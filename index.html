@@ -585,15 +585,20 @@ function handleMobAuth(){closeMob();showAuth('signup')}
 sb.auth.onAuthStateChange(async(event,session)=>{
   currentUser=session?.user||null;
   updateNavAuth();
+  const mob=document.getElementById('mob-auth-btn');
   if(currentUser){
-    const prof=await loadCurrentProfile();
-    const mob=document.getElementById('mob-auth-btn');
     if(mob)mob.textContent='My Profile';
-    // Auto-redirect on sign in event
-    if(event==='SIGNED_IN'){
-      if(!prof){showPage('onboard')}
-      else{showPage('dashboard')}
+    if(event==='SIGNED_IN'||event==='TOKEN_REFRESHED'||event==='INITIAL_SESSION'){
+      const prof=await loadCurrentProfile();
+      // Only redirect if we're on auth page
+      const authPage=document.getElementById('page-auth');
+      if(authPage&&authPage.classList.contains('active')){
+        if(!prof){showPage('onboard')}
+        else{showPage('dashboard')}
+      }
     }
+  } else {
+    if(mob)mob.textContent='Join / Sign In';
   }
 });
 
@@ -973,6 +978,13 @@ function toast(m){
   updateNavAuth();
   if(currentUser){
     await loadCurrentProfile();
+    const mob=document.getElementById('mob-auth-btn');
+    if(mob)mob.textContent='My Profile';
+    // If page loaded fresh and user is signed in — go to dashboard
+    const homePage=document.getElementById('page-home');
+    if(homePage&&homePage.classList.contains('active')){
+      // Stay on home, just update nav
+    }
   }
   loadStats();
   loadProfiles();
