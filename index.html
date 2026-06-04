@@ -1374,6 +1374,7 @@
       const area = localStorage.getItem('deserved_signup_area') || currentUser.user_metadata?.city_area || '';
 
       const profile = {
+        id: currentUser.id,
         user_id: currentUser.id,
         email: currentUser.email,
         first_name: first,
@@ -1399,7 +1400,7 @@
         const { error } = await sb
           .from('profiles')
           .upsert(profile, {
-            onConflict: 'user_id'
+            onConflict: 'id'
           });
 
         if (error) {
