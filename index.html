@@ -618,7 +618,7 @@ function updateNavAuth(){
 function showPage(name){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.getElementById('page-'+name).classList.add('active');
-  document.getElementById('page-onboard').scrollIntoView({behavior:'smooth',block:'start'});
+  window.scrollTo(0,0);
   if(name==='browse')loadProfiles();
   if(name==='dashboard')loadDashboard();
   if(name==='home')loadStats();
@@ -977,13 +977,14 @@ function toast(m){
   currentUser=session?.user||null;
   updateNavAuth();
   if(currentUser){
-    await loadCurrentProfile();
+    const prof=await loadCurrentProfile();
     const mob=document.getElementById('mob-auth-btn');
     if(mob)mob.textContent='My Profile';
-    // If page loaded fresh and user is signed in — go to dashboard
-    const homePage=document.getElementById('page-home');
-    if(homePage&&homePage.classList.contains('active')){
-      // Stay on home, just update nav
+    // Auto go to dashboard if signed in and on home page
+    if(!prof){
+      showPage('onboard');
+    } else {
+      showPage('dashboard');
     }
   }
   loadStats();
