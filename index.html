@@ -1,995 +1,1672 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DESERVED — You deserve to be seen.</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,700;0,9..144,900;1,9..144,300;1,9..144,700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<style>
-*{margin:0;padding:0;box-sizing:border-box}
-:root{
-  --black:#0C0C0C;--off:#F7F4EF;--warm:#EDE8DF;--mid:#C8C0B4;
-  --muted:#8A8278;--border:#E0DAD2;--accent:#E8820C;
-  --need:#D94F3D;--give:#2A7D4F;--both:#4A6FA5;
-}
-html{scroll-behavior:smooth}
-body{background:var(--off);color:var(--black);font-family:'DM Sans',sans-serif;overflow-x:hidden}
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DESERVED — You deserve to be seen.</title>
 
-/* CURSOR */
-#cd{position:fixed;width:8px;height:8px;background:var(--accent);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:transform .15s}
-#cr{position:fixed;width:36px;height:36px;border:1.5px solid var(--accent);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:all .3s cubic-bezier(.23,1,.32,1);opacity:.35}
-@media(max-width:768px){#cd,#cr{display:none}}
-@media(min-width:769px){body,*{cursor:none!important}}
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-/* NAV */
-nav{position:fixed;top:0;left:0;right:0;z-index:500;height:62px;padding:0 40px;display:flex;align-items:center;justify-content:space-between;transition:all .4s}
-nav.solid{background:rgba(247,244,239,.96);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
-.logo{font-family:'Fraunces',serif;font-size:20px;font-weight:900;color:var(--black);text-decoration:none;letter-spacing:-.03em}
-.logo span{color:var(--accent)}
-.nav-r{display:flex;align-items:center;gap:12px}
-.nav-links{display:flex;gap:24px;list-style:none}
-.nav-links a{font-size:13px;font-weight:500;color:var(--muted);text-decoration:none;transition:color .2s}
-.nav-links a:hover{color:var(--black)}
-.btn-nav{padding:9px 20px;border-radius:100px;font-size:13px;font-weight:600;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s;text-decoration:none;display:inline-flex;align-items:center}
-.btn-nav.outline{background:transparent;border:1.5px solid var(--border);color:var(--black)}
-.btn-nav.outline:hover{border-color:var(--black)}
-.btn-nav.solid-btn{background:var(--black);color:var(--off)}
-.btn-nav.solid-btn:hover{background:var(--accent)}
-.hamburger{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:4px}
-.hamburger span{display:block;width:22px;height:1.5px;background:var(--black)}
+  <style>
+    :root {
+      --bg: #070707;
+      --bg2: #101010;
+      --card: rgba(255,255,255,0.06);
+      --card2: rgba(255,255,255,0.1);
+      --text: #f7f2e8;
+      --muted: #b6ac9c;
+      --gold: #f5c76b;
+      --gold2: #ffdf8a;
+      --danger: #ff6b6b;
+      --green: #72e08a;
+      --border: rgba(255,255,255,0.12);
+      --shadow: 0 30px 80px rgba(0,0,0,0.45);
+      --radius: 26px;
+    }
 
-/* PAGES */
-.page{display:none;min-height:100vh}
-.page.active{display:block}
+    * {
+      box-sizing: border-box;
+    }
 
-/* ── HOME PAGE ── */
-#page-home{
-  min-height:100vh;display:flex;flex-direction:column;
-  align-items:center;justify-content:center;
-  padding:100px 40px 80px;
-  position:relative;overflow:hidden;
-  text-align:center;
-}
-.home-bg{position:absolute;inset:0;background:var(--off)}
-.home-circle{position:absolute;border-radius:50%;opacity:.06}
-.hc1{width:600px;height:600px;background:var(--need);top:-200px;right:-100px;animation:drift1 20s ease-in-out infinite}
-.hc2{width:500px;height:500px;background:var(--give);bottom:-100px;left:-100px;animation:drift2 25s ease-in-out infinite}
-@keyframes drift1{0%,100%{transform:translate(0,0)}50%{transform:translate(-30px,20px)}}
-@keyframes drift2{0%,100%{transform:translate(0,0)}50%{transform:translate(20px,-30px)}}
-.home-tag{display:inline-flex;align-items:center;gap:8px;font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:24px;position:relative;z-index:1}
-.home-tag::before{content:'';width:24px;height:1px;background:var(--accent)}
-h1.home-title{font-family:'Fraunces',serif;font-size:clamp(52px,10vw,100px);font-weight:900;line-height:.9;letter-spacing:-.04em;color:var(--black);margin-bottom:24px;position:relative;z-index:1}
-h1.home-title .it{font-style:italic;font-weight:300;color:var(--muted)}
-h1.home-title .ac{color:var(--accent)}
-.home-desc{font-size:17px;color:var(--muted);line-height:1.75;max-width:520px;margin:0 auto 36px;position:relative;z-index:1}
-.home-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;position:relative;z-index:1}
-.btn-primary{background:var(--black);color:var(--off);padding:16px 32px;border-radius:100px;font-size:15px;font-weight:600;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .25s;text-decoration:none;display:inline-flex;align-items:center;gap:8px}
-.btn-primary:hover{background:var(--accent);transform:translateY(-2px)}
-.btn-outline-lg{background:transparent;border:1.5px solid var(--border);color:var(--black);padding:14px 28px;border-radius:100px;font-size:15px;font-weight:500;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .25s;border:1.5px solid var(--border)}
-.btn-outline-lg:hover{border-color:var(--black)}
-.home-stats{display:flex;gap:48px;justify-content:center;flex-wrap:wrap;margin-top:56px;position:relative;z-index:1}
-.hs-item{text-align:center}
-.hs-num{font-family:'Fraunces',serif;font-size:40px;font-weight:900;color:var(--black);letter-spacing:-.04em;line-height:1}
-.hs-label{font-size:12px;color:var(--muted);margin-top:4px;font-weight:500}
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(245,199,107,0.12), transparent 30%),
+        radial-gradient(circle at bottom right, rgba(255,255,255,0.08), transparent 30%),
+        var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
 
-/* ── AUTH PAGE ── */
-#page-auth{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:80px 24px;background:var(--off)}
-.auth-card{background:var(--warm);border:1px solid var(--border);border-radius:24px;padding:48px;width:100%;max-width:460px}
-.auth-logo{font-family:'Fraunces',serif;font-size:24px;font-weight:900;color:var(--black);letter-spacing:-.03em;margin-bottom:32px;text-align:center}
-.auth-logo span{color:var(--accent)}
-.auth-tabs{display:flex;background:var(--off);border-radius:100px;padding:4px;margin-bottom:28px}
-.auth-tab{flex:1;padding:10px;border-radius:100px;font-size:13.5px;font-weight:600;text-align:center;cursor:pointer;transition:all .2s;background:none;border:none;color:var(--muted);font-family:'DM Sans',sans-serif}
-.auth-tab.on{background:var(--black);color:var(--off)}
-.fg{margin-bottom:16px}
-.fg label{display:block;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:7px}
-.fg input,.fg select,.fg textarea{width:100%;background:var(--off);border:1.5px solid var(--border);color:var(--black);padding:13px 16px;border-radius:12px;font-size:15px;font-family:'DM Sans',sans-serif;outline:none;transition:all .2s;appearance:none}
-.fg input:focus,.fg select:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(232,130,12,.1)}
-.fg-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.auth-submit{width:100%;padding:16px;background:var(--black);color:var(--off);border:none;border-radius:100px;font-size:15px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .25s;margin-top:8px}
-.auth-submit:hover{background:var(--accent)}
-.auth-submit:disabled{opacity:.5;cursor:not-allowed}
-.auth-err{background:rgba(217,79,61,.08);border:1px solid rgba(217,79,61,.2);border-radius:10px;padding:12px 16px;font-size:13.5px;color:var(--need);margin-bottom:16px;display:none}
-.auth-err.show{display:block}
-.auth-success{background:rgba(42,125,79,.08);border:1px solid rgba(42,125,79,.2);border-radius:10px;padding:12px 16px;font-size:13.5px;color:var(--give);margin-bottom:16px;display:none}
-.auth-success.show{display:block}
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
 
-/* ── ONBOARDING ── */
-#page-onboard{min-height:100vh;padding:80px 24px;background:var(--off)}
-.onboard-inner{max-width:640px;margin:0 auto}
-.progress-bar-wrap{background:var(--warm);border:1px solid var(--border);border-radius:100px;height:6px;margin-bottom:40px;overflow:hidden}
-.progress-bar-fill{height:100%;background:var(--accent);border-radius:100px;transition:width .5s cubic-bezier(.23,1,.32,1)}
-.step-screen{display:none;animation:fadeUp .4s ease}
-.step-screen.active{display:block}
-@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
-.step-tag{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);display:flex;align-items:center;gap:8px;margin-bottom:12px}
-.step-tag::before{content:'';width:20px;height:1px;background:var(--accent)}
-.step-title{font-family:'Fraunces',serif;font-size:clamp(32px,6vw,52px);font-weight:900;letter-spacing:-.04em;line-height:.95;color:var(--black);margin-bottom:12px}
-.step-title .it{font-style:italic;font-weight:300;color:var(--muted)}
-.step-desc{font-size:15px;color:var(--muted);line-height:1.7;margin-bottom:32px}
-.form-section{background:var(--warm);border:1px solid var(--border);border-radius:20px;padding:28px;margin-bottom:16px}
-.form-section-title{font-family:'Fraunces',serif;font-size:16px;font-weight:700;color:var(--black);margin-bottom:18px;display:flex;align-items:center;gap:8px}
-.role-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-.role-card{border:1.5px solid var(--border);border-radius:14px;padding:18px 14px;text-align:center;cursor:pointer;transition:all .3s;background:var(--off)}
-.role-card:hover{transform:translateY(-2px)}
-.role-card.selected{transform:translateY(-2px)}
-.role-card.need-s.selected{border-color:var(--need);background:rgba(217,79,61,.05)}
-.role-card.give-s.selected{border-color:var(--give);background:rgba(42,125,79,.05)}
-.role-card.both-s.selected{border-color:var(--both);background:rgba(74,111,165,.05)}
-.rc-icon{font-size:28px;margin-bottom:8px;display:block}
-.rc-title{font-family:'Fraunces',serif;font-size:14px;font-weight:700;color:var(--black);margin-bottom:4px}
-.rc-desc{font-size:11.5px;color:var(--muted);line-height:1.4}
-.skill-tags-wrap{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
-.skill-tag-item{display:inline-flex;align-items:center;gap:6px;background:var(--black);color:var(--off);padding:6px 12px;border-radius:100px;font-size:13px;font-weight:500}
-.skill-tag-item button{background:none;border:none;color:rgba(247,244,239,.6);cursor:pointer;font-size:14px;padding:0;line-height:1;font-family:'DM Sans',sans-serif}
-.skill-tag-item button:hover{color:#fff}
-.skill-sugs{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
-.skill-sug{background:var(--warm);border:1px solid var(--border);color:var(--muted);padding:5px 12px;border-radius:100px;font-size:12px;font-weight:500;cursor:pointer;transition:all .2s}
-.skill-sug:hover{background:var(--black);color:var(--off);border-color:var(--black)}
-.char-count{font-size:11px;color:var(--muted);text-align:right;margin-top:4px}
-.step-nav{display:flex;align-items:center;justify-content:space-between;margin-top:20px;gap:12px}
-.btn-step-back{background:transparent;border:1.5px solid var(--border);color:var(--muted);padding:14px 24px;border-radius:100px;font-size:14px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s}
-.btn-step-back:hover{border-color:var(--black);color:var(--black)}
-.btn-step-next{background:var(--black);color:var(--off);padding:15px 32px;border-radius:100px;font-size:14px;font-weight:600;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .25s}
-.btn-step-next:hover{background:var(--accent)}
-.btn-step-next:disabled{opacity:.5;cursor:not-allowed}
+    button,
+    input,
+    select,
+    textarea {
+      font-family: inherit;
+    }
 
-/* ── BROWSE PROFILES ── */
-#page-browse{padding:90px 40px 60px;background:var(--off)}
-.browse-header{max-width:1100px;margin:0 auto;display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:32px;flex-wrap:wrap;gap:16px}
-.browse-title{font-family:'Fraunces',serif;font-size:clamp(32px,5vw,52px);font-weight:900;letter-spacing:-.04em;color:var(--black)}
-.browse-title .it{font-style:italic;font-weight:300;color:var(--muted)}
-.filter-row{display:flex;gap:8px;flex-wrap:wrap;max-width:1100px;margin:0 auto 28px}
-.filter-chip{padding:8px 18px;border-radius:100px;font-size:13px;font-weight:600;border:1.5px solid var(--border);background:var(--off);color:var(--muted);cursor:pointer;transition:all .2s;font-family:'DM Sans',sans-serif}
-.filter-chip:hover,.filter-chip.on{background:var(--black);color:var(--off);border-color:var(--black)}
-.profiles-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;max-width:1100px;margin:0 auto}
-.profile-card{background:var(--warm);border:1px solid var(--border);border-radius:20px;overflow:hidden;transition:all .35s cubic-bezier(.23,1,.32,1);cursor:pointer}
-.profile-card:hover{transform:translateY(-6px);box-shadow:0 24px 48px rgba(0,0,0,.1)}
-.pc-top{padding:24px 22px 18px;display:flex;align-items:flex-start;gap:12px}
-.pc-av{width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-size:18px;font-weight:700;color:#fff;flex-shrink:0}
-.pc-name{font-family:'Fraunces',serif;font-size:16px;font-weight:700;color:var(--black);letter-spacing:-.02em}
-.pc-role-text{font-size:12.5px;color:var(--muted);margin-top:2px}
-.pc-badge{display:inline-block;margin-top:5px;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:3px 10px;border-radius:100px}
-.badge-need{background:rgba(217,79,61,.1);color:var(--need)}
-.badge-give{background:rgba(42,125,79,.1);color:var(--give)}
-.badge-both{background:rgba(74,111,165,.1);color:var(--both)}
-.pc-body{padding:0 22px 18px;font-size:13.5px;color:var(--muted);line-height:1.65}
-.pc-skills-row{padding:14px 22px;border-top:1px solid var(--border);display:flex;flex-wrap:wrap;gap:5px}
-.pc-skill{font-size:11.5px;font-weight:500;padding:3px 10px;border-radius:100px;background:var(--off);border:1px solid var(--border);color:var(--muted)}
-.pc-footer{padding:12px 22px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
-.pc-loc{font-size:12px;color:var(--muted)}
-.pc-connect-btn{background:var(--black);color:var(--off);padding:7px 16px;border-radius:100px;font-size:12px;font-weight:600;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;transition:background .2s}
-.pc-connect-btn:hover{background:var(--accent)}
-.empty-profiles{text-align:center;padding:80px 20px;color:var(--muted)}
-.empty-profiles span{font-size:48px;display:block;margin-bottom:16px}
-.empty-profiles h3{font-family:'Fraunces',serif;font-size:24px;font-weight:700;color:var(--black);margin-bottom:8px}
-.empty-profiles p{font-size:15px;line-height:1.7}
-.loading-profiles{text-align:center;padding:60px;color:var(--muted);font-size:15px}
+    button {
+      cursor: pointer;
+      border: none;
+    }
 
-/* ── DASHBOARD ── */
-#page-dashboard{padding:90px 40px 60px;background:var(--off)}
-.dash-inner{max-width:900px;margin:0 auto}
-.dash-welcome{margin-bottom:32px}
-.dash-welcome h2{font-family:'Fraunces',serif;font-size:clamp(28px,4vw,44px);font-weight:900;letter-spacing:-.04em;color:var(--black)}
-.dash-welcome h2 .it{font-style:italic;font-weight:300;color:var(--muted)}
-.dash-welcome p{font-size:15px;color:var(--muted);margin-top:6px}
-.dash-status-card{border-radius:20px;padding:24px 28px;margin-bottom:20px;display:flex;align-items:center;gap:16px}
-.dsc-pending{background:rgba(232,130,12,.08);border:1px solid rgba(232,130,12,.2)}
-.dsc-approved{background:rgba(42,125,79,.08);border:1px solid rgba(42,125,79,.2)}
-.dsc-rejected{background:rgba(217,79,61,.08);border:1px solid rgba(217,79,61,.2)}
-.dsc-icon{font-size:32px;flex-shrink:0}
-.dsc-title{font-family:'Fraunces',serif;font-size:18px;font-weight:700;color:var(--black);margin-bottom:4px}
-.dsc-desc{font-size:14px;color:var(--muted);line-height:1.6}
-.dash-profile-card{background:var(--warm);border:1px solid var(--border);border-radius:20px;padding:28px;margin-bottom:20px}
-.dpc-top{display:flex;align-items:flex-start;gap:16px;margin-bottom:20px}
-.dpc-av{width:64px;height:64px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-size:24px;font-weight:700;color:#fff;flex-shrink:0}
-.dpc-name{font-family:'Fraunces',serif;font-size:22px;font-weight:700;color:var(--black);letter-spacing:-.02em}
-.dpc-role{font-size:13px;color:var(--muted);margin-top:3px}
-.dpc-story{font-size:14.5px;color:var(--muted);line-height:1.75;font-style:italic;padding-top:16px;border-top:1px solid var(--border)}
-.dash-connections{background:var(--warm);border:1px solid var(--border);border-radius:20px;padding:28px}
-.dc-title{font-family:'Fraunces',serif;font-size:18px;font-weight:700;color:var(--black);margin-bottom:16px}
-.conn-item{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--border)}
-.conn-item:last-child{border-bottom:none}
-.ci-av{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-size:15px;font-weight:700;color:#fff;flex-shrink:0;background:var(--accent)}
-.ci-name{font-size:14px;font-weight:600;color:var(--black)}
-.ci-msg{font-size:12.5px;color:var(--muted);margin-top:2px}
-.ci-status{font-size:11px;font-weight:700;padding:4px 10px;border-radius:100px;white-space:nowrap}
-.status-pending{background:rgba(232,130,12,.1);color:var(--accent)}
-.status-accepted{background:rgba(42,125,79,.1);color:var(--give)}
-.status-declined{background:rgba(217,79,61,.1);color:var(--need)}
-.conn-actions{display:flex;gap:8px;margin-left:auto}
-.btn-accept{background:var(--give);color:#fff;padding:6px 14px;border-radius:100px;font-size:12px;font-weight:600;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;transition:background .2s}
-.btn-accept:hover{background:#1f5f3a}
-.btn-decline{background:transparent;border:1px solid var(--border);color:var(--muted);padding:6px 14px;border-radius:100px;font-size:12px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s}
-.btn-decline:hover{border-color:var(--need);color:var(--need)}
+    .container {
+      width: min(1120px, calc(100% - 34px));
+      margin: 0 auto;
+    }
 
-/* MODAL */
-.modal-overlay{position:fixed;inset:0;z-index:800;background:rgba(12,12,12,.55);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;padding:24px;opacity:0;pointer-events:none;transition:opacity .3s}
-.modal-overlay.open{opacity:1;pointer-events:all}
-.modal{background:var(--off);border-radius:24px;padding:36px;max-width:460px;width:100%;transform:translateY(20px);transition:transform .4s cubic-bezier(.23,1,.32,1);border:1px solid var(--border)}
-.modal-overlay.open .modal{transform:translateY(0)}
-.modal-title{font-family:'Fraunces',serif;font-size:26px;font-weight:900;color:var(--black);letter-spacing:-.03em;margin-bottom:8px}
-.modal-desc{font-size:14px;color:var(--muted);line-height:1.7;margin-bottom:20px}
-.modal-fg textarea{width:100%;background:var(--warm);border:1.5px solid var(--border);color:var(--black);padding:14px;border-radius:12px;font-size:14px;font-family:'DM Sans',sans-serif;outline:none;transition:border-color .2s;resize:vertical;min-height:100px}
-.modal-fg textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(232,130,12,.1)}
-.modal-btns{display:flex;gap:10px;margin-top:16px}
-.btn-modal-send{flex:1;padding:14px;background:var(--black);color:var(--off);border:none;border-radius:100px;font-size:14px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;transition:background .2s}
-.btn-modal-send:hover{background:var(--accent)}
-.btn-modal-cancel{padding:14px 20px;background:transparent;border:1.5px solid var(--border);color:var(--muted);border-radius:100px;font-size:14px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s}
-.btn-modal-cancel:hover{border-color:var(--black);color:var(--black)}
-.modal-privacy{font-size:12px;color:var(--muted);text-align:center;margin-top:12px;line-height:1.6}
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(18px);
+      background: rgba(7,7,7,0.76);
+      border-bottom: 1px solid var(--border);
+    }
 
-/* MOBILE MENU */
-#mob-menu{display:none;position:fixed;inset:0;z-index:600;background:var(--off);flex-direction:column;padding:80px 40px;gap:0}
-#mob-menu.open{display:flex}
-#mob-menu a,#mob-menu button{font-family:'Fraunces',serif;font-size:36px;font-weight:700;color:var(--black);text-decoration:none;padding:16px 0;border-bottom:1px solid var(--border);transition:color .2s;background:none;border-top:none;border-left:none;border-right:none;text-align:left;cursor:pointer;font-family:'Fraunces',serif;border-bottom:1px solid var(--border)}
-#mob-menu a:hover,#mob-menu button:hover{color:var(--accent)}
-.mob-close{position:absolute;top:20px;right:24px;background:none;border:none;font-size:26px;cursor:pointer;color:var(--black)}
+    .nav {
+      height: 76px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+    }
 
-/* TOAST */
-#toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(10px);background:var(--black);color:var(--off);padding:12px 24px;border-radius:100px;font-size:13px;font-weight:500;opacity:0;pointer-events:none;transition:all .35s;z-index:1000;white-space:nowrap;max-width:90vw;text-align:center}
-#toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+    .logo {
+      font-size: 22px;
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      background: transparent;
+      color: var(--text);
+      padding: 0;
+    }
 
-/* SCROLL REVEAL */
-.sr{opacity:0;transform:translateY(24px);transition:opacity .7s cubic-bezier(.23,1,.32,1),transform .7s cubic-bezier(.23,1,.32,1)}
-.sr.go{opacity:1;transform:translateY(0)}
+    .logo span {
+      color: var(--gold);
+    }
 
-/* RESPONSIVE */
-@media(max-width:900px){
-  nav{padding:0 24px}
-  .nav-links{display:none}
-  .hamburger{display:flex}
-  .profiles-grid{grid-template-columns:1fr 1fr}
-  #page-home,#page-browse,#page-dashboard,#page-onboard{padding-left:24px;padding-right:24px}
-  .role-grid{grid-template-columns:1fr}
-}
-@media(max-width:540px){
-  .profiles-grid{grid-template-columns:1fr}
-  .fg-row{grid-template-columns:1fr}
-}
-</style>
-</head>
-<body>
+    .navlinks {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
 
-<div id="cd"></div>
-<div id="cr"></div>
-<div id="toast"></div>
+    .navlinks button,
+    .mobile-panel button {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid transparent;
+      padding: 10px 13px;
+      border-radius: 999px;
+      font-weight: 700;
+    }
 
-<!-- CONNECT MODAL -->
-<div class="modal-overlay" id="connect-modal" onclick="handleModalClick(event)">
-  <div class="modal">
-    <div class="modal-title" id="modal-title">Send Connection Request</div>
-    <p class="modal-desc" id="modal-desc">Introduce yourself. They'll decide whether to connect. Your contact info stays private until you both agree.</p>
-    <div class="modal-fg">
-      <textarea id="connect-msg" placeholder="Hi, my name is… I'd like to connect because…" maxlength="400" rows="4"></textarea>
-    </div>
-    <div class="modal-btns">
-      <button class="btn-modal-cancel" onclick="closeModal()">Cancel</button>
-      <button class="btn-modal-send" onclick="sendConnection()">Send Request →</button>
-    </div>
-    <p class="modal-privacy">🔒 Double opt-in. Both people must agree before any contact.</p>
-  </div>
-</div>
+    .navlinks button:hover,
+    .mobile-panel button:hover {
+      border-color: var(--border);
+      background: rgba(255,255,255,0.06);
+    }
 
-<!-- MOBILE MENU -->
-<div id="mob-menu">
-  <button class="mob-close" onclick="closeMob()">✕</button>
-  <a href="#" onclick="showPage('home');closeMob()">Home</a>
-  <a href="#" onclick="showPage('browse');closeMob()">Browse People</a>
-  <button id="mob-auth-btn" onclick="handleMobAuth()">Join / Sign In</button>
-</div>
+    .btn {
+      background: linear-gradient(135deg, var(--gold), var(--gold2));
+      color: #171006;
+      padding: 12px 18px;
+      border-radius: 999px;
+      font-weight: 900;
+      box-shadow: 0 12px 28px rgba(245,199,107,0.18);
+    }
 
-<!-- NAV -->
-<nav id="nav">
-  <a href="#" class="logo" onclick="showPage('home');return false">DESERVED<span>.</span></a>
-  <div class="nav-r">
-    <ul class="nav-links">
-      <li><a href="#" onclick="showPage('browse');return false">Browse People</a></li>
-      <li><a href="#" onclick="showPage('home');return false">Stories</a></li>
-    </ul>
-    <div id="nav-auth-area">
-      <a href="#" class="btn-nav outline" onclick="showAuth('login');return false">Sign In</a>
-      <a href="#" class="btn-nav solid-btn" onclick="showAuth('signup');return false">Join Free →</a>
-    </div>
-    <div id="nav-user-area" style="display:none;align-items:center;gap:10px">
-      <button class="btn-nav outline" onclick="goToMyProfile()">My Profile</button>
-      <button class="btn-nav solid-btn" onclick="signOut()">Sign Out</button>
-    </div>
-    <button class="hamburger" id="hbg" onclick="openMob()"><span></span><span></span><span></span></button>
-  </div>
-</nav>
+    .btn.secondary {
+      background: rgba(255,255,255,0.08);
+      color: var(--text);
+      border: 1px solid var(--border);
+      box-shadow: none;
+    }
 
-<!-- ── HOME PAGE ── -->
-<div class="page active" id="page-home">
-  <div class="home-bg">
-    <div class="home-circle hc1"></div>
-    <div class="home-circle hc2"></div>
-  </div>
-  <div class="home-tag">Calgary, Canada — Est. 2026</div>
-  <h1 class="home-title">
-    <span style="display:block">You</span>
-    <span style="display:block" class="it">deserve</span>
-    <span style="display:block">to be</span>
-    <span style="display:block" class="ac">seen.</span>
-  </h1>
-  <p class="home-desc">Real talent finds real opportunity here. No reference. No gatekeeping. No discrimination. Just you and what you can do.</p>
-  <div class="home-actions">
-    <button class="btn-primary" onclick="showAuth('signup')">✦ Join DESERVED →</button>
-    <button class="btn-outline-lg" onclick="showPage('browse')">Browse People</button>
-  </div>
-  <div class="home-stats" id="home-stats">
-    <div class="hs-item sr"><div class="hs-num" id="stat-members">—</div><div class="hs-label">Members</div></div>
-    <div class="hs-item sr"><div class="hs-num" id="stat-connections">—</div><div class="hs-label">Connections Made</div></div>
-    <div class="hs-item sr"><div class="hs-num">$0</div><div class="hs-label">Hall Rent</div></div>
-  </div>
-</div>
+    .btn.danger {
+      background: rgba(255,107,107,0.14);
+      color: #ffd0d0;
+      border: 1px solid rgba(255,107,107,0.25);
+      box-shadow: none;
+    }
 
-<!-- ── AUTH PAGE ── -->
-<div class="page" id="page-auth">
-  <div class="auth-card">
-    <div class="auth-logo">DESERVED<span>.</span></div>
-    <div class="auth-tabs">
-      <button class="auth-tab on" id="tab-login" onclick="switchAuthTab('login')">Sign In</button>
-      <button class="auth-tab" id="tab-signup" onclick="switchAuthTab('signup')">Join Free</button>
-    </div>
-    <div id="auth-err" class="auth-err"></div>
-    <div id="auth-success" class="auth-success"></div>
+    .hamb {
+      display: none;
+      background: rgba(255,255,255,0.08);
+      color: var(--text);
+      border: 1px solid var(--border);
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      font-size: 24px;
+    }
 
-    <!-- LOGIN -->
-    <div id="form-login">
-      <div class="fg"><label>Email</label><input type="email" id="login-email" placeholder="you@email.com"></div>
-      <div class="fg"><label>Password</label><input type="password" id="login-pass" placeholder="Your password"></div>
-      <button class="auth-submit" id="btn-login" onclick="handleLogin()">Sign In →</button>
-    </div>
+    .mobile-panel {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(7,7,7,0.96);
+      z-index: 200;
+      padding: 24px;
+    }
 
-    <!-- SIGNUP -->
-    <div id="form-signup" style="display:none">
-      <div class="fg-row">
-        <div class="fg"><label>First Name</label><input type="text" id="sig-fname" placeholder="Gurpreet"></div>
-        <div class="fg"><label>Last Name</label><input type="text" id="sig-lname" placeholder="Singh"></div>
-      </div>
-      <div class="fg"><label>Email</label><input type="email" id="sig-email" placeholder="you@email.com"></div>
-      <div class="fg"><label>Password</label><input type="password" id="sig-pass" placeholder="Min. 8 characters"></div>
-      <div class="fg">
-        <label>City Area</label>
-        <select id="sig-city">
-          <option value="">Select your area…</option>
-          <option>NE Calgary</option><option>NW Calgary</option>
-          <option>SE Calgary</option><option>SW Calgary</option>
-          <option>Downtown Calgary</option><option>Outside Calgary</option>
-        </select>
-      </div>
-      <button class="auth-submit" id="btn-signup" onclick="handleSignup()">Create Account →</button>
-    </div>
-    <p style="text-align:center;margin-top:16px;font-size:13px;color:var(--muted)">
-      <a href="#" onclick="showPage('home');return false" style="color:var(--accent)">← Back to home</a>
-    </p>
-  </div>
-</div>
+    .mobile-panel.active {
+      display: block;
+    }
 
-<!-- ── ONBOARDING ── -->
-<div class="page" id="page-onboard">
-  <div class="onboard-inner">
-    <div class="progress-bar-wrap"><div class="progress-bar-fill" id="progress-fill" style="width:25%"></div></div>
+    .mobile-panel .mobile-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+    }
 
-    <!-- STEP 1 — ROLE -->
-    <div class="step-screen active" id="step-1">
-      <div class="step-tag">Step 1 of 4 — Your purpose</div>
-      <h2 class="step-title">What brings<br><span class="it">you here?</span></h2>
-      <p class="step-desc">This shapes how people find you and how we match you.</p>
-      <div class="form-section">
-        <div class="form-section-title">🎯 Choose your role</div>
-        <div class="role-grid">
-          <div class="role-card need-s" id="rc-need" onclick="selectRole('need')"><span class="rc-icon">🙋</span><div class="rc-title">I Need Something</div><div class="rc-desc">Work, mentor, collaborator, chance</div></div>
-          <div class="role-card give-s" id="rc-give" onclick="selectRole('give')"><span class="rc-icon">🤝</span><div class="rc-title">I Want to Give</div><div class="rc-desc">Skills, time, teaching, mentoring</div></div>
-          <div class="role-card both-s" id="rc-both" onclick="selectRole('both')"><span class="rc-icon">⚡</span><div class="rc-title">Both</div><div class="rc-desc">Need something & have something to give</div></div>
-        </div>
-      </div>
-      <div class="form-section" id="need-detail" style="display:none">
-        <div class="form-section-title">🙋 What do you need?</div>
-        <div class="fg">
-          <label>I am looking for…</label>
-          <select id="ob-need-type">
-            <option value="">Select…</option>
-            <option>A job or work opportunity</option>
-            <option>A mentor or guide</option>
-            <option>A collaborator or partner</option>
-            <option>Someone to teach me a skill</option>
-            <option>Volunteers for my project</option>
-            <option>A platform to show my talent</option>
-            <option>Other</option>
-          </select>
-        </div>
-        <div class="fg">
-          <label>Describe what you need</label>
-          <textarea id="ob-need-desc" rows="3" placeholder="Be honest and specific." maxlength="300" oninput="updateCC('ob-need-desc','cc-need',300)"></textarea>
-          <div class="char-count"><span id="cc-need">0</span>/300</div>
-        </div>
-      </div>
-      <div class="step-nav">
-        <span></span>
-        <button class="btn-step-next" onclick="goStep(2)">Continue →</button>
-      </div>
-    </div>
+    .mobile-panel .mobile-links {
+      display: grid;
+      gap: 12px;
+    }
 
-    <!-- STEP 2 — SKILLS -->
-    <div class="step-screen" id="step-2">
-      <div class="step-tag">Step 2 of 4 — Your skills</div>
-      <h2 class="step-title">What can<br><span class="it">you do?</span></h2>
-      <p class="step-desc">Add your skills and experience. This is your credential.</p>
-      <div class="form-section">
-        <div class="form-section-title">💼 Skills & Talents</div>
-        <div class="fg">
-          <label>Add a skill (press Enter)</label>
-          <input type="text" id="skill-input" placeholder="e.g. Carpentry, Teaching, Coding…" onkeydown="addSkillKey(event)">
-          <div class="skill-tags-wrap" id="skill-tags"></div>
-          <div class="skill-sugs">
-            <span class="skill-sug" onclick="addSkillDirect('Carpentry')">Carpentry</span>
-            <span class="skill-sug" onclick="addSkillDirect('Teaching')">Teaching</span>
-            <span class="skill-sug" onclick="addSkillDirect('Cooking')">Cooking</span>
-            <span class="skill-sug" onclick="addSkillDirect('Coding')">Coding</span>
-            <span class="skill-sug" onclick="addSkillDirect('Driving')">Driving</span>
-            <span class="skill-sug" onclick="addSkillDirect('Design')">Design</span>
-            <span class="skill-sug" onclick="addSkillDirect('Accounting')">Accounting</span>
-            <span class="skill-sug" onclick="addSkillDirect('Nursing')">Nursing</span>
-            <span class="skill-sug" onclick="addSkillDirect('Music')">Music</span>
-            <span class="skill-sug" onclick="addSkillDirect('Mentoring')">Mentoring</span>
-          </div>
-        </div>
-        <div class="fg">
-          <label>Years of experience</label>
-          <select id="ob-exp">
-            <option value="">Select…</option>
-            <option>Just starting out</option>
-            <option>1–3 years</option>
-            <option>3–5 years</option>
-            <option>5–10 years</option>
-            <option>10–20 years</option>
-            <option>20+ years</option>
-          </select>
-        </div>
-      </div>
-      <div class="step-nav">
-        <button class="btn-step-back" onclick="goStep(1)">← Back</button>
-        <button class="btn-step-next" onclick="goStep(3)">Continue →</button>
-      </div>
-    </div>
+    .mobile-panel button {
+      width: 100%;
+      text-align: left;
+      font-size: 22px;
+      padding: 18px;
+      border: 1px solid var(--border);
+      border-radius: 22px;
+    }
 
-    <!-- STEP 3 — STORY -->
-    <div class="step-screen" id="step-3">
-      <div class="step-tag">Step 3 of 4 — Your story</div>
-      <h2 class="step-title">Tell us<br><span class="it">your story.</span></h2>
-      <p class="step-desc">Not a resume. Just you, in your own words.</p>
-      <div class="form-section">
-        <div class="form-section-title">✍️ In Your Own Words</div>
-        <div class="fg">
-          <label>Your story *</label>
-          <textarea id="ob-story" rows="6" placeholder="Where are you from? What have you built, survived, or created? What wall did you hit? What do you want Calgary to know about you?" maxlength="800" oninput="updateCC('ob-story','cc-story',800)"></textarea>
-          <div class="char-count"><span id="cc-story">0</span>/800</div>
-        </div>
-        <div class="fg">
-          <label>Originally from (optional)</label>
-          <input type="text" id="ob-origin" placeholder="e.g. Punjab, India">
-        </div>
-        <div class="fg">
-          <label>How long in Calgary?</label>
-          <select id="ob-time">
-            <option value="">Select…</option>
-            <option>Just arrived</option>
-            <option>Less than 1 year</option>
-            <option>1–3 years</option>
-            <option>3–5 years</option>
-            <option>5–10 years</option>
-            <option>Over 10 years</option>
-            <option>Born here</option>
-          </select>
-        </div>
-        <div class="fg">
-          <label>Languages you speak</label>
-          <input type="text" id="ob-langs" placeholder="e.g. Punjabi, English, Hindi">
-        </div>
-      </div>
-      <div class="step-nav">
-        <button class="btn-step-back" onclick="goStep(2)">← Back</button>
-        <button class="btn-step-next" onclick="goStep(4)">Continue →</button>
-      </div>
-    </div>
+    .page {
+      display: none;
+      padding: 42px 0 80px;
+      min-height: calc(100vh - 76px);
+    }
 
-    <!-- STEP 4 — SUBMIT -->
-    <div class="step-screen" id="step-4">
-      <div class="step-tag">Step 4 of 4 — Almost there</div>
-      <h2 class="step-title">Ready to<br><span class="it">be seen?</span></h2>
-      <p class="step-desc">Your profile goes to our team for a quick human review — usually 24–48 hours. Once approved you're live.</p>
-      <div style="background:rgba(42,125,79,.06);border:1px solid rgba(42,125,79,.2);border-radius:16px;padding:24px;margin-bottom:16px">
-        <p style="font-size:14px;color:var(--black);line-height:1.7"><strong style="color:var(--give)">✓ What happens next:</strong><br>We review your profile personally. Once approved, you'll get an email and your profile goes live for Calgary to see. If we need anything, we'll reach out kindly.</p>
-      </div>
-      <div style="font-size:13px;color:var(--muted);margin-bottom:20px;line-height:1.7">
-        By submitting you agree to our Community Guidelines — be real, be kind, be yourself.
-      </div>
-      <div class="step-nav">
-        <button class="btn-step-back" onclick="goStep(3)">← Back</button>
-        <button class="btn-step-next" id="btn-submit-profile" onclick="submitProfile()" style="background:var(--give)">Submit Profile 🙏</button>
-      </div>
-    </div>
+    .page.active {
+      display: block;
+    }
 
-  </div>
-</div>
+    .hero {
+      padding: 62px 0 40px;
+      display: grid;
+      grid-template-columns: 1.12fr 0.88fr;
+      gap: 34px;
+      align-items: center;
+    }
 
-<!-- ── BROWSE ── -->
-<div class="page" id="page-browse">
-  <div class="browse-header">
-    <div>
-      <h2 class="browse-title">Real people.<br><span class="it">Real Calgary.</span></h2>
-      <p style="font-size:14px;color:var(--muted);margin-top:6px">Every profile reviewed by a real human.</p>
-    </div>
-    <button class="btn-primary" onclick="showAuth('signup')">Join DESERVED →</button>
-  </div>
-  <div class="filter-row">
-    <button class="filter-chip on" onclick="filterProfiles('all',this)">All People</button>
-    <button class="filter-chip" onclick="filterProfiles('need',this)">Looking for work</button>
-    <button class="filter-chip" onclick="filterProfiles('give',this)">Offering help</button>
-    <button class="filter-chip" onclick="filterProfiles('both',this)">Both</button>
-  </div>
-  <div id="profiles-container" class="profiles-grid">
-    <div class="loading-profiles" style="grid-column:1/-1">Loading real profiles… 🔍</div>
-  </div>
-</div>
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.06);
+      padding: 9px 13px;
+      border-radius: 999px;
+      color: var(--muted);
+      font-weight: 750;
+      margin-bottom: 18px;
+    }
 
-<!-- ── DASHBOARD ── -->
-<div class="page" id="page-dashboard">
-  <div class="dash-inner">
-    <div class="dash-welcome">
-      <h2>Welcome back,<br><span class="it" id="dash-name">—</span></h2>
-      <p id="dash-subtitle">Here's your DESERVED profile</p>
-    </div>
-    <div id="dash-status"></div>
-    <div id="dash-profile-section"></div>
-    <div id="dash-connections-section"></div>
-  </div>
-</div>
+    h1 {
+      font-size: clamp(48px, 9vw, 106px);
+      line-height: 0.88;
+      letter-spacing: -0.085em;
+      margin: 0 0 22px;
+    }
 
-<script>
-// ── SUPABASE INIT ──
-const {createClient}=supabase;
-const sb=createClient(
-  'https://etrdshspqlcmgvjrxapc.supabase.co',
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV0cmRzaHNwcWxjbWd2anJ4YXBjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA1ODg4NTUsImV4cCI6MjA5NjE2NDg1NX0.11hVZw0UwkTwsxGj7aVBrYlfYUtotsDWoJ4fZ2y2k8g'
-);
+    h2 {
+      font-size: clamp(34px, 5vw, 64px);
+      line-height: 0.94;
+      letter-spacing: -0.065em;
+      margin: 0 0 15px;
+    }
 
-// ── STATE ──
-let currentUser=null;
-let currentProfile=null;
-let selectedRole=null;
-let skills=[];
-let connectingToId=null;
-let allProfiles=[];
+    h3 {
+      margin: 0 0 8px;
+      font-size: 22px;
+      letter-spacing: -0.03em;
+    }
 
-// ── CURSOR ──
-const cd=document.getElementById('cd'),cr=document.getElementById('cr');
-let mx=0,my=0,rx=0,ry=0;
-document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cd.style.left=mx+'px';cd.style.top=my+'px'});
-(function a(){rx+=(mx-rx)*.1;ry+=(my-ry)*.1;cr.style.left=rx+'px';cr.style.top=ry+'px';requestAnimationFrame(a)})();
-document.querySelectorAll('a,button,.role-card,.profile-card,.skill-sug,.filter-chip').forEach(el=>{
-  el.addEventListener('mouseenter',()=>{cd.style.transform='translate(-50%,-50%) scale(2)';cr.style.width='52px';cr.style.height='52px'});
-  el.addEventListener('mouseleave',()=>{cd.style.transform='translate(-50%,-50%) scale(1)';cr.style.width='36px';cr.style.height='36px'});
-});
+    p {
+      color: var(--muted);
+      line-height: 1.65;
+      font-size: 16px;
+    }
 
-// ── NAV ──
-window.addEventListener('scroll',()=>document.getElementById('nav').classList.toggle('solid',scrollY>20));
-function openMob(){document.getElementById('mob-menu').classList.add('open');document.body.style.overflow='hidden'}
-function closeMob(){document.getElementById('mob-menu').classList.remove('open');document.body.style.overflow=''}
-function handleMobAuth(){closeMob();showAuth('signup')}
+    .hero p {
+      font-size: 20px;
+      max-width: 670px;
+    }
 
-// ── AUTH STATE ──
-sb.auth.onAuthStateChange(async(event,session)=>{
-  currentUser=session?.user||null;
-  updateNavAuth();
-  const mob=document.getElementById('mob-auth-btn');
-  if(currentUser){
-    if(mob)mob.textContent='My Profile';
-    if(event==='SIGNED_IN'||event==='TOKEN_REFRESHED'||event==='INITIAL_SESSION'){
-      const prof=await loadCurrentProfile();
-      // Only redirect if we're on auth page
-      const authPage=document.getElementById('page-auth');
-      if(authPage&&authPage.classList.contains('active')){
-        if(!prof){showPage('onboard')}
-        else{showPage('dashboard')}
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 26px;
+    }
+
+    .hero-card {
+      border: 1px solid var(--border);
+      background:
+        linear-gradient(145deg, rgba(245,199,107,0.11), rgba(255,255,255,0.04)),
+        rgba(255,255,255,0.04);
+      box-shadow: var(--shadow);
+      border-radius: var(--radius);
+      padding: 28px;
+      min-height: 360px;
+      display: grid;
+      align-content: space-between;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-top: 28px;
+    }
+
+    .stat {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 18px;
+    }
+
+    .stat strong {
+      font-size: 30px;
+      color: var(--gold);
+      display: block;
+      letter-spacing: -0.04em;
+    }
+
+    .grid {
+      display: grid;
+      gap: 18px;
+    }
+
+    .grid.two {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .grid.three {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      box-shadow: 0 16px 44px rgba(0,0,0,0.22);
+    }
+
+    .auth-box {
+      max-width: 520px;
+      margin: 24px auto;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid var(--border);
+      border-radius: 30px;
+      padding: 26px;
+      box-shadow: var(--shadow);
+    }
+
+    .tabs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 18px;
+      background: rgba(0,0,0,0.24);
+      padding: 6px;
+      border-radius: 999px;
+    }
+
+    .tabs button {
+      border-radius: 999px;
+      padding: 12px;
+      background: transparent;
+      color: var(--muted);
+      font-weight: 900;
+    }
+
+    .tabs button.active {
+      background: var(--gold);
+      color: #1b1205;
+    }
+
+    .auth-form {
+      display: none;
+    }
+
+    .auth-form.active {
+      display: grid;
+      gap: 13px;
+    }
+
+    label {
+      font-size: 13px;
+      color: var(--muted);
+      font-weight: 800;
+      margin-bottom: 6px;
+      display: block;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      background: rgba(0,0,0,0.26);
+      border: 1px solid var(--border);
+      color: var(--text);
+      border-radius: 16px;
+      padding: 14px 15px;
+      outline: none;
+      font-size: 15px;
+    }
+
+    textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: rgba(245,199,107,0.75);
+      box-shadow: 0 0 0 4px rgba(245,199,107,0.08);
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .error {
+      display: none;
+      color: #ffd0d0;
+      background: rgba(255,107,107,0.12);
+      border: 1px solid rgba(255,107,107,0.22);
+      padding: 12px;
+      border-radius: 16px;
+      font-weight: 750;
+    }
+
+    .error.show {
+      display: block;
+    }
+
+    .success {
+      display: none;
+      color: #ceffd9;
+      background: rgba(114,224,138,0.12);
+      border: 1px solid rgba(114,224,138,0.22);
+      padding: 12px;
+      border-radius: 16px;
+      font-weight: 750;
+    }
+
+    .success.show {
+      display: block;
+    }
+
+    .onboard-wrap {
+      max-width: 830px;
+      margin: 0 auto;
+    }
+
+    .step {
+      display: none;
+    }
+
+    .step.active {
+      display: block;
+    }
+
+    .choice-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin: 18px 0;
+    }
+
+    .choice {
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.05);
+      border-radius: 22px;
+      padding: 18px;
+      text-align: left;
+      color: var(--text);
+    }
+
+    .choice.active {
+      border-color: var(--gold);
+      background: rgba(245,199,107,0.12);
+    }
+
+    .skills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .skill {
+      padding: 8px 11px;
+      border-radius: 999px;
+      background: rgba(245,199,107,0.12);
+      border: 1px solid rgba(245,199,107,0.24);
+      color: var(--gold2);
+      font-weight: 800;
+      font-size: 13px;
+    }
+
+    .profile-card {
+      display: grid;
+      gap: 12px;
+    }
+
+    .profile-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      align-items: flex-start;
+    }
+
+    .avatar {
+      width: 58px;
+      height: 58px;
+      display: grid;
+      place-items: center;
+      border-radius: 18px;
+      background: linear-gradient(135deg, var(--gold), var(--gold2));
+      color: #1b1205;
+      font-weight: 1000;
+      font-size: 22px;
+      flex-shrink: 0;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.06);
+      color: var(--muted);
+      border-radius: 999px;
+      padding: 7px 10px;
+      font-size: 12px;
+      font-weight: 850;
+    }
+
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 24px 0;
+    }
+
+    .filters button {
+      background: rgba(255,255,255,0.06);
+      color: var(--text);
+      border: 1px solid var(--border);
+      padding: 10px 13px;
+      border-radius: 999px;
+      font-weight: 850;
+    }
+
+    .filters button.active {
+      background: var(--gold);
+      color: #1b1205;
+    }
+
+    .empty {
+      color: var(--muted);
+      text-align: center;
+      padding: 40px 20px;
+      border: 1px dashed var(--border);
+      border-radius: var(--radius);
+    }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 22px;
+      transform: translateX(-50%) translateY(120px);
+      background: #161616;
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 13px 18px;
+      border-radius: 999px;
+      box-shadow: var(--shadow);
+      z-index: 500;
+      font-weight: 850;
+      transition: 0.25s ease;
+      max-width: calc(100% - 30px);
+      text-align: center;
+    }
+
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    .gold {
+      color: var(--gold);
+    }
+
+    .footer {
+      padding: 35px 0 55px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      text-align: center;
+    }
+
+    @media (max-width: 860px) {
+      .navlinks {
+        display: none;
+      }
+
+      .hamb {
+        display: block;
+      }
+
+      .hero {
+        grid-template-columns: 1fr;
+        padding-top: 38px;
+      }
+
+      .grid.two,
+      .grid.three,
+      .stats,
+      .choice-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-card {
+        min-height: auto;
+      }
+
+      .page {
+        padding-top: 28px;
       }
     }
-  } else {
-    if(mob)mob.textContent='Join / Sign In';
-  }
-});
+  </style>
+</head>
 
-function updateNavAuth(){
-  const authArea=document.getElementById('nav-auth-area');
-  const userArea=document.getElementById('nav-user-area');
-  if(currentUser){
-    authArea.style.display='none';
-    userArea.style.display='flex';
-  } else {
-    authArea.style.display='flex';
-    userArea.style.display='none';
-  }
-}
+<body>
+  <header class="topbar">
+    <div class="container nav">
+      <button class="logo" onclick="showPage('home')">DESERVED<span>.</span></button>
 
-// ── PAGES ──
-function showPage(name){
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.getElementById('page-'+name).classList.add('active');
-  window.scrollTo(0,0);
-  if(name==='browse')loadProfiles();
-  if(name==='dashboard')loadDashboard();
-  if(name==='home')loadStats();
-}
+      <nav class="navlinks">
+        <button onclick="showPage('home')">Home</button>
+        <button onclick="showPage('browse')">Browse People</button>
+        <button onclick="showPage('stories')">Stories</button>
 
-function showAuth(tab){
-  showPage('auth');
-  switchAuthTab(tab);
-}
+        <span id="nav-guest">
+          <button onclick="showAuth('login')">Sign In</button>
+          <button class="btn" onclick="showAuth('signup')">Join Free →</button>
+        </span>
 
-// ── SCROLL REVEAL ──
-const srEls=document.querySelectorAll('.sr');
-const ob=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('go')})},{threshold:.1});
-srEls.forEach(e=>ob.observe(e));
+        <span id="nav-user" style="display:none;">
+          <button onclick="goToMyProfile()">My Profile</button>
+          <button class="btn danger" onclick="handleLogout()">Sign Out</button>
+        </span>
+      </nav>
 
-// ── AUTH ──
-function switchAuthTab(tab){
-  document.getElementById('tab-login').classList.toggle('on',tab==='login');
-  document.getElementById('tab-signup').classList.toggle('on',tab==='signup');
-  document.getElementById('form-login').style.display=tab==='login'?'block':'none';
-  document.getElementById('form-signup').style.display=tab==='signup'?'block':'none';
-  clearAuthMsg();
-}
+      <button class="hamb" onclick="openMob()">☰</button>
+    </div>
+  </header>
 
-function clearAuthMsg(){
-  document.getElementById('auth-err').classList.remove('show');
-  document.getElementById('auth-success').classList.remove('show');
-}
+  <div id="mobile-panel" class="mobile-panel">
+    <div class="mobile-head">
+      <div class="logo">DESERVED<span>.</span></div>
+      <button style="width:auto;" onclick="closeMob()">✕</button>
+    </div>
 
-function showAuthErr(msg){
-  const el=document.getElementById('auth-err');
-  el.textContent=msg;el.classList.add('show');
-}
-function showAuthSuccess(msg){
-  const el=document.getElementById('auth-success');
-  el.textContent=msg;el.classList.add('show');
-}
+    <div class="mobile-links">
+      <button onclick="closeMob();showPage('home')">Home</button>
+      <button onclick="closeMob();showPage('browse')">Browse People</button>
+      <button onclick="closeMob();showPage('stories')">Stories</button>
+      <button id="mob-auth-btn" onclick="handleMobAuth()">Join / Sign In</button>
+    </div>
+  </div>
 
-async function handleLogin(){
-  const email=document.getElementById('login-email').value.trim();
-  const pass=document.getElementById('login-pass').value;
-  if(!email||!pass){showAuthErr('Please fill in both fields.');return;}
-  const btn=document.getElementById('btn-login');
-  btn.disabled=true;btn.textContent='Signing in…';
-  clearAuthMsg();
-  const{data,error}=await sb.auth.signInWithPassword({email,password:pass});
-  btn.disabled=false;btn.textContent='Sign In →';
-  if(error){showAuthErr(error.message);return;}
-  currentUser=data.user;
-  updateNavAuth();
-  toast('Welcome back! 🙏');
-  const prof=await loadCurrentProfile();
-  if(!prof){showPage('onboard');}
-  else{showPage('dashboard');}
-}
+  <main>
+    <section id="page-home" class="page active">
+      <div class="container hero">
+        <div>
+          <div class="badge">Calgary, Canada — Est. 2026</div>
+          <h1>You deserve to be seen.</h1>
+          <p>
+            Real talent finds real opportunity here. No reference. No gatekeeping.
+            No discrimination. Just you and what you can do.
+          </p>
 
-async function handleSignup(){
-  const fn=document.getElementById('sig-fname').value.trim();
-  const ln=document.getElementById('sig-lname').value.trim();
-  const email=document.getElementById('sig-email').value.trim();
-  const pass=document.getElementById('sig-pass').value;
-  const city=document.getElementById('sig-city').value;
-  if(!fn||!ln||!email||pass.length<8||!city){
-    showAuthErr('Please fill in all fields. Password must be at least 8 characters.');return;
-  }
-  const btn=document.getElementById('btn-signup');
-  btn.disabled=true;btn.textContent='Creating account…';
-  clearAuthMsg();
-  const{data,error}=await sb.auth.signUp({
-    email,password:pass,
-    options:{data:{first_name:fn,last_name:ln,city}}
-  });
-  btn.disabled=false;btn.textContent='Create Account →';
-  if(error){showAuthErr(error.message);return;}
-  showAuthSuccess('Account created! Setting up your profile…');
-  window._signupData={first_name:fn,last_name:ln,email,city};
-  setTimeout(()=>{showPage('onboard')},800);
-}
+          <div class="hero-actions">
+            <button class="btn" onclick="requireAuthOrOnboard()">✦ Join DESERVED →</button>
+            <button class="btn secondary" onclick="showPage('browse')">Browse People</button>
+          </div>
 
-async function signOut(){
-  await sb.auth.signOut();
-  currentUser=null;currentProfile=null;
-  toast('Signed out. See you soon! 🙏');
-  showPage('home');
-}
-
-// ── PROFILE LOADING ──
-async function loadCurrentProfile(){
-  if(!currentUser)return null;
-  const{data}=await sb.from('profiles').select('*').eq('id',currentUser.id).single();
-  currentProfile=data;
-  return data;
-}
-
-// ── ONBOARDING ──
-let currentStep=1;
-
-function goStep(step){
-  if(step>currentStep&&!validateStep(currentStep))return;
-  document.getElementById('step-'+currentStep).classList.remove('active');
-  currentStep=step;
-  document.getElementById('step-'+currentStep).classList.add('active');
-  const pct=[25,50,75,100][step-1];
-  document.getElementById('progress-fill').style.width=pct+'%';
-  document.getElementById('page-onboard').scrollIntoView({behavior:'smooth',block:'start'});
-}
-
-function validateStep(step){
-  if(step===1&&!selectedRole){toast('Please select your role to continue.');return false;}
-  if(step===2&&skills.length===0){toast('Please add at least one skill.');return false;}
-  if(step===3){
-    const story=document.getElementById('ob-story').value.trim();
-    if(story.length<50){toast('Please write at least a short story about yourself (50+ characters).');return false;}
-  }
-  return true;
-}
-
-function selectRole(r){
-  selectedRole=r;
-  ['need','give','both'].forEach(x=>document.getElementById('rc-'+x).classList.toggle('selected',x===r));
-  document.getElementById('need-detail').style.display=(r==='need'||r==='both')?'block':'none';
-}
-
-function addSkillKey(e){if(e.key==='Enter'){e.preventDefault();addSkillDirect(document.getElementById('skill-input').value.trim());document.getElementById('skill-input').value=''}}
-function addSkillDirect(val){if(!val||skills.includes(val)||skills.length>=8)return;skills.push(val);renderSkills()}
-function removeSkill(s){skills=skills.filter(x=>x!==s);renderSkills()}
-function renderSkills(){
-  document.getElementById('skill-tags').innerHTML=skills.map(s=>`<span class="skill-tag-item">${s}<button onclick="removeSkill('${s}')">×</button></span>`).join('');
-}
-function updateCC(id,cid,max){document.getElementById(cid).textContent=document.getElementById(id).value.length}
-
-async function submitProfile(){
-  if(!currentUser){toast('Please sign in first.');return;}
-  const btn=document.getElementById('btn-submit-profile');
-  btn.disabled=true;btn.textContent='Submitting…';
-  const sd=window._signupData||{};
-  // Get user metadata as fallback
-  const meta=currentUser.user_metadata||{};
-  const profileData={
-    id:currentUser.id,
-    first_name:sd.first_name||meta.first_name||'',
-    last_name:sd.last_name||meta.last_name||'',
-    email:currentUser.email,
-    city:sd.city||meta.city||'',
-    role:selectedRole,
-    need_type:document.getElementById('ob-need-type')?.value||'',
-    need_desc:document.getElementById('ob-need-desc')?.value||'',
-    skills:skills,
-    experience:document.getElementById('ob-exp').value,
-    story:document.getElementById('ob-story').value,
-    origin:document.getElementById('ob-origin').value,
-    time_in_calgary:document.getElementById('ob-time').value,
-    languages:document.getElementById('ob-langs').value,
-    status:'pending'
-  };
-  const{error}=await sb.from('profiles').upsert(profileData);
-  btn.disabled=false;btn.textContent='Submit Profile 🙏';
-  if(error){toast('Error: '+error.message);return;}
-  currentProfile=profileData;
-  toast('🙏 Profile submitted! We\'ll review it within 24–48 hours.');
-  showPage('dashboard');
-  loadDashboard();
-}
-
-// ── BROWSE PROFILES ──
-async function loadProfiles(filter='all'){
-  const container=document.getElementById('profiles-container');
-  container.innerHTML='<div class="loading-profiles" style="grid-column:1/-1">Loading real profiles… 🔍</div>';
-  let query=sb.from('profiles').select('*').eq('status','approved');
-  if(filter!=='all')query=query.eq('role',filter);
-  const{data,error}=await query.order('created_at',{ascending:false});
-  if(error){container.innerHTML='<div class="loading-profiles" style="grid-column:1/-1">Could not load profiles. Please try again.</div>';return;}
-  allProfiles=data||[];
-  renderProfiles(allProfiles);
-}
-
-function renderProfiles(profiles){
-  const container=document.getElementById('profiles-container');
-  if(!profiles||profiles.length===0){
-    container.innerHTML=`
-      <div class="empty-profiles" style="grid-column:1/-1">
-        <span>🌱</span>
-        <h3>Be the first.</h3>
-        <p>No approved profiles yet. Join DESERVED and be the first person Calgary sees here.</p>
-        <button class="btn-primary" style="margin-top:20px" onclick="showAuth('signup')">Join DESERVED →</button>
-      </div>`;
-    return;
-  }
-  const colors=['#C46A08','#2A7D4F','#4A6FA5','#8B5E3C','#6B3FA0','#C0392B'];
-  container.innerHTML=profiles.map((p,i)=>{
-    const initials=((p.first_name||'?')[0]+(p.last_name||'?')[0]).toUpperCase();
-    const color=colors[i%colors.length];
-    const badgeClass=p.role==='need'?'badge-need':p.role==='give'?'badge-give':'badge-both';
-    const badgeText=p.role==='need'?'🙋 Looking for work':p.role==='give'?'🤝 Offering help':'⚡ Need & Give';
-    const skillsHtml=(p.skills||[]).slice(0,4).map(s=>`<span class="pc-skill">${s}</span>`).join('');
-    const storyPreview=(p.story||'').substring(0,100)+(p.story?.length>100?'…':'');
-    return `
-      <div class="profile-card" onclick="openProfileConnect('${p.id}','${p.first_name} ${p.last_name}')">
-        <div class="pc-top">
-          <div class="pc-av" style="background:${color}">${initials}</div>
-          <div>
-            <div class="pc-name">${p.first_name} ${p.last_name}</div>
-            <div class="pc-role-text">${(p.skills||[]).slice(0,2).join(' · ')||'Member'} ${p.city?'· '+p.city:''}</div>
-            <span class="pc-badge ${badgeClass}">${badgeText}</span>
+          <div class="stats">
+            <div class="stat">
+              <strong id="stat-members">—</strong>
+              <span>Members</span>
+            </div>
+            <div class="stat">
+              <strong id="stat-connections">—</strong>
+              <span>Connections Made</span>
+            </div>
+            <div class="stat">
+              <strong>$0</strong>
+              <span>Hall Rent</span>
+            </div>
           </div>
         </div>
-        ${storyPreview?`<div class="pc-body">"${storyPreview}"</div>`:''}
-        ${skillsHtml?`<div class="pc-skills-row">${skillsHtml}</div>`:''}
-        <div class="pc-footer">
-          <span class="pc-loc">📍 ${p.city||'Calgary'}</span>
-          <button class="pc-connect-btn" onclick="openProfileConnect('${p.id}','${p.first_name} ${p.last_name}');event.stopPropagation()">Connect →</button>
-        </div>
-      </div>`;
-  }).join('');
-}
 
-function filterProfiles(filter,btn){
-  document.querySelectorAll('.filter-chip').forEach(b=>b.classList.remove('on'));
-  btn.classList.add('on');
-  if(filter==='all')renderProfiles(allProfiles);
-  else renderProfiles(allProfiles.filter(p=>p.role===filter));
-}
+        <div class="hero-card">
+          <div>
+            <h3>Built for people with ability, not perfect resumes.</h3>
+            <p>
+              DESERVED helps people show their skills, story, needs, and offers —
+              then creates safer double opt-in connections.
+            </p>
+          </div>
 
-// ── CONNECT ──
-function openProfileConnect(profileId,name){
-  if(!currentUser){toast('Please sign in to connect with people. 🙏');showAuth('signup');return;}
-  if(profileId===currentUser?.id){toast('That\'s you! 😄');return;}
-  connectingToId=profileId;
-  document.getElementById('modal-title').textContent='Connect with '+name.split(' ')[0];
-  document.getElementById('modal-desc').textContent='Send '+name.split(' ')[0]+' a message. They\'ll decide whether to connect. Your contact info stays private.';
-  document.getElementById('connect-msg').value='';
-  document.getElementById('connect-modal').classList.add('open');
-  document.body.style.overflow='hidden';
-}
-
-function closeModal(){
-  document.getElementById('connect-modal').classList.remove('open');
-  document.body.style.overflow='';
-  connectingToId=null;
-}
-
-function handleModalClick(e){if(e.target===document.getElementById('connect-modal'))closeModal()}
-
-async function sendConnection(){
-  const msg=document.getElementById('connect-msg').value.trim();
-  if(!msg){toast('Please write a short message. 🙏');return;}
-  if(!connectingToId||!currentUser){toast('Something went wrong. Please try again.');return;}
-  const btn=document.querySelector('.btn-modal-send');
-  btn.disabled=true;btn.textContent='Sending…';
-  const{error}=await sb.from('connections').insert({
-    from_id:currentUser.id,
-    to_id:connectingToId,
-    message:msg,
-    status:'pending'
-  });
-  btn.disabled=false;btn.textContent='Send Request →';
-  if(error){toast('Error: '+error.message);return;}
-  closeModal();
-  toast('✓ Connection request sent! They\'ll be notified. 🙏');
-}
-
-// ── DASHBOARD ──
-async function loadDashboard(){
-  if(!currentUser){showAuth('login');return;}
-  const profile=await loadCurrentProfile();
-  const nameEl=document.getElementById('dash-name');
-  nameEl.textContent=(profile?.first_name||currentUser.user_metadata?.first_name||'friend')+'.';
-  // Status card
-  const statusEl=document.getElementById('dash-status');
-  if(!profile){
-    statusEl.innerHTML=`<div class="dash-status-card dsc-pending"><span class="dsc-icon">📝</span><div><div class="dsc-title">Complete your profile</div><div class="dsc-desc">You haven't submitted your profile yet. It takes 5 minutes and it's worth it.</div><button class="btn-primary" style="margin-top:12px;font-size:13px;padding:10px 20px" onclick="showPage('onboard')">Complete Profile →</button></div></div>`;
-    document.getElementById('dash-profile-section').innerHTML='';
-    document.getElementById('dash-connections-section').innerHTML='';
-    return;
-  }
-  if(profile.status==='pending'){
-    statusEl.innerHTML=`<div class="dash-status-card dsc-pending"><span class="dsc-icon">⏳</span><div><div class="dsc-title">Profile under review</div><div class="dsc-desc">Our team is reviewing your profile. You'll receive an email within 24–48 hours once it's approved.</div></div></div>`;
-  } else if(profile.status==='approved'){
-    statusEl.innerHTML=`<div class="dash-status-card dsc-approved"><span class="dsc-icon">✅</span><div><div class="dsc-title">Profile live!</div><div class="dsc-desc">Your profile is live on DESERVED. Calgary can see you. Browse other profiles and make connections.</div></div></div>`;
-  } else if(profile.status==='rejected'){
-    statusEl.innerHTML=`<div class="dash-status-card dsc-rejected"><span class="dsc-icon">❌</span><div><div class="dsc-title">Profile needs revision</div><div class="dsc-desc">${profile.rejection_reason||'Please update your profile and resubmit.'}</div><button class="btn-primary" style="margin-top:12px;font-size:13px;padding:10px 20px" onclick="showPage('onboard')">Update Profile →</button></div></div>`;
-  }
-  // Profile card
-  const colors=['#C46A08','#2A7D4F','#4A6FA5','#8B5E3C','#6B3FA0'];
-  const color=colors[Math.floor(Math.random()*colors.length)];
-  const initials=((profile.first_name||'?')[0]+(profile.last_name||'?')[0]).toUpperCase();
-  document.getElementById('dash-profile-section').innerHTML=`
-    <div class="dash-profile-card">
-      <div class="dpc-top">
-        <div class="dpc-av" style="background:${color}">${initials}</div>
-        <div>
-          <div class="dpc-name">${profile.first_name} ${profile.last_name}</div>
-          <div class="dpc-role">${(profile.skills||[]).slice(0,3).join(' · ')||'Member'} · ${profile.city||'Calgary'}</div>
-          ${profile.languages?`<div style="font-size:12px;color:var(--muted);margin-top:4px">🗣️ ${profile.languages}</div>`:''}
+          <div class="grid">
+            <div class="card">
+              <h3>Need something?</h3>
+              <p>Find work, mentors, partners, collaborators, or guidance.</p>
+            </div>
+            <div class="card">
+              <h3>Want to give?</h3>
+              <p>Offer skills, time, knowledge, mentorship, or opportunity.</p>
+            </div>
+          </div>
         </div>
       </div>
-      ${profile.story?`<div class="dpc-story">"${profile.story.substring(0,200)}${profile.story.length>200?'…':''}"</div>`:''}
-    </div>`;
-  // Connections
-  await loadConnectionsDash();
-}
+    </section>
 
-async function loadConnectionsDash(){
-  if(!currentUser)return;
-  const{data}=await sb.from('connections').select('*').or(`from_id.eq.${currentUser.id},to_id.eq.${currentUser.id}`).order('created_at',{ascending:false});
-  const el=document.getElementById('dash-connections-section');
-  if(!data||data.length===0){
-    el.innerHTML=`<div class="dash-connections"><div class="dc-title">🔗 Connections</div><p style="font-size:14px;color:var(--muted);line-height:1.7">No connections yet. <a href="#" onclick="showPage('browse');return false" style="color:var(--accent)">Browse profiles</a> and connect with someone.</p></div>`;
-    return;
-  }
-  const connHtml=data.map(c=>{
-    const isFrom=c.from_id===currentUser.id;
-    const otherName=isFrom?'To someone':'From someone';
-    const statusClass=c.status==='pending'?'status-pending':c.status==='accepted'?'status-accepted':'status-declined';
-    const acceptBtns=(!isFrom&&c.status==='pending')?`<div class="conn-actions"><button class="btn-accept" onclick="respondConnection('${c.id}','accepted')">Accept</button><button class="btn-decline" onclick="respondConnection('${c.id}','declined')">Decline</button></div>`:'';
-    return `<div class="conn-item"><div class="ci-av">${isFrom?'→':'←'}</div><div><div class="ci-name">${isFrom?'Request sent':'Request received'}</div><div class="ci-msg">"${(c.message||'').substring(0,60)}…"</div></div><span class="ci-status ${statusClass}">${c.status}</span>${acceptBtns}</div>`;
-  }).join('');
-  el.innerHTML=`<div class="dash-connections"><div class="dc-title">🔗 Your Connections</div>${connHtml}</div>`;
-}
+    <section id="page-auth" class="page">
+      <div class="container">
+        <div class="auth-box">
+          <h2>DESERVED.</h2>
 
-async function respondConnection(connId,status){
-  const{error}=await sb.from('connections').update({status,responded_at:new Date().toISOString()}).eq('id',connId);
-  if(error){toast('Error: '+error.message);return;}
-  toast(status==='accepted'?'✓ Connection accepted! 🎉':'Connection declined.');
-  loadConnectionsDash();
-}
+          <div class="tabs">
+            <button id="tab-login" class="active" onclick="showAuthForm('login')">Sign In</button>
+            <button id="tab-signup" onclick="showAuthForm('signup')">Join Free</button>
+          </div>
 
-// ── STATS ──
-async function loadStats(){
-  const{count:members}=await sb.from('profiles').select('*',{count:'exact',head:true}).eq('status','approved');
-  const{count:connections}=await sb.from('connections').select('*',{count:'exact',head:true}).eq('status','accepted');
-  const mEl=document.getElementById('stat-members');
-  const cEl=document.getElementById('stat-connections');
-  if(mEl)mEl.textContent=members||'0';
-  if(cEl)cEl.textContent=connections||'0';
-}
+          <div id="auth-error" class="error"></div>
+          <div id="auth-success" class="success"></div>
 
-// ── GO TO MY PROFILE ──
-async function goToMyProfile(){
-  if(!currentUser){showAuth('login');return;}
-  const prof=await loadCurrentProfile();
-  if(!prof){showPage('onboard')}
-  else{showPage('dashboard')}
-}
+          <div id="form-login" class="auth-form active">
+            <div>
+              <label>Email</label>
+              <input id="login-email" type="email" autocomplete="email" />
+            </div>
+            <div>
+              <label>Password</label>
+              <input id="login-pass" type="password" autocomplete="current-password" />
+            </div>
+            <button id="btn-login" class="btn" onclick="handleLogin()">Sign In →</button>
+          </div>
 
-// ── TOAST ──
-function toast(m){
-  const t=document.getElementById('toast');
-  t.textContent=m;t.classList.add('on');
-  setTimeout(()=>t.classList.remove('on'),3500);
-}
+          <div id="form-signup" class="auth-form">
+            <div class="form-row">
+              <div>
+                <label>First Name</label>
+                <input id="signup-first" type="text" />
+              </div>
+              <div>
+                <label>Last Name</label>
+                <input id="signup-last" type="text" />
+              </div>
+            </div>
 
-// ── INIT ──
-(async()=>{
-  const{data:{session}}=await sb.auth.getSession();
-  currentUser=session?.user||null;
-  updateNavAuth();
-  if(currentUser){
-    const prof=await loadCurrentProfile();
-    const mob=document.getElementById('mob-auth-btn');
-    if(mob)mob.textContent='My Profile';
-    // Auto go to dashboard if signed in and on home page
-    if(!prof){
-      showPage('onboard');
-    } else {
-      showPage('dashboard');
+            <div>
+              <label>Email</label>
+              <input id="signup-email" type="email" autocomplete="email" />
+            </div>
+
+            <div>
+              <label>Password</label>
+              <input id="signup-pass" type="password" autocomplete="new-password" />
+            </div>
+
+            <div>
+              <label>City Area</label>
+              <select id="signup-area">
+                <option value="">Select your area…</option>
+                <option>NE Calgary</option>
+                <option>NW Calgary</option>
+                <option>SE Calgary</option>
+                <option>SW Calgary</option>
+                <option>Downtown Calgary</option>
+                <option>Outside Calgary</option>
+              </select>
+            </div>
+
+            <button id="btn-signup" class="btn" onclick="handleSignup()">Create Account →</button>
+          </div>
+
+          <p style="margin-top:18px;">
+            <button class="btn secondary" onclick="showPage('home')">← Back to home</button>
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section id="page-onboard" class="page">
+      <div class="container onboard-wrap">
+        <div class="card">
+          <div id="step-1" class="step active">
+            <div class="badge">Step 1 of 4 — Your purpose</div>
+            <h2>What brings you here?</h2>
+            <p>This shapes how people find you and how we match you.</p>
+
+            <label>Choose your role</label>
+            <div class="choice-grid">
+              <button class="choice" onclick="setRole('need', this)">
+                <h3>I Need Something</h3>
+                <p>Work, mentor, collaborator, chance</p>
+              </button>
+              <button class="choice" onclick="setRole('give', this)">
+                <h3>I Want to Give</h3>
+                <p>Skills, time, teaching, mentoring</p>
+              </button>
+              <button class="choice" onclick="setRole('both', this)">
+                <h3>Both</h3>
+                <p>Need something and have something to give</p>
+              </button>
+            </div>
+
+            <div>
+              <label>I am looking for…</label>
+              <select id="need-type">
+                <option value="">Select…</option>
+                <option>A job or work opportunity</option>
+                <option>A mentor or guide</option>
+                <option>A collaborator or partner</option>
+                <option>Someone to teach me a skill</option>
+                <option>Volunteers for my project</option>
+                <option>A platform to show my talent</option>
+                <option>Other</option>
+              </select>
+            </div>
+
+            <div style="margin-top:12px;">
+              <label>Describe what you need</label>
+              <textarea id="need-desc" maxlength="300"></textarea>
+            </div>
+
+            <p>
+              <button class="btn" onclick="nextStep(2)">Continue →</button>
+            </p>
+          </div>
+
+          <div id="step-2" class="step">
+            <div class="badge">Step 2 of 4 — Your skills</div>
+            <h2>What can you do?</h2>
+            <p>Add your skills and experience. This is your credential.</p>
+
+            <label>Skills & Talents</label>
+            <input id="skill-input" placeholder="Add a skill and press Enter" onkeydown="handleSkillKey(event)" />
+
+            <div class="skills" id="skills-list"></div>
+
+            <div style="margin-top:15px;">
+              <label>Quick add</label>
+              <div class="skills">
+                <button class="skill" onclick="addSkill('Carpentry')">Carpentry</button>
+                <button class="skill" onclick="addSkill('Teaching')">Teaching</button>
+                <button class="skill" onclick="addSkill('Cooking')">Cooking</button>
+                <button class="skill" onclick="addSkill('Coding')">Coding</button>
+                <button class="skill" onclick="addSkill('Driving')">Driving</button>
+                <button class="skill" onclick="addSkill('Design')">Design</button>
+                <button class="skill" onclick="addSkill('Accounting')">Accounting</button>
+                <button class="skill" onclick="addSkill('Nursing')">Nursing</button>
+                <button class="skill" onclick="addSkill('Music')">Music</button>
+                <button class="skill" onclick="addSkill('Mentoring')">Mentoring</button>
+              </div>
+            </div>
+
+            <div style="margin-top:15px;">
+              <label>Years of experience</label>
+              <select id="experience">
+                <option value="">Select…</option>
+                <option>Just starting out</option>
+                <option>1–3 years</option>
+                <option>3–5 years</option>
+                <option>5–10 years</option>
+                <option>10–20 years</option>
+                <option>20+ years</option>
+              </select>
+            </div>
+
+            <p>
+              <button class="btn secondary" onclick="nextStep(1)">← Back</button>
+              <button class="btn" onclick="nextStep(3)">Continue →</button>
+            </p>
+          </div>
+
+          <div id="step-3" class="step">
+            <div class="badge">Step 3 of 4 — Your story</div>
+            <h2>Tell us your story.</h2>
+            <p>Not a resume. Just you, in your own words.</p>
+
+            <div>
+              <label>Your story *</label>
+              <textarea id="story" maxlength="800"></textarea>
+            </div>
+
+            <div class="form-row" style="margin-top:12px;">
+              <div>
+                <label>Originally from</label>
+                <input id="origin" />
+              </div>
+              <div>
+                <label>How long in Calgary?</label>
+                <select id="calgary-time">
+                  <option value="">Select…</option>
+                  <option>Just arrived</option>
+                  <option>Less than 1 year</option>
+                  <option>1–3 years</option>
+                  <option>3–5 years</option>
+                  <option>5–10 years</option>
+                  <option>Over 10 years</option>
+                  <option>Born here</option>
+                </select>
+              </div>
+            </div>
+
+            <div style="margin-top:12px;">
+              <label>Languages you speak</label>
+              <input id="languages" placeholder="English, Punjabi, Hindi…" />
+            </div>
+
+            <p>
+              <button class="btn secondary" onclick="nextStep(2)">← Back</button>
+              <button class="btn" onclick="nextStep(4)">Continue →</button>
+            </p>
+          </div>
+
+          <div id="step-4" class="step">
+            <div class="badge">Step 4 of 4 — Almost there</div>
+            <h2>Ready to be seen?</h2>
+            <p>
+              Your profile goes to our team for a quick human review. Once approved,
+              your profile becomes visible.
+            </p>
+
+            <div class="success show">
+              We review your profile personally. Once approved, your profile goes live.
+            </div>
+
+            <p>
+              <button class="btn secondary" onclick="nextStep(3)">← Back</button>
+              <button id="btn-submit-profile" class="btn" onclick="submitProfile()">Submit Profile</button>
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="page-browse" class="page">
+      <div class="container">
+        <h2>Real people. Real Calgary.</h2>
+        <p>Every profile reviewed by a real human.</p>
+
+        <div class="filters">
+          <button class="active" onclick="setFilter('all', this)">All People</button>
+          <button onclick="setFilter('need', this)">Looking for work</button>
+          <button onclick="setFilter('give', this)">Offering help</button>
+          <button onclick="setFilter('both', this)">Both</button>
+        </div>
+
+        <div id="profiles-grid" class="grid three">
+          <div class="empty">Loading real profiles…</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="page-dashboard" class="page">
+      <div class="container">
+        <h2>Welcome back, <span id="dash-name">—</span></h2>
+        <p>Here's your DESERVED profile.</p>
+
+        <div id="dashboard-content" class="grid two"></div>
+      </div>
+    </section>
+
+    <section id="page-stories" class="page">
+      <div class="container">
+        <h2>Stories</h2>
+        <p>Coming soon: real stories from people who deserved a chance.</p>
+
+        <div class="card">
+          <h3>DESERVED is not just profiles.</h3>
+          <p>
+            This platform is for human stories, hidden talent, and community-powered opportunity.
+          </p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div class="footer">
+    DESERVED © 2026 — Built in Calgary.
+  </div>
+
+  <div id="toast" class="toast"></div>
+
+  <script>
+    const SUPABASE_URL = 'https://etrdshspqlcmgvjrxapc.supabase.co';
+
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV0cmRzaHNwcWxjbWd2anJ4YXBjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA1ODg4NTUsImV4cCI6MjA5NjE2NDg1NX0.11hVZw0UwkTwsxGj7aVBrYlfYUtotsDWoJ4fZ2y2k8g';
+
+    const { createClient } = supabase;
+
+    const sb = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+      auth: {
+        persistSession: true,
+        autoRefreshToken: true,
+        detectSessionInUrl: true,
+        storage: window.localStorage,
+        storageKey: 'deserved-auth-session'
+      }
+    });
+
+    let currentUser = null;
+    let currentProfile = null;
+    let currentFilter = 'all';
+
+    let onboard = {
+      role: '',
+      skills: []
+    };
+
+    function toast(message) {
+      const el = document.getElementById('toast');
+      el.textContent = message;
+      el.classList.add('show');
+      setTimeout(() => el.classList.remove('show'), 2600);
     }
-  }
-  loadStats();
-  loadProfiles();
-})();
-</script>
+
+    function showPage(name) {
+      const target = document.getElementById('page-' + name);
+
+      if (!target) {
+        console.error('Page not found:', name);
+        toast('Page not found. Please try again.');
+        return;
+      }
+
+      document.querySelectorAll('.page').forEach(page => {
+        page.classList.remove('active');
+      });
+
+      target.classList.add('active');
+      window.scrollTo(0, 0);
+
+      if (name === 'browse') loadProfiles();
+      if (name === 'dashboard') loadDashboard();
+      if (name === 'home') loadStats();
+
+      closeMob();
+    }
+
+    function openMob() {
+      document.getElementById('mobile-panel').classList.add('active');
+    }
+
+    function closeMob() {
+      document.getElementById('mobile-panel').classList.remove('active');
+    }
+
+    function handleMobAuth() {
+      closeMob();
+
+      if (currentUser) {
+        goToMyProfile();
+      } else {
+        showAuth('signup');
+      }
+    }
+
+    function showAuth(mode = 'login') {
+      showPage('auth');
+      showAuthForm(mode);
+    }
+
+    function showAuthForm(mode) {
+      clearAuthMsg();
+
+      document.getElementById('tab-login').classList.toggle('active', mode === 'login');
+      document.getElementById('tab-signup').classList.toggle('active', mode === 'signup');
+
+      document.getElementById('form-login').classList.toggle('active', mode === 'login');
+      document.getElementById('form-signup').classList.toggle('active', mode === 'signup');
+    }
+
+    function clearAuthMsg() {
+      const err = document.getElementById('auth-error');
+      const success = document.getElementById('auth-success');
+
+      err.textContent = '';
+      success.textContent = '';
+      err.classList.remove('show');
+      success.classList.remove('show');
+    }
+
+    function showAuthErr(message) {
+      const err = document.getElementById('auth-error');
+      err.textContent = message;
+      err.classList.add('show');
+    }
+
+    function showAuthSuccess(message) {
+      const success = document.getElementById('auth-success');
+      success.textContent = message;
+      success.classList.add('show');
+    }
+
+    function updateNavAuth() {
+      const guest = document.getElementById('nav-guest');
+      const user = document.getElementById('nav-user');
+      const mob = document.getElementById('mob-auth-btn');
+
+      if (currentUser) {
+        guest.style.display = 'none';
+        user.style.display = 'inline-flex';
+        if (mob) mob.textContent = 'My Profile';
+      } else {
+        guest.style.display = 'inline-flex';
+        user.style.display = 'none';
+        if (mob) mob.textContent = 'Join / Sign In';
+      }
+    }
+
+    async function handleSignup() {
+      const first = document.getElementById('signup-first').value.trim();
+      const last = document.getElementById('signup-last').value.trim();
+      const email = document.getElementById('signup-email').value.trim();
+      const password = document.getElementById('signup-pass').value;
+      const area = document.getElementById('signup-area').value;
+
+      if (!first || !last || !email || !password || !area) {
+        showAuthErr('Please fill in all fields.');
+        return;
+      }
+
+      if (password.length < 6) {
+        showAuthErr('Password must be at least 6 characters.');
+        return;
+      }
+
+      const btn = document.getElementById('btn-signup');
+      btn.disabled = true;
+      btn.textContent = 'Creating account…';
+      clearAuthMsg();
+
+      try {
+        const { data, error } = await sb.auth.signUp({
+          email,
+          password,
+          options: {
+            data: {
+              first_name: first,
+              last_name: last,
+              city_area: area
+            }
+          }
+        });
+
+        if (error) {
+          showAuthErr(error.message);
+          return;
+        }
+
+        const { data: sessionData } = await sb.auth.getSession();
+
+        currentUser = sessionData?.session?.user || data?.user || null;
+        updateNavAuth();
+
+        localStorage.setItem('deserved_signup_first', first);
+        localStorage.setItem('deserved_signup_last', last);
+        localStorage.setItem('deserved_signup_area', area);
+
+        showAuthSuccess('Account created. Now complete your profile.');
+        toast('Account created');
+
+        setTimeout(() => {
+          showPage('onboard');
+        }, 650);
+
+      } catch (err) {
+        console.error('Signup error:', err);
+        showAuthErr('Something went wrong while creating your account.');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Create Account →';
+      }
+    }
+
+    async function handleLogin() {
+      const email = document.getElementById('login-email').value.trim();
+      const password = document.getElementById('login-pass').value;
+
+      if (!email || !password) {
+        showAuthErr('Please fill in both fields.');
+        return;
+      }
+
+      const btn = document.getElementById('btn-login');
+      btn.disabled = true;
+      btn.textContent = 'Signing in…';
+      clearAuthMsg();
+
+      try {
+        const { data, error } = await sb.auth.signInWithPassword({
+          email,
+          password
+        });
+
+        if (error) {
+          showAuthErr(error.message);
+          return;
+        }
+
+        const { data: sessionData } = await sb.auth.getSession();
+        currentUser = sessionData?.session?.user || data?.user || null;
+
+        if (!currentUser) {
+          showAuthErr('Signed in, but session was not found. Please refresh and try again.');
+          return;
+        }
+
+        updateNavAuth();
+
+        const profile = await loadCurrentProfile();
+
+        toast('Welcome back');
+
+        if (profile) {
+          showPage('dashboard');
+        } else {
+          showPage('onboard');
+        }
+
+      } catch (err) {
+        console.error('Login error:', err);
+        showAuthErr('Something went wrong while signing in.');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Sign In →';
+      }
+    }
+
+    async function handleLogout() {
+      await sb.auth.signOut();
+
+      currentUser = null;
+      currentProfile = null;
+
+      updateNavAuth();
+      showPage('home');
+      toast('Signed out');
+    }
+
+    async function requireAuthOrOnboard() {
+      if (!currentUser) {
+        showAuth('signup');
+        return;
+      }
+
+      const profile = await loadCurrentProfile();
+
+      if (profile) {
+        showPage('dashboard');
+      } else {
+        showPage('onboard');
+      }
+    }
+
+    async function goToMyProfile() {
+      if (!currentUser) {
+        showAuth('login');
+        return;
+      }
+
+      const profile = await loadCurrentProfile();
+
+      if (profile) {
+        showPage('dashboard');
+      } else {
+        showPage('onboard');
+      }
+    }
+
+    async function loadCurrentProfile() {
+      if (!currentUser) return null;
+
+      try {
+        const { data, error } = await sb
+          .from('profiles')
+          .select('*')
+          .eq('user_id', currentUser.id)
+          .maybeSingle();
+
+        if (error) {
+          console.error('Profile load error:', error);
+          return null;
+        }
+
+        currentProfile = data || null;
+        return currentProfile;
+
+      } catch (err) {
+        console.error('Profile load failed:', err);
+        return null;
+      }
+    }
+
+    function setRole(role, btn) {
+      onboard.role = role;
+
+      document.querySelectorAll('.choice').forEach(choice => {
+        choice.classList.remove('active');
+      });
+
+      btn.classList.add('active');
+    }
+
+    function nextStep(num) {
+      if (num === 2 && !onboard.role) {
+        toast('Please choose your role first');
+        return;
+      }
+
+      if (num === 3 && onboard.skills.length === 0) {
+        toast('Please add at least one skill');
+        return;
+      }
+
+      if (num === 4) {
+        const story = document.getElementById('story').value.trim();
+        if (!story) {
+          toast('Please tell your story');
+          return;
+        }
+      }
+
+      document.querySelectorAll('.step').forEach(step => {
+        step.classList.remove('active');
+      });
+
+      document.getElementById('step-' + num).classList.add('active');
+      window.scrollTo(0, 0);
+    }
+
+    function handleSkillKey(event) {
+      if (event.key === 'Enter') {
+        event.preventDefault();
+
+        const input = document.getElementById('skill-input');
+        addSkill(input.value);
+        input.value = '';
+      }
+    }
+
+    function addSkill(skill) {
+      const clean = String(skill || '').trim();
+
+      if (!clean) return;
+
+      const exists = onboard.skills.some(item => {
+        return item.toLowerCase() === clean.toLowerCase();
+      });
+
+      if (!exists) {
+        onboard.skills.push(clean);
+        renderSkills();
+      }
+    }
+
+    function removeSkill(skill) {
+      onboard.skills = onboard.skills.filter(item => item !== skill);
+      renderSkills();
+    }
+
+    function renderSkills() {
+      const box = document.getElementById('skills-list');
+
+      if (!onboard.skills.length) {
+        box.innerHTML = '<span class="muted">No skills added yet.</span>';
+        return;
+      }
+
+      box.innerHTML = onboard.skills.map(skill => {
+        return `<button class="skill" onclick="removeSkill('${escapeJs(skill)}')">${escapeHtml(skill)} ×</button>`;
+      }).join('');
+    }
+
+    async function submitProfile() {
+      if (!currentUser) {
+        showAuth('signup');
+        return;
+      }
+
+      const first = localStorage.getItem('deserved_signup_first') || currentUser.user_metadata?.first_name || '';
+      const last = localStorage.getItem('deserved_signup_last') || currentUser.user_metadata?.last_name || '';
+      const area = localStorage.getItem('deserved_signup_area') || currentUser.user_metadata?.city_area || '';
+
+      const profile = {
+        user_id: currentUser.id,
+        email: currentUser.email,
+        first_name: first,
+        last_name: last,
+        city_area: area,
+        role: onboard.role,
+        need_type: document.getElementById('need-type').value,
+        need_description: document.getElementById('need-desc').value.trim(),
+        skills: onboard.skills,
+        experience: document.getElementById('experience').value,
+        story: document.getElementById('story').value.trim(),
+        origin: document.getElementById('origin').value.trim(),
+        calgary_time: document.getElementById('calgary-time').value,
+        languages: document.getElementById('languages').value.trim(),
+        status: 'pending'
+      };
+
+      const btn = document.getElementById('btn-submit-profile');
+      btn.disabled = true;
+      btn.textContent = 'Submitting…';
+
+      try {
+        const { error } = await sb
+          .from('profiles')
+          .upsert(profile, {
+            onConflict: 'user_id'
+          });
+
+        if (error) {
+          console.error('Profile submit error:', error);
+          toast(error.message);
+          return;
+        }
+
+        currentProfile = profile;
+
+        toast('Profile submitted');
+        showPage('dashboard');
+
+      } catch (err) {
+        console.error('Profile submit failed:', err);
+        toast('Could not submit profile.');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Submit Profile';
+      }
+    }
+
+    async function loadStats() {
+      try {
+        const { count: profileCount } = await sb
+          .from('profiles')
+          .select('*', { count: 'exact', head: true });
+
+        const { count: connectionCount } = await sb
+          .from('connections')
+          .select('*', { count: 'exact', head: true });
+
+        document.getElementById('stat-members').textContent = profileCount ?? 0;
+        document.getElementById('stat-connections').textContent = connectionCount ?? 0;
+
+      } catch (err) {
+        console.error('Stats error:', err);
+      }
+    }
+
+    async function loadProfiles() {
+      const box = document.getElementById('profiles-grid');
+
+      box.innerHTML = '<div class="empty">Loading real profiles…</div>';
+
+      try {
+        let query = sb
+          .from('profiles')
+          .select('*')
+          .order('created_at', { ascending: false });
+
+        if (currentFilter !== 'all') {
+          query = query.eq('role', currentFilter);
+        }
+
+        const { data, error } = await query;
+
+        if (error) {
+          console.error('Profiles load error:', error);
+          box.innerHTML = `<div class="empty">Could not load profiles: ${escapeHtml(error.message)}</div>`;
+          return;
+        }
+
+        const visible = (data || []).filter(profile => {
+          return profile.status === 'approved' || profile.user_id === currentUser?.id;
+        });
+
+        if (!visible.length) {
+          box.innerHTML = '<div class="empty">No approved profiles yet.</div>';
+          return;
+        }
+
+        box.innerHTML = visible.map(renderProfileCard).join('');
+
+      } catch (err) {
+        console.error('Profiles failed:', err);
+        box.innerHTML = '<div class="empty">Could not load profiles.</div>';
+      }
+    }
+
+    function setFilter(filter, btn) {
+      currentFilter = filter;
+
+      document.querySelectorAll('.filters button').forEach(button => {
+        button.classList.remove('active');
+      });
+
+      btn.classList.add('active');
+      loadProfiles();
+    }
+
+    function loadDashboard() {
+      const box = document.getElementById('dashboard-content');
+
+      if (!currentProfile) {
+        box.innerHTML = `
+          <div class="card">
+            <h3>No profile found yet.</h3>
+            <p>Please complete your profile.</p>
+            <button class="btn" onclick="showPage('onboard')">Complete Profile →</button>
+          </div>
+        `;
+        return;
+      }
+
+      const name = `${currentProfile.first_name || ''} ${currentProfile.last_name || ''}`.trim() || 'there';
+
+      document.getElementById('dash-name').textContent = name;
+
+      box.innerHTML = `
+        ${renderProfileCard(currentProfile)}
+        <div class="card">
+          <h3>Profile Status</h3>
+          <p>
+            <span class="tag">${escapeHtml(currentProfile.status || 'pending')}</span>
+          </p>
+          <p>
+            If your profile is pending, it will only be visible to you until approved.
+          </p>
+          <button class="btn secondary" onclick="showPage('browse')">Browse People</button>
+        </div>
+      `;
+    }
+
+    function renderProfileCard(profile) {
+      const first = profile.first_name || 'Member';
+      const last = profile.last_name || '';
+      const name = `${first} ${last}`.trim();
+      const initial = first.charAt(0).toUpperCase() || 'D';
+      const skills = Array.isArray(profile.skills)
+        ? profile.skills
+        : typeof profile.skills === 'string'
+          ? profile.skills.split(',').map(s => s.trim()).filter(Boolean)
+          : [];
+
+      return `
+        <div class="card profile-card">
+          <div class="profile-top">
+            <div style="display:flex; gap:14px;">
+              <div class="avatar">${escapeHtml(initial)}</div>
+              <div>
+                <h3>${escapeHtml(name)}</h3>
+                <div class="muted">${escapeHtml(profile.city_area || 'Calgary')}</div>
+              </div>
+            </div>
+            <span class="tag">${escapeHtml(labelRole(profile.role))}</span>
+          </div>
+
+          <p>${escapeHtml(profile.story || 'No story yet.')}</p>
+
+          ${profile.need_type ? `<p><strong class="gold">Looking for:</strong> ${escapeHtml(profile.need_type)}</p>` : ''}
+
+          <div class="skills">
+            ${skills.slice(0, 8).map(skill => `<span class="skill">${escapeHtml(skill)}</span>`).join('')}
+          </div>
+
+          <div class="muted">
+            ${profile.experience ? escapeHtml(profile.experience) + ' experience' : ''}
+            ${profile.languages ? ' · ' + escapeHtml(profile.languages) : ''}
+          </div>
+
+          ${profile.user_id !== currentUser?.id ? `<button class="btn secondary" onclick="requestConnection('${profile.user_id}')">Send Connection Request →</button>` : ''}
+        </div>
+      `;
+    }
+
+    async function requestConnection(receiverId) {
+      if (!currentUser) {
+        showAuth('login');
+        return;
+      }
+
+      if (!receiverId || receiverId === currentUser.id) {
+        toast('Invalid profile');
+        return;
+      }
+
+      try {
+        const payload = {
+          requester_id: currentUser.id,
+          receiver_id: receiverId,
+          status: 'pending'
+        };
+
+        const { error } = await sb
+          .from('connections')
+          .insert(payload);
+
+        if (error) {
+          console.error('Connection error:', error);
+          toast(error.message);
+          return;
+        }
+
+        toast('Connection request sent');
+
+      } catch (err) {
+        console.error('Connection failed:', err);
+        toast('Could not send request.');
+      }
+    }
+
+    function labelRole(role) {
+      if (role === 'need') return 'Looking';
+      if (role === 'give') return 'Offering';
+      if (role === 'both') return 'Both';
+      return 'Member';
+    }
+
+    function escapeHtml(value) {
+      return String(value ?? '')
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#039;');
+    }
+
+    function escapeJs(value) {
+      return String(value ?? '')
+        .replaceAll('\\', '\\\\')
+        .replaceAll("'", "\\'")
+        .replaceAll('"', '\\"');
+    }
+
+    sb.auth.onAuthStateChange(async (event, session) => {
+      currentUser = session?.user || null;
+      updateNavAuth();
+
+      if (!currentUser) {
+        currentProfile = null;
+      }
+    });
+
+    async function initApp() {
+      try {
+        const { data: { session }, error } = await sb.auth.getSession();
+
+        if (error) {
+          console.error('Session error:', error);
+        }
+
+        currentUser = session?.user || null;
+        updateNavAuth();
+
+        if (currentUser) {
+          const profile = await loadCurrentProfile();
+
+          if (profile) {
+            showPage('dashboard');
+          } else {
+            showPage('onboard');
+          }
+        } else {
+          showPage('home');
+        }
+
+        loadStats();
+        renderSkills();
+
+      } catch (err) {
+        console.error('App init error:', err);
+        showPage('home');
+      }
+    }
+
+    initApp();
+  </script>
 </body>
 </html>
