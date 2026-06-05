@@ -762,7 +762,6 @@ footer p{font-size:13px;color:rgba(247,244,239,.35)}
         <h2 class="browse-title">Real people.<br><span class="it">Real Calgary.</span></h2>
         <p style="font-size:14px;color:var(--muted);margin-top:6px">Every profile reviewed by a real human.</p>
       </div>
-      <button class="btn-primary" onclick="requireAuthOrOnboard()">Join DESERVED →</button>
     </div>
     <div class="filter-row">
       <button class="filter-chip active" onclick="setFilter('all',this)">All People</button>
@@ -925,7 +924,7 @@ const sb=createClient(SUPABASE_URL,SUPABASE_ANON_KEY,{
   auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true,storage:window.localStorage,storageKey:'deserved-auth-session'}
 });
 
-let currentUser=null,currentProfile=null,currentFilter='all',allProfiles=[];
+let currentUser=null,currentProfile=null,currentFilter='all',allProfiles=[],myConnections=[];
 let onboard={role:'',skills:[]};
 
 // ── CURSOR ──
@@ -1203,18 +1202,23 @@ async function loadProfiles(){
     if(error){box.innerHTML=`<div class="empty-state"><span>⚠️</span><h3>Could not load profiles</h3><p>${escHtml(error.message)}</p></div>`;return;}
     const visible=(data||[]).filter(p=>p.status==='approved'||p.user_id===currentUser?.id);
     allProfiles=visible;
+    // Load my connections if signed in
+    if(currentUser){
+      const{data:conns}=await sb.from('connections').select('*').or(`requester_id.eq.${currentUser.id},receiver_id.eq.${currentUser.id}`);
+      myConnections=conns||[];
+    }
     if(!visible.length){box.innerHTML='<div class="empty-state"><span>🌱</span><h3>Be the first.</h3><p>No approved profiles yet. Join DESERVED and be the first person Calgary sees here.</p></div>';return;}
     box.innerHTML=visible.map(renderProfileCard).join('');
-  // Make cards clickable
-  document.querySelectorAll('.profile-card[data-uid]').forEach(card=>{
-    card.style.cursor='pointer';
-    card.addEventListener('click',function(e){
-      if(e.target.classList.contains('pc-connect-btn'))return;
-      const uid=this.dataset.uid;
-      const p=visible.find(x=>x.user_id===uid);
-      if(p)showProfilePage(p);
+    // Make cards clickable
+    document.querySelectorAll('.profile-card[data-uid]').forEach(card=>{
+      card.style.cursor='pointer';
+      card.addEventListener('click',function(e){
+        if(e.target.classList.contains('pc-connect-btn')||e.target.classList.contains('pc-connected-btn'))return;
+        const uid=this.dataset.uid;
+        const p=visible.find(x=>x.user_id===uid);
+        if(p)showProfilePage(p);
+      });
     });
-  });
   }catch(err){box.innerHTML='<div class="empty-state"><span>⚠️</span><h3>Could not load profiles.</h3></div>';}
 }
 function setFilter(filter,btn){
@@ -1234,6 +1238,32 @@ function renderProfileCard(p){
   const badgeText=p.role==='need'?'🙋 Looking for work':p.role==='give'?'🤝 Offering help':p.role==='both'?'⚡ Need & Give':'Member';
   const storyPreview=(p.story||'').substring(0,100)+((p.story||'').length>100?'…':'');
   const isOwn=p.user_id===currentUser?.id;
+
+  // Check connection status
+  let connFooter='';
+  if(isOwn){
+    connFooter='<span style="font-size:12px;color:var(--accent);font-weight:600">Your profile</span>';
+  } else if(currentUser){
+    const conn=myConnections.find(c=>(c.requester_id===p.user_id||c.receiver_id===p.user_id));
+    if(conn){
+      if(conn.status==='accepted'){
+        connFooter=`<span class="pc-connected-btn" style="font-size:12px;color:var(--give);font-weight:600;display:flex;align-items:center;gap:5px">✓ Connected</span>`;
+      } else if(conn.status==='pending'){
+        const isPendingIncoming=conn.receiver_id===currentUser.id;
+        connFooter=isPendingIncoming
+          ?`<span style="font-size:12px;color:var(--accent);font-weight:600">⏳ Pending — you received</span>`
+          :`<span style="font-size:12px;color:var(--muted);font-weight:500">⏳ Request sent</span>`;
+      } else {
+        // Declined — allow reconnecting
+        connFooter=`<button class="pc-connect-btn" onclick="openConnModal('${p.user_id}','${escJs(name)}')">Connect →</button>`;
+      }
+    } else {
+      connFooter=`<button class="pc-connect-btn" onclick="openConnModal('${p.user_id}','${escJs(name)}')">Connect →</button>`;
+    }
+  } else {
+    connFooter=`<button class="pc-connect-btn" onclick="openConnModal('${p.user_id}','${escJs(name)}')">Connect →</button>`;
+  }
+
   return `
     <div class="profile-card" data-uid="${p.user_id}">
       <div class="pc-top">
@@ -1248,7 +1278,7 @@ function renderProfileCard(p){
       ${skills.length?`<div class="pc-skills">${skills.slice(0,4).map(s=>`<span class="pc-skill">${escHtml(s)}</span>`).join('')}</div>`:''}
       <div class="pc-footer">
         <span class="pc-loc">📍 ${escHtml(p.city_area||'Calgary')}</span>
-        ${!isOwn?`<button class="pc-connect-btn" onclick="openConnModal('${p.user_id}','${escJs(`${p.first_name||''} ${p.last_name||''}`.trim()||'Member')}')">Connect →</button>`:'<span style="font-size:12px;color:var(--accent);font-weight:600">Your profile</span>'}
+        ${connFooter}
       </div>
     </div>`;
 }
@@ -1557,25 +1587,39 @@ async function showProfilePage(profile){
     profile.languages?`<span class="phb-meta-item">🗣️ <strong>${escHtml(profile.languages)}</strong></span>`:'',
   ].join('');
 
-  // Actions
+  // Actions + Connect card based on connection status
   const actions=document.getElementById('prof-actions');
+  const ccr=document.getElementById('prof-connect-card');
   if(isOwn){
     actions.innerHTML=`<button class="btn-edit-hero" onclick="showPage('onboard')">✏️ Edit Profile</button>
     <button class="btn-edit-hero" onclick="showPage('dashboard')">📊 Dashboard</button>`;
-  } else {
-    actions.innerHTML=`<button class="btn-connect-hero" onclick="handleProfConnect()">✦ Connect with ${escHtml(name.split(' ')[0])}</button>`;
-  }
-
-  // Connect card
-  const ccr=document.getElementById('prof-connect-card');
-  if(isOwn){
     ccr.innerHTML=`<div class="ccr-title">Your Profile</div>
     <p class="ccr-desc">This is how others see you on DESERVED.</p>
     <button class="ccr-btn" onclick="showPage('dashboard')">View Dashboard →</button>`;
   } else {
-    document.getElementById('ccr-title').textContent='Connect with '+name.split(' ')[0];
-    document.getElementById('ccr-desc').textContent='Send a message. They\'ll decide whether to connect. Contact stays private.';
-    document.getElementById('ccr-btn').textContent='✦ Connect with '+name.split(' ')[0];
+    // Check connection status
+    const conn=myConnections.find(c=>(c.requester_id===profile.user_id||c.receiver_id===profile.user_id));
+    if(conn&&conn.status==='accepted'){
+      // Already connected — show email
+      const theirEmail=conn.requester_id===currentUser?.id?null:null; // loaded via profile fetch
+      actions.innerHTML=`<span style="display:inline-flex;align-items:center;gap:8px;background:rgba(42,125,79,.15);border:1px solid rgba(42,125,79,.3);padding:10px 18px;border-radius:100px;font-size:13px;font-weight:600;color:#fff">✓ Connected</span>`;
+      ccr.innerHTML=`<div class="ccr-title" style="color:#fff">✓ Connected</div>
+      <p class="ccr-desc">You're connected with ${escHtml(name.split(' ')[0])}. Reach out directly.</p>
+      <button class="ccr-btn" style="background:var(--give)" onclick="showPage('dashboard')">View in Dashboard →</button>`;
+    } else if(conn&&conn.status==='pending'){
+      const isSent=conn.requester_id===currentUser?.id;
+      actions.innerHTML=`<span style="display:inline-flex;align-items:center;gap:8px;background:rgba(232,130,12,.15);border:1px solid rgba(232,130,12,.3);padding:10px 18px;border-radius:100px;font-size:13px;font-weight:600;color:#fff">${isSent?'⏳ Request Sent':'⏳ Request Incoming'}</span>`;
+      ccr.innerHTML=`<div class="ccr-title" style="color:#fff">${isSent?'Request Sent':'They want to connect!'}</div>
+      <p class="ccr-desc">${isSent?'Waiting for '+escHtml(name.split(' ')[0])+' to respond.':'Go to your dashboard to accept or decline.'}</p>
+      ${!isSent?`<button class="ccr-btn" onclick="showPage('dashboard')">Respond in Dashboard →</button>`:''}`;
+    } else {
+      // Not connected
+      actions.innerHTML=`<button class="btn-connect-hero" onclick="handleProfConnect()">✦ Connect with ${escHtml(name.split(' ')[0])}</button>`;
+      ccr.innerHTML=`<div class="ccr-title">Connect with ${escHtml(name.split(' ')[0])}</div>
+      <p class="ccr-desc">Send a message. They'll decide whether to connect. Your contact info stays private.</p>
+      <button class="ccr-btn" onclick="handleProfConnect()">✦ Connect with ${escHtml(name.split(' ')[0])}</button>
+      <p class="ccr-privacy">🔒 Double opt-in. Both must agree before contact info is shared.</p>`;
+    }
   }
 
   // Story
@@ -1641,12 +1685,17 @@ async function showProfilePage(profile){
     // Hide connections tab for other people's profiles
     const connTab=document.querySelector('[onclick*="connections"]');
     if(connTab)connTab.style.display='none';
+    // Make sure we're on about tab
+    switchProfTab('about',document.querySelector('.phb-tab'));
     connsBody.innerHTML='';
   }
 
-  // Show/hide danger zone
+  // Show/hide danger zone and connections tab
   const dz=document.getElementById('prof-danger-zone');
   if(dz)dz.style.display=isOwn?'block':'none';
+  // Always show connections tab on own, hide on others
+  const connTab=document.querySelector('.phb-tab[onclick*="connections"]');
+  if(connTab)connTab.style.display=isOwn?'':'none';
 
   // Reset to about tab
   switchProfTab('about',document.querySelector('.phb-tab'));
