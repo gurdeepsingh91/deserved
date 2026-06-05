@@ -925,6 +925,8 @@ const sb=createClient(SUPABASE_URL,SUPABASE_ANON_KEY,{
 });
 
 let currentUser=null,currentProfile=null,currentFilter='all',allProfiles=[],myConnections=[];
+let appInitialized=false;
+let handlingBrowserNav=false;
 let onboard={role:'',skills:[]};
 
 // ── CURSOR ──
@@ -958,9 +960,19 @@ function toast(msg){
 }
 
 // ── PAGES ──
-function showPage(name){
+function showPage(name,skipHistory=false){
   const target=document.getElementById('page-'+name);
   if(!target){toast('Page not found.');return;}
+
+  // Make browser Back / Forward work for this single-page app.
+  if(appInitialized && !skipHistory && !handlingBrowserNav){
+    const newHash=name==='home'?'':'#'+name;
+    const currentKey=history.state?.deservedPage;
+    if(currentKey!==name){
+      history.pushState({deservedPage:name},'',newHash||window.location.pathname);
+    }
+  }
+
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   target.classList.add('active');
   // Scroll to the top of the target page, accounting for fixed nav
@@ -980,6 +992,29 @@ function showPage(name){
   if(name==='home')loadStats();
   if(name==='admin')loadAdminData();
 }
+
+window.addEventListener('popstate',async e=>{
+  const page=e.state?.deservedPage||(window.location.hash?window.location.hash.replace('#',''):'home');
+  handlingBrowserNav=true;
+  try{
+    if(page==='profile'){
+      if(viewingProfile){
+        showPage('profile',true);
+      }else if(currentUser){
+        const profile=await loadCurrentProfile();
+        if(profile){showProfilePage(profile);}
+        else{showPage('onboard',true);}
+      }else{
+        showPage('home',true);
+      }
+    }else{
+      showPage(page,true);
+    }
+  }finally{
+    handlingBrowserNav=false;
+  }
+});
+
 
 // ── AUTH NAV ──
 function updateNavAuth(){
@@ -1869,7 +1904,17 @@ async function initApp(){
     }
     loadStats();
     renderSkills();
-  }catch(err){console.error('Init error:',err);showPage('home');}
+
+    const active=document.querySelector('.page.active');
+    const activeName=active?.id?.replace('page-','')||'home';
+    history.replaceState({deservedPage:activeName},'',activeName==='home'?window.location.pathname:'#'+activeName);
+    appInitialized=true;
+  }catch(err){
+    console.error('Init error:',err);
+    showPage('home',true);
+    history.replaceState({deservedPage:'home'},'',window.location.pathname);
+    appInitialized=true;
+  }
 }
 initApp();
 </script>
