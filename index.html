@@ -226,7 +226,63 @@ h1.home-h .ac{color:var(--accent)}
 .stories-coming h3{font-family:'Fraunces',serif;font-size:24px;font-weight:700;color:var(--black);margin-bottom:12px;letter-spacing:-.02em}
 .stories-coming p{font-size:15px;color:var(--muted);line-height:1.75}
 
-/* TOAST */
+/* ── ADMIN ── */
+#page-admin{background:var(--warm)}
+.admin-wrap{max-width:1100px;margin:0 auto;padding:100px 40px 80px}
+.admin-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:32px;flex-wrap:wrap;gap:16px}
+.admin-title{font-family:'Fraunces',serif;font-size:clamp(28px,4vw,44px);font-weight:900;letter-spacing:-.04em;color:var(--black)}
+.admin-title .it{font-style:italic;font-weight:300;color:var(--muted)}
+.admin-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:32px}
+.admin-stat{background:var(--off);border:1px solid var(--border);border-radius:16px;padding:20px 22px;position:relative;overflow:hidden;transition:all .3s}
+.admin-stat:hover{transform:translateY(-3px);box-shadow:0 12px 32px rgba(0,0,0,.08)}
+.admin-stat::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;transform:scaleX(0);transform-origin:left;transition:transform .4s}
+.admin-stat:hover::after{transform:scaleX(1)}
+.as-orange::after{background:var(--accent)}
+.as-red::after{background:var(--need)}
+.as-green::after{background:var(--give)}
+.as-blue::after{background:var(--both)}
+.as-num{font-family:'Fraunces',serif;font-size:40px;font-weight:900;letter-spacing:-.04em;color:var(--black);line-height:1;margin-bottom:4px}
+.as-label{font-size:13px;color:var(--muted)}
+.admin-section-title{font-family:'Fraunces',serif;font-size:20px;font-weight:700;color:var(--black);letter-spacing:-.02em;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between}
+.admin-queue{display:flex;flex-direction:column;gap:12px;margin-bottom:40px}
+.admin-item{background:var(--off);border:1px solid var(--border);border-radius:16px;overflow:hidden;transition:all .3s}
+.admin-item:hover{box-shadow:0 8px 24px rgba(0,0,0,.08)}
+.admin-item-header{display:grid;grid-template-columns:48px 1fr auto auto auto;align-items:center;gap:14px;padding:18px 20px;cursor:pointer}
+.ai-av{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-size:16px;font-weight:700;color:#fff;flex-shrink:0}
+.ai-name{font-size:15px;font-weight:600;color:var(--black)}
+.ai-sub{font-size:12px;color:var(--muted);margin-top:2px}
+.ai-role{display:inline-flex;align-items:center;padding:4px 12px;border-radius:100px;font-size:11px;font-weight:700;white-space:nowrap}
+.ai-time{font-size:11.5px;color:var(--muted);white-space:nowrap}
+.ai-chevron{font-size:12px;color:var(--muted);background:none;border:none;cursor:pointer;padding:4px;transition:transform .3s;font-family:'DM Sans',sans-serif}
+.admin-item.expanded .ai-chevron{transform:rotate(180deg)}
+.admin-item-body{display:none;border-top:1px solid var(--border);padding:20px}
+.admin-item.expanded .admin-item-body{display:block}
+.ai-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px}
+.ai-field-label{font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+.ai-field-val{font-size:14px;color:var(--black);line-height:1.5}
+.ai-story{background:var(--warm);border-radius:10px;padding:14px 16px;margin-bottom:16px}
+.ai-story p{font-size:13.5px;color:var(--muted);line-height:1.75;font-style:italic}
+.ai-skills{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px}
+.ai-skill{font-size:12px;padding:4px 10px;border-radius:100px;background:var(--warm);border:1px solid var(--border);color:var(--muted)}
+.ai-actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center;padding-top:14px;border-top:1px solid var(--border)}
+.btn-approve{background:var(--give);color:#fff;padding:10px 22px;border-radius:100px;font-size:13px;font-weight:700;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s}
+.btn-approve:hover{background:#1f5f3a;transform:translateY(-1px)}
+.btn-reject{background:var(--off);color:var(--need);border:1.5px solid rgba(217,79,61,.3);padding:8px 18px;border-radius:100px;font-size:13px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s}
+.btn-reject:hover{background:rgba(217,79,61,.06)}
+.reject-reason-wrap{display:none;margin-top:12px}
+.reject-reason-wrap.show{display:block}
+.reject-reason-wrap textarea{width:100%;background:var(--warm);border:1.5px solid var(--border);color:var(--black);padding:12px 14px;border-radius:10px;font-size:14px;font-family:'DM Sans',sans-serif;outline:none;resize:vertical;min-height:80px}
+.reject-reason-wrap textarea:focus{border-color:var(--need)}
+.reject-confirm{background:var(--need);color:#fff;padding:9px 20px;border-radius:100px;font-size:13px;font-weight:600;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;margin-top:8px;transition:all .2s}
+.admin-empty{text-align:center;padding:40px;color:var(--muted);background:var(--off);border:1px dashed var(--border);border-radius:16px}
+.admin-empty span{font-size:40px;display:block;margin-bottom:10px}
+@media(max-width:900px){
+  .admin-stats{grid-template-columns:1fr 1fr}
+  .admin-item-header{grid-template-columns:44px 1fr auto}
+  .ai-role,.ai-time{display:none}
+  .ai-grid{grid-template-columns:1fr}
+  .admin-wrap{padding:80px 20px 60px}
+}
 #toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(12px);background:var(--black);color:var(--off);padding:12px 24px;border-radius:100px;font-size:13px;font-weight:500;opacity:0;pointer-events:none;transition:all .35s;z-index:1000;white-space:nowrap;max-width:90vw;text-align:center}
 #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
@@ -288,6 +344,7 @@ footer p{font-size:13px;color:rgba(247,244,239,.35)}
     </span>
     <span id="nav-user" style="display:none">
       <button class="btn-nav-outline" onclick="goToMyProfile()">My Profile</button>
+      <button id="nav-admin-btn" class="btn-nav-outline" style="display:none;color:var(--accent);border-color:var(--accent)" onclick="showPage('admin')">⚙ Admin</button>
       <button class="btn-nav-danger" onclick="handleLogout()">Sign Out</button>
     </span>
     <button class="hamburger" id="hbg" onclick="openMob()"><span></span><span></span><span></span></button>
@@ -533,6 +590,39 @@ footer p{font-size:13px;color:rgba(247,244,239,.35)}
   </div>
 </section>
 
+<!-- ADMIN -->
+<section id="page-admin" class="page">
+  <div class="admin-wrap">
+    <div class="admin-header">
+      <div>
+        <h2 class="admin-title">Admin<br><span class="it">Dashboard</span></h2>
+        <p style="font-size:14px;color:var(--muted);margin-top:6px">Only you can see this. 🔒</p>
+      </div>
+      <button class="btn-primary" onclick="loadAdminData()">↺ Refresh</button>
+    </div>
+    <div class="admin-stats" id="admin-stats">
+      <div class="admin-stat as-orange"><div class="as-num" id="adm-total">—</div><div class="as-label">Total Members</div></div>
+      <div class="admin-stat as-red"><div class="as-num" id="adm-pending">—</div><div class="as-label">Awaiting Review</div></div>
+      <div class="admin-stat as-green"><div class="as-num" id="adm-approved">—</div><div class="as-label">Approved</div></div>
+      <div class="admin-stat as-blue"><div class="as-num" id="adm-connections">—</div><div class="as-label">Connections Made</div></div>
+    </div>
+    <div class="admin-section-title">
+      <span>⏳ Pending Review</span>
+      <span id="pending-count" style="font-size:14px;color:var(--accent);font-weight:600"></span>
+    </div>
+    <div id="admin-pending-queue" class="admin-queue">
+      <div class="admin-empty"><span>⏳</span>Loading pending profiles…</div>
+    </div>
+    <div class="admin-section-title" style="margin-top:8px">
+      <span>✅ Approved Members</span>
+      <span id="approved-count" style="font-size:14px;color:var(--give);font-weight:600"></span>
+    </div>
+    <div id="admin-approved-list" class="admin-queue">
+      <div class="admin-empty"><span>✅</span>Loading approved profiles…</div>
+    </div>
+  </div>
+</section>
+
 <footer>
   <p>DESERVED © 2026 — Built in Calgary for everyone who deserves to be seen. 🙏</p>
 </footer>
@@ -600,6 +690,7 @@ function showPage(name){
   if(name==='browse')loadProfiles();
   if(name==='dashboard')loadDashboard();
   if(name==='home')loadStats();
+  if(name==='admin')loadAdminData();
 }
 
 // ── AUTH NAV ──
@@ -610,6 +701,7 @@ function updateNavAuth(){
   if(currentUser){
     g.style.display='none';u.style.display='inline-flex';
     if(mob)mob.textContent='My Profile';
+    updateAdminNav();
   }else{
     g.style.display='inline-flex';u.style.display='none';
     if(mob)mob.textContent='Join / Sign In';
@@ -901,6 +993,128 @@ sb.auth.onAuthStateChange(async(event,session)=>{
   updateNavAuth();
   if(!currentUser)currentProfile=null;
 });
+
+// ── ADMIN ──
+const ADMIN_ID='98cae623-f687-4657-a1df-6c6852e908bd';
+
+function isAdmin(){return currentUser?.id===ADMIN_ID}
+
+function updateAdminNav(){
+  const btn=document.getElementById('nav-admin-btn');
+  if(btn)btn.style.display=isAdmin()?'inline-flex':'none';
+}
+
+async function loadAdminData(){
+  if(!isAdmin()){toast('Access denied.');showPage('home');return;}
+  // Stats
+  const{count:total}=await sb.from('profiles').select('*',{count:'exact',head:true});
+  const{count:pending}=await sb.from('profiles').select('*',{count:'exact',head:true}).eq('status','pending');
+  const{count:approved}=await sb.from('profiles').select('*',{count:'exact',head:true}).eq('status','approved');
+  const{count:conns}=await sb.from('connections').select('*',{count:'exact',head:true});
+  document.getElementById('adm-total').textContent=total??0;
+  document.getElementById('adm-pending').textContent=pending??0;
+  document.getElementById('adm-approved').textContent=approved??0;
+  document.getElementById('adm-connections').textContent=conns??0;
+  document.getElementById('pending-count').textContent=pending?`${pending} waiting`:'';
+  // Pending profiles
+  const{data:pendingProfiles}=await sb.from('profiles').select('*').eq('status','pending').order('created_at',{ascending:true});
+  renderAdminQueue('admin-pending-queue',pendingProfiles||[],'pending');
+  // Approved profiles
+  const{data:approvedProfiles}=await sb.from('profiles').select('*').eq('status','approved').order('created_at',{ascending:false});
+  document.getElementById('approved-count').textContent=approvedProfiles?.length?`${approvedProfiles.length} members`:'';
+  renderAdminQueue('admin-approved-list',approvedProfiles||[],'approved');
+}
+
+function renderAdminQueue(containerId,profiles,type){
+  const box=document.getElementById(containerId);
+  if(!profiles.length){
+    box.innerHTML=`<div class="admin-empty"><span>${type==='pending'?'🎉':'👥'}</span>${type==='pending'?'No pending profiles — all clear!':'No approved members yet.'}</div>`;
+    return;
+  }
+  const colors=['#C46A08','#2A7D4F','#4A6FA5','#8B5E3C','#6B3FA0','#C0392B'];
+  box.innerHTML=profiles.map((p,i)=>{
+    const name=`${p.first_name||''} ${p.last_name||''}`.trim()||'Unknown';
+    const initial=(p.first_name||'?').charAt(0).toUpperCase();
+    const color=colors[i%colors.length];
+    const skills=Array.isArray(p.skills)?p.skills:typeof p.skills==='string'?p.skills.split(',').map(s=>s.trim()).filter(Boolean):[];
+    const badgeClass=p.role==='need'?'badge-need':p.role==='give'?'badge-give':p.role==='both'?'badge-both':'badge-member';
+    const badgeText=p.role==='need'?'🙋 Looking':p.role==='give'?'🤝 Giving':p.role==='both'?'⚡ Both':'Member';
+    const date=new Date(p.created_at).toLocaleDateString('en-CA',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});
+    return `
+      <div class="admin-item" id="ai-${p.id}">
+        <div class="admin-item-header" onclick="toggleAdminItem('${p.id}')">
+          <div class="ai-av" style="background:${color}">${escHtml(initial)}</div>
+          <div>
+            <div class="ai-name">${escHtml(name)}</div>
+            <div class="ai-sub">${escHtml(p.city_area||'Calgary')} · ${escHtml(p.email||'')}</div>
+          </div>
+          <span class="ai-role pc-badge ${badgeClass}">${badgeText}</span>
+          <span class="ai-time">${date}</span>
+          <button class="ai-chevron">▼</button>
+        </div>
+        <div class="admin-item-body">
+          <div class="ai-grid">
+            <div><div class="ai-field-label">Email</div><div class="ai-field-val">${escHtml(p.email||'—')}</div></div>
+            <div><div class="ai-field-label">Location</div><div class="ai-field-val">${escHtml(p.city_area||'—')}</div></div>
+            <div><div class="ai-field-label">Originally From</div><div class="ai-field-val">${escHtml(p.origin||'—')}</div></div>
+            <div><div class="ai-field-label">In Calgary</div><div class="ai-field-val">${escHtml(p.calgary_time||'—')}</div></div>
+            <div><div class="ai-field-label">Languages</div><div class="ai-field-val">${escHtml(p.languages||'—')}</div></div>
+            <div><div class="ai-field-label">Experience</div><div class="ai-field-val">${escHtml(p.experience||'—')}</div></div>
+            <div><div class="ai-field-label">Looking For</div><div class="ai-field-val">${escHtml(p.need_type||'—')}</div></div>
+            <div><div class="ai-field-label">Status</div><div class="ai-field-val">${escHtml(p.status||'—')}</div></div>
+          </div>
+          ${p.story?`<div class="ai-story"><div class="ai-field-label" style="margin-bottom:8px">Their Story</div><p>${escHtml(p.story)}</p></div>`:''}
+          ${skills.length?`<div><div class="ai-field-label" style="margin-bottom:8px">Skills</div><div class="ai-skills">${skills.map(s=>`<span class="ai-skill">${escHtml(s)}</span>`).join('')}</div></div>`:''}
+          <div class="ai-actions">
+            ${type==='pending'?`
+              <button class="btn-approve" onclick="approveProfile('${p.id}','${escHtml(name)}')">✓ Approve</button>
+              <button class="btn-reject" onclick="showRejectBox('${p.id}')">✕ Reject</button>
+              <div class="reject-reason-wrap" id="rr-${p.id}">
+                <textarea id="rr-text-${p.id}" placeholder="Reason for rejection (shown to user)…"></textarea>
+                <button class="reject-confirm" onclick="rejectProfile('${p.id}','${escHtml(name)}')">Confirm Rejection</button>
+              </div>
+            `:`
+              <button class="btn-reject" onclick="revokeProfile('${p.id}','${escHtml(name)}')">Revoke Approval</button>
+            `}
+          </div>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function toggleAdminItem(id){
+  document.getElementById('ai-'+id)?.classList.toggle('expanded');
+}
+
+function showRejectBox(id){
+  const box=document.getElementById('rr-'+id);
+  if(box)box.classList.toggle('show');
+}
+
+async function approveProfile(userId,name){
+  const{error}=await sb.from('profiles').update({status:'approved',approved_at:new Date().toISOString()}).eq('id',userId);
+  if(error){toast('Error: '+error.message);return;}
+  toast(`✅ ${name} approved! Their profile is now live.`);
+  // Remove from pending UI
+  const el=document.getElementById('ai-'+userId);
+  if(el){el.style.transition='all .4s';el.style.opacity='0';el.style.transform='translateX(20px)';setTimeout(()=>{el.remove();loadAdminData();},400);}
+}
+
+async function rejectProfile(userId,name){
+  const reason=document.getElementById('rr-text-'+userId)?.value.trim()||'Your profile did not meet our community guidelines.';
+  const{error}=await sb.from('profiles').update({status:'rejected',rejection_reason:reason,rejected_at:new Date().toISOString()}).eq('id',userId);
+  if(error){toast('Error: '+error.message);return;}
+  toast(`Profile rejected. ${name} has been notified.`);
+  const el=document.getElementById('ai-'+userId);
+  if(el){el.style.transition='all .4s';el.style.opacity='0';el.style.transform='translateX(-20px)';setTimeout(()=>{el.remove();loadAdminData();},400);}
+}
+
+async function revokeProfile(userId,name){
+  const{error}=await sb.from('profiles').update({status:'pending'}).eq('id',userId);
+  if(error){toast('Error: '+error.message);return;}
+  toast(`${name} moved back to pending.`);
+  loadAdminData();
+}
 
 // ── INIT ──
 async function initApp(){
