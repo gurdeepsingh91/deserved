@@ -83,6 +83,14 @@ h1.home-h .ac{color:var(--accent)}
 .btn-outline{background:transparent;border:1.5px solid var(--border);color:var(--black);padding:14px 28px;border-radius:100px;font-size:15px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .25s}
 .btn-outline:hover{border-color:var(--black)}
 .home-stats{display:flex;gap:56px;justify-content:center;flex-wrap:wrap;margin-top:60px}
+.home-trust{font-size:12px;color:var(--muted);margin-top:18px;font-weight:600;letter-spacing:.02em}
+.home-actions-signedin{display:none;gap:12px;justify-content:center;flex-wrap:wrap}
+.home-how{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:46px auto 0;max-width:760px}
+.hh-card{background:var(--warm);border:1px solid var(--border);border-radius:18px;padding:18px 20px;text-align:left}
+.hh-kicker{font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:7px}
+.hh-title{font-family:'Fraunces',serif;font-size:17px;font-weight:700;color:var(--black);letter-spacing:-.02em;margin-bottom:5px}
+.hh-text{font-size:13px;color:var(--muted);line-height:1.55}
+
 .hs-num{font-family:'Fraunces',serif;font-size:44px;font-weight:900;color:var(--black);letter-spacing:-.04em;line-height:1}
 .hs-label{font-size:12px;color:var(--muted);margin-top:4px;font-weight:500;letter-spacing:.04em}
 
@@ -467,6 +475,8 @@ footer p{font-size:13px;color:rgba(247,244,239,.35)}
   .ob-row{grid-template-columns:1fr}
   .fg-row{grid-template-columns:1fr}
   .home-stats{gap:32px}
+  .home-how{grid-template-columns:1fr;margin-top:34px}
+
   .admin-stats{grid-template-columns:1fr 1fr}
   .admin-item-header{grid-template-columns:44px 1fr auto}
   .ai-role,.ai-time{display:none}
@@ -570,15 +580,39 @@ footer p{font-size:13px;color:rgba(247,244,239,.35)}
       <span style="display:block">to be</span>
       <span style="display:block" class="ac">seen.</span>
     </h1>
-    <p class="home-desc">Real talent finds real opportunity here. No reference. No gatekeeping. No discrimination. Just you and what you can do.</p>
-    <div class="home-ctas">
-      <button class="btn-primary" onclick="requireAuthOrOnboard()">✦ Join DESERVED →</button>
-      <button class="btn-outline" onclick="showPage('browse')">Browse People</button>
+    <p class="home-desc" id="home-desc">A Calgary-first platform where real people share their skills, stories, needs, and offers — then connect through a safer, human-reviewed community.</p>
+    <div class="home-ctas" id="home-actions-guest">
+      <button class="btn-primary" onclick="requireAuthOrOnboard()">✦ Create Your Free Profile →</button>
+      <button class="btn-outline" onclick="showPage('browse')">Browse Calgary People</button>
     </div>
+    <div class="home-actions-signedin" id="home-actions-user">
+      <button class="btn-primary" onclick="goToMyProfile()">View My Profile →</button>
+      <button class="btn-outline" onclick="showPage('browse')">Browse People</button>
+      <button class="btn-outline" id="home-share-btn" onclick="shareMyProfileFromHome()" style="display:none">Share My Profile</button>
+      <button class="btn-outline" id="home-admin-btn" onclick="showPage('admin')" style="display:none;color:var(--accent);border-color:var(--accent)">Admin Dashboard</button>
+    </div>
+    <div class="home-trust" id="home-trust">Human-reviewed profiles · Double opt-in connections · Built in Calgary</div>
     <div class="home-stats">
       <div class="sr"><div class="hs-num" id="stat-members">—</div><div class="hs-label">Members</div></div>
       <div class="sr"><div class="hs-num" id="stat-connections">—</div><div class="hs-label">Connections Made</div></div>
-      <div class="sr"><div class="hs-num">$0</div><div class="hs-label">Hall Rent</div></div>
+      <div class="sr"><div class="hs-num">$0</div><div class="hs-label">Free to Join</div></div>
+    </div>
+    <div class="home-how" id="home-how">
+      <div class="hh-card sr">
+        <div class="hh-kicker">Step 1</div>
+        <div class="hh-title">Create a profile</div>
+        <div class="hh-text">Share your skills, story, needs, and what you can offer.</div>
+      </div>
+      <div class="hh-card sr">
+        <div class="hh-kicker">Step 2</div>
+        <div class="hh-title">Get reviewed</div>
+        <div class="hh-text">Profiles are checked before going public to keep trust high.</div>
+      </div>
+      <div class="hh-card sr">
+        <div class="hh-kicker">Step 3</div>
+        <div class="hh-title">Connect safely</div>
+        <div class="hh-text">Contact info stays private until both people agree.</div>
+      </div>
     </div>
   </div>
 </section>
@@ -1092,7 +1126,7 @@ function showPage(name,skipHistory=false){
   closeMob();
   if(name==='browse')loadProfiles();
   if(name==='dashboard')loadDashboard();
-  if(name==='home')loadStats();
+  if(name==='home'){loadStats();updateHomeState();}
   if(name==='admin')loadAdminData();
 }
 
@@ -1125,6 +1159,54 @@ window.addEventListener('popstate',async e=>{
 });
 
 
+
+// ── HOME STATE ──
+function updateHomeState(){
+  const desc=document.getElementById('home-desc');
+  const guest=document.getElementById('home-actions-guest');
+  const user=document.getElementById('home-actions-user');
+  const share=document.getElementById('home-share-btn');
+  const admin=document.getElementById('home-admin-btn');
+
+  if(!desc||!guest||!user)return;
+
+  if(!currentUser){
+    desc.textContent='A Calgary-first platform where real people share their skills, stories, needs, and offers — then connect through a safer, human-reviewed community.';
+    guest.style.display='flex';
+    user.style.display='none';
+    if(share)share.style.display='none';
+    if(admin)admin.style.display='none';
+    return;
+  }
+
+  guest.style.display='none';
+  user.style.display='flex';
+
+  if(currentProfile?.status==='approved'){
+    desc.textContent='Your DESERVED profile is live. Browse Calgary people, share your profile, and build real local connections.';
+    if(share)share.style.display='inline-flex';
+  }else if(currentProfile?.status==='pending'){
+    desc.textContent='Your profile is under review. You can still edit your profile, browse Calgary people, and get ready to connect.';
+    if(share)share.style.display='none';
+  }else if(currentProfile?.status==='rejected'){
+    desc.textContent='Your profile needs a quick update before it can go live. Edit your profile and resubmit when ready.';
+    if(share)share.style.display='none';
+  }else{
+    desc.textContent='Welcome back. Finish your profile so Calgary can discover your story, skills, and offers.';
+    if(share)share.style.display='none';
+  }
+
+  if(admin)admin.style.display=isAdmin()?'inline-flex':'none';
+}
+
+function shareMyProfileFromHome(){
+  if(!currentProfile){toast('Create your profile first.');return;}
+  const link=profileUrl(currentProfile);
+  navigator.clipboard.writeText(link).then(()=>toast('Profile link copied! 🔗')).catch(()=>{
+    toast('Could not copy link. Open your profile and use Copy Link.');
+  });
+}
+
 // ── AUTH NAV ──
 function updateNavAuth(){
   const g=document.getElementById('nav-guest');
@@ -1138,6 +1220,7 @@ function updateNavAuth(){
     g.style.display='inline-flex';u.style.display='none';
     if(mob)mob.textContent='Join / Sign In';
   }
+  updateHomeState();
 }
 
 function showAuth(mode='login'){showPage('auth');showAuthForm(mode)}
@@ -1231,7 +1314,7 @@ async function handleLogin(){
 async function handleLogout(){
   await sb.auth.signOut();
   currentUser=null;currentProfile=null;
-  updateNavAuth();showPage('home');toast('Signed out');
+  updateNavAuth();updateHomeState();showPage('home');toast('Signed out');
 }
 
 // ── PROFILE ──
@@ -1251,7 +1334,7 @@ async function loadCurrentProfile(){
   try{
     const{data,error}=await sb.from('profiles').select('*').eq('user_id',currentUser.id).maybeSingle();
     if(error){console.error('Profile load:',error);return null;}
-    currentProfile=data||null;return currentProfile;
+    currentProfile=data||null;updateHomeState();return currentProfile;
   }catch(err){return null;}
 }
 
