@@ -316,6 +316,9 @@ h1.home-h .ac{color:var(--accent)}
   .ai-grid{grid-template-columns:1fr}
   .admin-wrap{padding:80px 20px 60px}
 }
+.forgot-link{font-size:12.5px;color:var(--muted);background:none;border:none;cursor:pointer;font-family:"DM Sans",sans-serif;text-decoration:underline;text-underline-offset:3px;padding:0;transition:color .2s;margin-top:4px;display:block;text-align:right}
+.forgot-link:hover{color:var(--accent)}
+.back-to-signin{font-size:13px;color:var(--accent);background:none;border:none;cursor:pointer;font-family:"DM Sans",sans-serif;padding:0;font-weight:600;margin-top:8px;display:block}
 #toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(12px);background:var(--black);color:var(--off);padding:12px 24px;border-radius:100px;font-size:13px;font-weight:500;opacity:0;pointer-events:none;transition:all .35s;z-index:1000;white-space:nowrap;max-width:90vw;text-align:center}
 #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
@@ -437,11 +440,19 @@ footer p{font-size:13px;color:rgba(247,244,239,.35)}
     </div>
     <div id="auth-error" class="auth-err"></div>
     <div id="auth-success" class="auth-suc"></div>
+
+    <!-- LOGIN FORM -->
     <div id="form-login" class="auth-form active">
       <div class="fg"><label>Email</label><input id="login-email" type="email" autocomplete="email"></div>
-      <div class="fg"><label>Password</label><input id="login-pass" type="password" autocomplete="current-password"></div>
+      <div class="fg">
+        <label>Password</label>
+        <input id="login-pass" type="password" autocomplete="current-password">
+        <button class="forgot-link" onclick="showAuthForm('forgot')">Forgot password?</button>
+      </div>
       <button id="btn-login" class="auth-submit" onclick="handleLogin()">Sign In →</button>
     </div>
+
+    <!-- SIGNUP FORM -->
     <div id="form-signup" class="auth-form">
       <div class="fg-row">
         <div class="fg"><label>First Name</label><input id="signup-first" type="text"></div>
@@ -459,6 +470,15 @@ footer p{font-size:13px;color:rgba(247,244,239,.35)}
       </div>
       <button id="btn-signup" class="auth-submit" onclick="handleSignup()">Create Account →</button>
     </div>
+
+    <!-- FORGOT PASSWORD FORM -->
+    <div id="form-forgot" class="auth-form">
+      <p style="font-size:14px;color:var(--muted);line-height:1.7;margin-bottom:16px">Enter your email and we'll send you a link to reset your password.</p>
+      <div class="fg"><label>Your Email</label><input id="forgot-email" type="email" autocomplete="email" placeholder="you@email.com"></div>
+      <button id="btn-forgot" class="auth-submit" onclick="handleForgotPassword()">Send Reset Link →</button>
+      <button class="back-to-signin" onclick="showAuthForm('login')">← Back to Sign In</button>
+    </div>
+
     <p style="text-align:center;margin-top:16px">
       <button class="btn-outline" onclick="showPage('home')" style="font-size:13px;padding:10px 20px">← Back to home</button>
     </p>
@@ -760,10 +780,18 @@ function updateNavAuth(){
 function showAuth(mode='login'){showPage('auth');showAuthForm(mode)}
 function showAuthForm(mode){
   clearAuthMsg();
+  // Tab states — forgot doesn't affect tabs
   document.getElementById('tab-login').classList.toggle('active',mode==='login');
   document.getElementById('tab-signup').classList.toggle('active',mode==='signup');
+  // Form states
   document.getElementById('form-login').classList.toggle('active',mode==='login');
   document.getElementById('form-signup').classList.toggle('active',mode==='signup');
+  document.getElementById('form-forgot').classList.toggle('active',mode==='forgot');
+  // Pre-fill forgot email if coming from login
+  if(mode==='forgot'){
+    const loginEmail=document.getElementById('login-email').value.trim();
+    if(loginEmail)document.getElementById('forgot-email').value=loginEmail;
+  }
 }
 function clearAuthMsg(){
   const e=document.getElementById('auth-error');
@@ -787,17 +815,26 @@ async function handleSignup(){
   btn.disabled=true;btn.textContent='Creating account…';clearAuthMsg();
   try{
     const{data,error}=await sb.auth.signUp({email,password,options:{data:{first_name:first,last_name:last,city_area:area}}});
-    if(error){showAuthErr(error.message);return;}
+    if(error){
+      // Already registered — switch to sign in automatically
+      if(error.message.toLowerCase().includes('already registered')||error.message.toLowerCase().includes('already been registered')){
+        showAuthForm('login');
+        document.getElementById('login-email').value=email;
+        showAuthErr('You already have an account. Please sign in below. 👇');
+        return;
+      }
+      showAuthErr(error.message);return;
+    }
     const{data:sd}=await sb.auth.getSession();
     currentUser=sd?.session?.user||data?.user||null;
     updateNavAuth();
     localStorage.setItem('deserved_signup_first',first);
     localStorage.setItem('deserved_signup_last',last);
     localStorage.setItem('deserved_signup_area',area);
-    showAuthSuccess('Account created. Now complete your profile.');
-    toast('Account created 🙏');
+    showAuthSuccess('Account created! Setting up your profile…');
+    toast('Welcome to DESERVED 🙏');
     setTimeout(()=>showPage('onboard'),650);
-  }catch(err){showAuthErr('Something went wrong.');}
+  }catch(err){showAuthErr('Something went wrong. Please try again.');}
   finally{btn.disabled=false;btn.textContent='Create Account →';}
 }
 
@@ -810,7 +847,7 @@ async function handleLogin(){
   btn.disabled=true;btn.textContent='Signing in…';clearAuthMsg();
   try{
     const{data,error}=await sb.auth.signInWithPassword({email,password});
-    if(error){showAuthErr(error.message);return;}
+    if(error){let msg=error.message;if(msg.toLowerCase().includes('invalid login')||msg.toLowerCase().includes('invalid credentials')){msg='Wrong email or password. Try again, or use Forgot Password below.';}showAuthErr(msg);return;}
     const{data:sd}=await sb.auth.getSession();
     currentUser=sd?.session?.user||data?.user||null;
     if(!currentUser){showAuthErr('Session not found. Please refresh and try again.');return;}
@@ -976,7 +1013,22 @@ function renderProfileCard(p){
 }
 
 // ── CONNECTION ──
-// ── CONNECTIONS ──
+// ── FORGOT PASSWORD ──
+async function handleForgotPassword(){
+  const email=document.getElementById('forgot-email').value.trim();
+  if(!email){showAuthErr('Please enter your email address.');return;}
+  const btn=document.getElementById('btn-forgot');
+  btn.disabled=true;btn.textContent='Sending…';clearAuthMsg();
+  try{
+    const{error}=await sb.auth.resetPasswordForEmail(email,{
+      redirectTo:'https://deserved.vercel.app'
+    });
+    if(error){showAuthErr(error.message);return;}
+    showAuthSuccess('✓ Password reset link sent! Check your email — it might be in your spam folder too.');
+    btn.textContent='Email sent ✓';
+  }catch(err){showAuthErr('Something went wrong. Please try again.');}
+  finally{btn.disabled=false;}
+}
 let connectingToId=null;
 let connectingToName=null;
 
