@@ -479,6 +479,14 @@ footer p{font-size:13px;color:rgba(247,244,239,.35)}
       <button class="back-to-signin" onclick="showAuthForm('login')">← Back to Sign In</button>
     </div>
 
+    <!-- RESET PASSWORD FORM (after clicking email link) -->
+    <div id="form-reset" class="auth-form">
+      <p style="font-size:14px;color:var(--muted);line-height:1.7;margin-bottom:16px">Choose a new password for your account.</p>
+      <div class="fg"><label>New Password</label><input id="reset-pass" type="password" placeholder="Min. 6 characters" autocomplete="new-password"></div>
+      <div class="fg"><label>Confirm Password</label><input id="reset-pass2" type="password" placeholder="Same password again" autocomplete="new-password"></div>
+      <button id="btn-reset" class="auth-submit" onclick="handleResetPassword()" style="background:var(--give)">Set New Password →</button>
+    </div>
+
     <p style="text-align:center;margin-top:16px">
       <button class="btn-outline" onclick="showPage('home')" style="font-size:13px;padding:10px 20px">← Back to home</button>
     </p>
@@ -780,17 +788,22 @@ function updateNavAuth(){
 function showAuth(mode='login'){showPage('auth');showAuthForm(mode)}
 function showAuthForm(mode){
   clearAuthMsg();
-  // Tab states — forgot doesn't affect tabs
   document.getElementById('tab-login').classList.toggle('active',mode==='login');
   document.getElementById('tab-signup').classList.toggle('active',mode==='signup');
-  // Form states
   document.getElementById('form-login').classList.toggle('active',mode==='login');
   document.getElementById('form-signup').classList.toggle('active',mode==='signup');
   document.getElementById('form-forgot').classList.toggle('active',mode==='forgot');
-  // Pre-fill forgot email if coming from login
+  document.getElementById('form-reset').classList.toggle('active',mode==='reset');
+  const tabs=document.querySelector('.auth-tabs');
+  if(tabs)tabs.style.display=(mode==='forgot'||mode==='reset')?'none':'flex';
   if(mode==='forgot'){
     const loginEmail=document.getElementById('login-email').value.trim();
     if(loginEmail)document.getElementById('forgot-email').value=loginEmail;
+  }
+  const logo=document.querySelector('.auth-logo');
+  if(logo){
+    if(mode==='reset'){logo.textContent='Reset Password';}
+    else{logo.innerHTML='DESERVED<span style="color:var(--accent)">.</span>';}
   }
 }
 function clearAuthMsg(){
@@ -1013,6 +1026,27 @@ function renderProfileCard(p){
 }
 
 // ── CONNECTION ──
+// ── RESET PASSWORD ──
+async function handleResetPassword(){
+  const pass=document.getElementById('reset-pass').value;
+  const pass2=document.getElementById('reset-pass2').value;
+  if(!pass||pass.length<6){showAuthErr('Password must be at least 6 characters.');return;}
+  if(pass!==pass2){showAuthErr('Passwords don\'t match. Please try again.');return;}
+  const btn=document.getElementById('btn-reset');
+  btn.disabled=true;btn.textContent='Saving…';clearAuthMsg();
+  try{
+    const{error}=await sb.auth.updateUser({password:pass});
+    if(error){showAuthErr(error.message);return;}
+    showAuthSuccess('✓ Password updated successfully! Taking you to your profile…');
+    toast('Password updated 🔒');
+    setTimeout(async()=>{
+      const profile=await loadCurrentProfile();
+      if(profile){showPage('dashboard');}else{showPage('onboard');}
+    },1500);
+  }catch(err){showAuthErr('Something went wrong. Please try again.');}
+  finally{btn.disabled=false;btn.textContent='Set New Password →';}
+}
+
 // ── FORGOT PASSWORD ──
 async function handleForgotPassword(){
   const email=document.getElementById('forgot-email').value.trim();
@@ -1198,7 +1232,12 @@ function escJs(v){return String(v??'').replaceAll('\\','\\\\').replaceAll("'","\
 sb.auth.onAuthStateChange(async(event,session)=>{
   currentUser=session?.user||null;
   updateNavAuth();
-  if(!currentUser)currentProfile=null;
+  if(!currentUser){currentProfile=null;}
+  // Handle password reset event
+  if(event==='PASSWORD_RECOVERY'){
+    showPage('auth');
+    showAuthForm('reset');
+  }
 });
 
 // ── ADMIN ──
@@ -1212,6 +1251,10 @@ function updateAdminNav(){
 }
 
 async function loadAdminData(){
+  if(!currentUser){
+    // Wait a moment for session to load
+    await new Promise(r=>setTimeout(r,500));
+  }
   if(!isAdmin()){toast('Access denied.');showPage('home');return;}
   // Stats
   const{count:total}=await sb.from('profiles').select('*',{count:'exact',head:true});
@@ -1326,11 +1369,23 @@ async function revokeProfile(userId,name){
 // ── INIT ──
 async function initApp(){
   try{
+    // Check for password recovery in URL hash
+    const hash=window.location.hash;
+    if(hash.includes('type=recovery')||hash.includes('error=access_denied')){
+      // Clear the ugly hash from URL
+      history.replaceState(null,null,window.location.pathname);
+    }
     const{data:{session},error}=await sb.auth.getSession();
     if(error)console.error('Session error:',error);
     currentUser=session?.user||null;
     updateNavAuth();
     if(currentUser){
+      // Check if this is a password recovery session
+      if(session?.user?.recovery_sent_at||hash.includes('type=recovery')){
+        showPage('auth');
+        showAuthForm('reset');
+        return;
+      }
       const profile=await loadCurrentProfile();
       if(profile){showPage('dashboard');}else{showPage('onboard');}
     }else{
