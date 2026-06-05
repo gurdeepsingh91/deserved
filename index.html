@@ -24,7 +24,7 @@ body{background:var(--off);color:var(--black);font-family:'DM Sans',sans-serif;o
 @media(min-width:769px){body,*{cursor:none!important}}
 
 /* NAV */
-nav{position:fixed;top:0;left:0;right:0;z-index:500;height:62px;padding:0 40px;display:flex;align-items:center;justify-content:space-between;transition:all .4s}
+nav{position:fixed;top:0;left:0;right:0;z-index:500;height:62px;padding:0 40px;display:flex;align-items:center;justify-content:space-between;transition:all .4s;background:rgba(247,244,239,.96);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
 nav.solid{background:rgba(247,244,239,.96);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
 @media(max-width:900px){nav{background:rgba(247,244,239,.96);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}}
 .logo{font-family:'Fraunces',serif;font-size:20px;font-weight:900;color:var(--black);letter-spacing:-.03em;background:none;border:none;cursor:pointer;padding:0}
@@ -642,7 +642,7 @@ footer p{font-size:13px;color:rgba(247,244,239,.35)}
           <button class="role-card give-s" onclick="setRole('give',this)"><span class="rc-icon">🤝</span><div class="rc-title">I Want to Give</div><div class="rc-desc">Skills, time, teaching, mentoring</div></button>
           <button class="role-card both-s" onclick="setRole('both',this)"><span class="rc-icon">⚡</span><div class="rc-title">Both</div><div class="rc-desc">Need something and have something to give</div></button>
         </div>
-        <div style="margin-top:16px">
+        <div style="margin-top:16px" id="need-fields">
           <div class="ob-fg"><label>I am looking for…</label>
             <select id="need-type">
               <option value="">Select…</option>
@@ -939,7 +939,7 @@ document.querySelectorAll('a,button,.profile-card,.filter-chip,.skill-sug,.role-
 });
 
 // ── NAV SCROLL ──
-window.addEventListener('scroll',()=>document.getElementById('nav').classList.toggle('solid',scrollY>20));
+// Nav always solid now — scroll listener removed
 
 // ── SCROLL REVEAL ──
 const srEls=document.querySelectorAll('.sr');
@@ -1117,6 +1117,11 @@ function setRole(role,btn){
   onboard.role=role;
   document.querySelectorAll('.role-card').forEach(c=>c.classList.remove('active'));
   btn.classList.add('active');
+  // Show/hide need fields based on role
+  const needFields=document.getElementById('need-fields');
+  if(needFields){
+    needFields.style.display=(role==='give')?'none':'block';
+  }
 }
 function nextStep(num){
   if(num===2&&!onboard.role){toast('Please choose your role first');return;}
@@ -1578,8 +1583,10 @@ async function showProfilePage(profile){
   if(profile.story){
     storyBody.innerHTML=`<p>${escHtml(profile.story)}</p>`;
     if(profile.need_type||profile.need_description){
-      storyBody.innerHTML+=`<div class="need-box">
-        <div class="nb-label">🙋 What ${escHtml(name.split(' ')[0])} needs</div>
+      const needLabel=profile.role==='give'?`🤝 What ${escHtml(name.split(' ')[0])} is offering`:profile.role==='both'?`⚡ What ${escHtml(name.split(' ')[0])} needs & offers`:`🙋 What ${escHtml(name.split(' ')[0])} needs`;
+      const needColor=profile.role==='give'?'var(--give)':profile.role==='both'?'var(--both)':'var(--need)';
+      storyBody.innerHTML+=`<div class="need-box" style="border-color:${needColor}20;background:${needColor}08">
+        <div class="nb-label" style="color:${needColor}">${needLabel}</div>
         <div class="nb-text">${escHtml(profile.need_type||'')}${profile.need_description?' — '+escHtml(profile.need_description):''}</div>
       </div>`;
     }
