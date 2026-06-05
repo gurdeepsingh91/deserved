@@ -187,6 +187,26 @@ h1.home-h .ac{color:var(--accent)}
 .empty-state span{font-size:48px;display:block;margin-bottom:16px}
 .empty-state h3{font-family:'Fraunces',serif;font-size:22px;color:var(--black);margin-bottom:8px}
 
+/* Browse preview loop — temporary community preview cards */
+.preview-loop-wrap{margin-top:38px;overflow:hidden;position:relative}
+.preview-loop-head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:14px;flex-wrap:wrap}
+.preview-loop-title{font-family:'Fraunces',serif;font-size:22px;font-weight:900;letter-spacing:-.03em;color:var(--black)}
+.preview-loop-note{font-size:12.5px;color:var(--muted);max-width:420px;line-height:1.55}
+.preview-loop-rail{overflow:hidden;mask-image:linear-gradient(to right,transparent,#000 8%,#000 92%,transparent);-webkit-mask-image:linear-gradient(to right,transparent,#000 8%,#000 92%,transparent)}
+.preview-loop-track{display:flex;gap:14px;width:max-content;animation:previewSlide 42s linear infinite}
+.preview-loop-track:hover{animation-play-state:paused}
+.preview-card{width:260px;min-height:174px;background:var(--warm);border:1px dashed var(--border);border-radius:18px;padding:18px;flex:0 0 auto;opacity:.92}
+.preview-top{display:flex;align-items:center;gap:11px;margin-bottom:12px}
+.preview-av{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-family:'Fraunces',serif;font-weight:700;font-size:17px;flex-shrink:0}
+.preview-name{font-family:'Fraunces',serif;font-size:15px;font-weight:700;color:var(--black);letter-spacing:-.02em}
+.preview-sub{font-size:12px;color:var(--muted);margin-top:2px}
+.preview-copy{font-size:13px;color:var(--muted);line-height:1.55;margin-bottom:12px}
+.preview-tags{display:flex;gap:5px;flex-wrap:wrap}
+.preview-tag{font-size:11px;font-weight:500;padding:3px 9px;border-radius:100px;background:var(--off);border:1px solid var(--border);color:var(--muted)}
+.preview-label{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin-top:10px}
+@keyframes previewSlide{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@media(max-width:540px){.preview-card{width:230px}.preview-loop-wrap{margin-top:28px}}
+
 /* ── DASHBOARD ── */
 #page-dashboard{background:var(--off)}
 .dash-wrap{max-width:900px;margin:0 auto;padding:100px 40px 80px}
@@ -772,6 +792,89 @@ footer p{font-size:13px;color:rgba(247,244,239,.35)}
     <div id="profiles-grid" class="profiles-grid">
       <div class="empty-state"><span>🔍</span><h3>Loading profiles…</h3></div>
     </div>
+
+    <div class="preview-loop-wrap" id="browse-preview-loop">
+      <div class="preview-loop-head">
+        <div class="preview-loop-title">More Calgary stories are joining.</div>
+        <div class="preview-loop-note">Community preview cards show the kind of people DESERVED is built for. Real approved profiles appear above as members join.</div>
+      </div>
+      <div class="preview-loop-rail">
+        <div class="preview-loop-track">
+          <div class="preview-card">
+            <div class="preview-top"><div class="preview-av" style="background:#2A7D4F">T</div><div><div class="preview-name">Math Tutor</div><div class="preview-sub">NE Calgary</div></div></div>
+            <div class="preview-copy">Offering help with school math, homework support, and basic study guidance.</div>
+            <div class="preview-tags"><span class="preview-tag">Teaching</span><span class="preview-tag">Mentoring</span></div>
+            <div class="preview-label">Preview</div>
+          </div>
+          <div class="preview-card">
+            <div class="preview-top"><div class="preview-av" style="background:#C46A08">W</div><div><div class="preview-name">Website Helper</div><div class="preview-sub">Calgary</div></div></div>
+            <div class="preview-copy">Helping local businesses with landing pages, online presence, and simple digital tools.</div>
+            <div class="preview-tags"><span class="preview-tag">Web Design</span><span class="preview-tag">Branding</span></div>
+            <div class="preview-label">Preview</div>
+          </div>
+          <div class="preview-card">
+            <div class="preview-top"><div class="preview-av" style="background:#4A6FA5">N</div><div><div class="preview-name">Newcomer Guide</div><div class="preview-sub">NW Calgary</div></div></div>
+            <div class="preview-copy">Helping newcomers understand resumes, local services, community resources, and first steps.</div>
+            <div class="preview-tags"><span class="preview-tag">Guidance</span><span class="preview-tag">Community</span></div>
+            <div class="preview-label">Preview</div>
+          </div>
+          <div class="preview-card">
+            <div class="preview-top"><div class="preview-av" style="background:#8B5E3C">P</div><div><div class="preview-name">Photographer</div><div class="preview-sub">SE Calgary</div></div></div>
+            <div class="preview-copy">Looking to collaborate with creators, small brands, and local community projects.</div>
+            <div class="preview-tags"><span class="preview-tag">Photos</span><span class="preview-tag">Creative</span></div>
+            <div class="preview-label">Preview</div>
+          </div>
+          <div class="preview-card">
+            <div class="preview-top"><div class="preview-av" style="background:#6B3FA0">C</div><div><div class="preview-name">Career Support</div><div class="preview-sub">Downtown</div></div></div>
+            <div class="preview-copy">Offering resume feedback, interview practice, and confidence support for job seekers.</div>
+            <div class="preview-tags"><span class="preview-tag">Resume</span><span class="preview-tag">Coaching</span></div>
+            <div class="preview-label">Preview</div>
+          </div>
+          <div class="preview-card">
+            <div class="preview-top"><div class="preview-av" style="background:#C0392B">F</div><div><div class="preview-name">Food Creator</div><div class="preview-sub">Calgary</div></div></div>
+            <div class="preview-copy">Looking for event partners, market opportunities, and people who can help grow locally.</div>
+            <div class="preview-tags"><span class="preview-tag">Cooking</span><span class="preview-tag">Events</span></div>
+            <div class="preview-label">Preview</div>
+          </div>
+          <div class="preview-card">
+            <div class="preview-top"><div class="preview-av" style="background:#2A7D4F">T</div><div><div class="preview-name">Math Tutor</div><div class="preview-sub">NE Calgary</div></div></div>
+            <div class="preview-copy">Offering help with school math, homework support, and basic study guidance.</div>
+            <div class="preview-tags"><span class="preview-tag">Teaching</span><span class="preview-tag">Mentoring</span></div>
+            <div class="preview-label">Preview</div>
+          </div>
+          <div class="preview-card">
+            <div class="preview-top"><div class="preview-av" style="background:#C46A08">W</div><div><div class="preview-name">Website Helper</div><div class="preview-sub">Calgary</div></div></div>
+            <div class="preview-copy">Helping local businesses with landing pages, online presence, and simple digital tools.</div>
+            <div class="preview-tags"><span class="preview-tag">Web Design</span><span class="preview-tag">Branding</span></div>
+            <div class="preview-label">Preview</div>
+          </div>
+          <div class="preview-card">
+            <div class="preview-top"><div class="preview-av" style="background:#4A6FA5">N</div><div><div class="preview-name">Newcomer Guide</div><div class="preview-sub">NW Calgary</div></div></div>
+            <div class="preview-copy">Helping newcomers understand resumes, local services, community resources, and first steps.</div>
+            <div class="preview-tags"><span class="preview-tag">Guidance</span><span class="preview-tag">Community</span></div>
+            <div class="preview-label">Preview</div>
+          </div>
+          <div class="preview-card">
+            <div class="preview-top"><div class="preview-av" style="background:#8B5E3C">P</div><div><div class="preview-name">Photographer</div><div class="preview-sub">SE Calgary</div></div></div>
+            <div class="preview-copy">Looking to collaborate with creators, small brands, and local community projects.</div>
+            <div class="preview-tags"><span class="preview-tag">Photos</span><span class="preview-tag">Creative</span></div>
+            <div class="preview-label">Preview</div>
+          </div>
+          <div class="preview-card">
+            <div class="preview-top"><div class="preview-av" style="background:#6B3FA0">C</div><div><div class="preview-name">Career Support</div><div class="preview-sub">Downtown</div></div></div>
+            <div class="preview-copy">Offering resume feedback, interview practice, and confidence support for job seekers.</div>
+            <div class="preview-tags"><span class="preview-tag">Resume</span><span class="preview-tag">Coaching</span></div>
+            <div class="preview-label">Preview</div>
+          </div>
+          <div class="preview-card">
+            <div class="preview-top"><div class="preview-av" style="background:#C0392B">F</div><div><div class="preview-name">Food Creator</div><div class="preview-sub">Calgary</div></div></div>
+            <div class="preview-copy">Looking for event partners, market opportunities, and people who can help grow locally.</div>
+            <div class="preview-tags"><span class="preview-tag">Cooking</span><span class="preview-tag">Events</span></div>
+            <div class="preview-label">Preview</div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -924,7 +1027,7 @@ const sb=createClient(SUPABASE_URL,SUPABASE_ANON_KEY,{
   auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true,storage:window.localStorage,storageKey:'deserved-auth-session'}
 });
 
-let currentUser=null,currentProfile=null,currentFilter='all',allProfiles=[],myConnections=[];
+let currentUser=null,currentProfile=null,currentFilter='all',allProfiles=[],myConnections=[],editMode=false,profileReturnTarget=null;
 let appInitialized=false;
 let handlingBrowserNav=false;
 let onboard={role:'',skills:[]};
@@ -994,15 +1097,21 @@ function showPage(name,skipHistory=false){
 }
 
 window.addEventListener('popstate',async e=>{
-  const page=e.state?.deservedPage||(window.location.hash?window.location.hash.replace('#',''):'home');
+  const hash=window.location.hash||'';
+  const statePage=e.state?.deservedPage;
+  const page=statePage||(hash.startsWith('#')?hash.slice(1).split('/')[0]:'home');
+  const slug=e.state?.profileSlug||(hash.startsWith('#profile/')?hash.replace('#profile/',''):null);
   handlingBrowserNav=true;
   try{
     if(page==='profile'){
-      if(viewingProfile){
+      if(slug){
+        const opened=await openProfileFromHash(slug);
+        if(!opened)showPage('browse',true);
+      }else if(viewingProfile){
         showPage('profile',true);
       }else if(currentUser){
         const profile=await loadCurrentProfile();
-        if(profile){showProfilePage(profile);}
+        if(profile){showProfilePage(profile,false);}
         else{showPage('onboard',true);}
       }else{
         showPage('home',true);
@@ -1129,13 +1238,13 @@ async function handleLogout(){
 async function requireAuthOrOnboard(){
   if(!currentUser){showAuth('signup');return;}
   const profile=await loadCurrentProfile();
-  if(profile){showProfilePage(profile);}else{showPage('onboard');}
+  if(profile){showProfilePage(profile,true);}else{resetOnboardFormForNewProfile();showPage('onboard');}
 }
 async function goToMyProfile(){
   if(!currentUser){showAuth('login');return;}
   const profile=await loadCurrentProfile();
-  if(profile){showProfilePage(profile);}
-  else{showPage('onboard');}
+  if(profile){showProfilePage(profile,true);}
+  else{resetOnboardFormForNewProfile();showPage('onboard');}
 }
 async function loadCurrentProfile(){
   if(!currentUser)return null;
@@ -1185,6 +1294,63 @@ function renderSkills(){
   box.innerHTML=onboard.skills.map(s=>`<span class="skill-tag-item">${escHtml(s)}<button onclick="removeSkill('${escJs(s)}')">×</button></span>`).join('');
 }
 
+
+// ── EDIT PROFILE PREFILL ──
+function startEditProfile(){
+  if(!currentUser||!currentProfile){showPage('onboard');return;}
+  editMode=true;
+  profileReturnTarget=currentProfile;
+  prefillOnboardForm(currentProfile);
+  showPage('onboard');
+  toast('Edit your profile, then save changes.');
+}
+
+function prefillOnboardForm(p){
+  onboard.role=p.role||'';
+  const roleBtn=document.querySelector(`.role-card.${p.role==='need'?'need-s':p.role==='give'?'give-s':p.role==='both'?'both-s':''}`);
+  document.querySelectorAll('.role-card').forEach(c=>c.classList.remove('active'));
+  if(roleBtn)roleBtn.classList.add('active');
+
+  const needFields=document.getElementById('need-fields');
+  if(needFields)needFields.style.display=(p.role==='give')?'none':'block';
+
+  onboard.skills=Array.isArray(p.skills)?p.skills:(typeof p.skills==='string'?p.skills.split(',').map(s=>s.trim()).filter(Boolean):[]);
+  renderSkills();
+
+  const setVal=(id,val)=>{const el=document.getElementById(id);if(el)el.value=val||'';};
+  setVal('need-type',p.need_type);
+  setVal('need-desc',p.need_description);
+  setVal('experience',p.experience);
+  setVal('story',p.story);
+  setVal('origin',p.origin);
+  setVal('calgary-time',p.calgary_time);
+  setVal('languages',p.languages);
+
+  document.querySelectorAll('.step').forEach(s=>s.classList.remove('active'));
+  document.getElementById('step-1')?.classList.add('active');
+  const progress=document.getElementById('progress-fill');
+  if(progress)progress.style.width='25%';
+
+  const btn=document.getElementById('btn-submit-profile');
+  if(btn)btn.textContent='Save Changes ✓';
+}
+
+function resetOnboardFormForNewProfile(){
+  editMode=false;
+  profileReturnTarget=null;
+  onboard={role:'',skills:[]};
+  document.querySelectorAll('.role-card').forEach(c=>c.classList.remove('active'));
+  renderSkills();
+  ['need-type','need-desc','experience','story','origin','calgary-time','languages'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el)el.value='';
+  });
+  const needFields=document.getElementById('need-fields');
+  if(needFields)needFields.style.display='block';
+  const btn=document.getElementById('btn-submit-profile');
+  if(btn)btn.textContent='Submit Profile 🙏';
+}
+
 // ── SUBMIT PROFILE ──
 async function submitProfile(){
   if(!currentUser){showAuth('signup');return;}
@@ -1204,16 +1370,22 @@ async function submitProfile(){
     origin:document.getElementById('origin').value.trim(),
     calgary_time:document.getElementById('calgary-time').value,
     languages:document.getElementById('languages').value.trim(),
-    status:'pending'
+    status:editMode?(currentProfile?.status||'pending'):'pending'
   };
   const btn=document.getElementById('btn-submit-profile');
-  btn.disabled=true;btn.textContent='Submitting…';
+  btn.disabled=true;btn.textContent=editMode?'Saving…':'Submitting…';
   try{
     const{error}=await sb.from('profiles').upsert(profile,{onConflict:'id'});
     if(error){console.error('Submit error:',error);toast(error.message);return;}
-    currentProfile=profile;toast('Profile submitted 🙏');showProfilePage(currentProfile);
+    const{data:fresh}=await sb.from('profiles').select('*').eq('id',currentUser.id).maybeSingle();
+    currentProfile=fresh||profile;
+    toast(editMode?'Profile updated ✓':'Profile submitted 🙏');
+    editMode=false;
+    profileReturnTarget=null;
+    btn.textContent='Submit Profile 🙏';
+    showProfilePage(currentProfile,true);
   }catch(err){toast('Could not submit profile.');}
-  finally{btn.disabled=false;btn.textContent='Submit Profile 🙏';}
+  finally{btn.disabled=false;btn.textContent=editMode?'Save Changes ✓':'Submit Profile 🙏';}
 }
 
 // ── STATS ──
@@ -1251,7 +1423,7 @@ async function loadProfiles(){
         if(e.target.classList.contains('pc-connect-btn')||e.target.classList.contains('pc-connected-btn'))return;
         const uid=this.dataset.uid;
         const p=visible.find(x=>x.user_id===uid);
-        if(p)showProfilePage(p);
+        if(p)showProfilePage(p,true);
       });
     });
   }catch(err){box.innerHTML='<div class="empty-state"><span>⚠️</span><h3>Could not load profiles.</h3></div>';}
@@ -1300,7 +1472,7 @@ function renderProfileCard(p){
   }
 
   return `
-    <div class="profile-card" data-uid="${p.user_id}">
+    <div class="profile-card" data-uid="${p.user_id}" data-slug="${profileSlug(p)}">
       <div class="pc-top">
         <div class="pc-av" style="background:${color}">${escHtml(initial)}</div>
         <div>
@@ -1527,6 +1699,43 @@ async function loadDashboard(){
 // ── HELPERS ──
 function escHtml(v){return String(v??'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#039;')}
 function escJs(v){return String(v??'').replaceAll('\\','\\\\').replaceAll("'","\\'").replaceAll('"','\\"')}
+function slugify(v){
+  return String(v??'').toLowerCase().trim()
+    .replace(/[^a-z0-9]+/g,'-')
+    .replace(/^-+|-+$/g,'');
+}
+function profileSlug(p){
+  const name=`${p?.first_name||''} ${p?.last_name||''}`.trim();
+  const base=slugify(name)||'profile';
+  const shortId=String(p?.user_id||p?.id||'').slice(0,8);
+  return `${base}-${shortId}`;
+}
+function profileUrl(p){
+  return `${window.location.origin}${window.location.pathname}#profile/${profileSlug(p)}`;
+}
+async function openProfileFromHash(slug){
+  if(!slug){return false;}
+  try{
+    const{data,error}=await sb.from('profiles').select('*');
+    if(error){console.error('Profile hash load:',error);return false;}
+    const profile=(data||[]).find(p=>profileSlug(p)===slug||p.user_id===slug||p.id===slug);
+    if(!profile)return false;
+    if(profile.status!=='approved'&&profile.user_id!==currentUser?.id&&!isAdmin()){
+      toast('This profile is not public yet.');
+      return false;
+    }
+    allProfiles=data||[];
+    if(currentUser){
+      const{data:conns}=await sb.from('connections').select('*').or(`requester_id.eq.${currentUser.id},receiver_id.eq.${currentUser.id}`);
+      myConnections=conns||[];
+    }
+    await showProfilePage(profile,false);
+    return true;
+  }catch(err){
+    console.error('Open profile from hash failed:',err);
+    return false;
+  }
+}
 
 // ── AUTH STATE ──
 sb.auth.onAuthStateChange(async(event,session)=>{
@@ -1588,8 +1797,12 @@ function switchProfTab(tab,btn){
   if(el)el.classList.add('on');
 }
 
-async function showProfilePage(profile){
+async function showProfilePage(profile,pushHistory=true){
   viewingProfile=profile;
+  if(appInitialized&&pushHistory&&!handlingBrowserNav){
+    const slug=profileSlug(profile);
+    history.pushState({deservedPage:'profile',profileSlug:slug},'','#profile/'+slug);
+  }
   const isOwn=profile.user_id===currentUser?.id;
   const colors=['#C46A08','#2A7D4F','#4A6FA5','#8B5E3C','#6B3FA0','#C0392B'];
   const name=`${profile.first_name||''} ${profile.last_name||''}`.trim()||'Member';
@@ -1626,7 +1839,7 @@ async function showProfilePage(profile){
   const actions=document.getElementById('prof-actions');
   const ccr=document.getElementById('prof-connect-card');
   if(isOwn){
-    actions.innerHTML=`<button class="btn-edit-hero" onclick="showPage('onboard')">✏️ Edit Profile</button>
+    actions.innerHTML=`<button class="btn-edit-hero" onclick="startEditProfile()">✏️ Edit Profile</button>
     <button class="btn-edit-hero" onclick="showPage('dashboard')">📊 Dashboard</button>`;
     ccr.innerHTML=`<div class="ccr-title">Your Profile</div>
     <p class="ccr-desc">This is how others see you on DESERVED.</p>
@@ -1745,12 +1958,12 @@ function handleProfConnect(){
 }
 
 function shareProfWhatsApp(){
-  const url=window.location.href;
+  const url=viewingProfile?profileUrl(viewingProfile):window.location.href;
   const name=`${viewingProfile?.first_name||''} ${viewingProfile?.last_name||''}`.trim();
   window.open('https://wa.me/?text='+encodeURIComponent(`Check out ${name}'s profile on DESERVED: ${url}`),'_blank');
 }
 function shareProfCopy(){
-  navigator.clipboard.writeText(window.location.href).then(()=>toast('Link copied! 🔗'));
+  navigator.clipboard.writeText(viewingProfile?profileUrl(viewingProfile):window.location.href).then(()=>toast('Profile link copied! 🔗'));
 }
 const ADMIN_ID='98cae623-f687-4657-a1df-6c6852e908bd';
 
@@ -1897,17 +2110,36 @@ async function initApp(){
         showAuthForm('reset');
         return;
       }
-      const profile=await loadCurrentProfile();
-      if(profile){showProfilePage(profile);}else{showPage('onboard');}
+      const profileHash=window.location.hash.startsWith('#profile/')?window.location.hash.replace('#profile/',''):null;
+      if(profileHash){
+        const opened=await openProfileFromHash(profileHash);
+        if(!opened){
+          const profile=await loadCurrentProfile();
+          if(profile){showProfilePage(profile,false);}else{showPage('onboard');}
+        }
+      }else{
+        const profile=await loadCurrentProfile();
+        if(profile){showProfilePage(profile,false);}else{resetOnboardFormForNewProfile();showPage('onboard');}
+      }
     }else{
-      showPage('home');
+      const profileHash=window.location.hash.startsWith('#profile/')?window.location.hash.replace('#profile/',''):null;
+      if(profileHash){
+        const opened=await openProfileFromHash(profileHash);
+        if(!opened)showPage('home');
+      }else{
+        showPage('home');
+      }
     }
     loadStats();
     renderSkills();
 
     const active=document.querySelector('.page.active');
     const activeName=active?.id?.replace('page-','')||'home';
-    history.replaceState({deservedPage:activeName},'',activeName==='home'?window.location.pathname:'#'+activeName);
+    if(activeName==='profile'&&viewingProfile){
+      history.replaceState({deservedPage:'profile',profileSlug:profileSlug(viewingProfile)},'','#profile/'+profileSlug(viewingProfile));
+    }else{
+      history.replaceState({deservedPage:activeName},'',activeName==='home'?window.location.pathname:'#'+activeName);
+    }
     appInitialized=true;
   }catch(err){
     console.error('Init error:',err);
