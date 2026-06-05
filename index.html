@@ -259,7 +259,101 @@ h1.home-h .ac{color:var(--accent)}
 .stories-coming h3{font-family:'Fraunces',serif;font-size:24px;font-weight:700;color:var(--black);margin-bottom:12px;letter-spacing:-.02em}
 .stories-coming p{font-size:15px;color:var(--muted);line-height:1.75}
 
-/* ── ADMIN ── */
+/* ── PROFILE PAGE ── */
+#page-profile{background:var(--off)}
+.profile-hero-band{
+  background:var(--black);
+  padding:100px 40px 0;
+  position:relative;overflow:hidden;
+}
+.phb-bg{
+  position:absolute;inset:0;
+  background:radial-gradient(ellipse 60% 80% at 20% 50%,rgba(232,130,12,.1),transparent),
+    radial-gradient(ellipse 40% 60% at 80% 20%,rgba(42,125,79,.07),transparent);
+}
+.phb-inner{
+  max-width:1100px;margin:0 auto;
+  display:grid;grid-template-columns:auto 1fr auto;
+  gap:32px;align-items:flex-end;
+  position:relative;z-index:1;
+}
+.phb-av-wrap{padding-bottom:0}
+.phb-av{
+  width:120px;height:120px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Fraunces',serif;font-size:44px;font-weight:900;color:#fff;
+  border:4px solid var(--black);
+  flex-shrink:0;
+}
+.phb-info{padding-bottom:24px}
+.phb-role-badge{display:inline-flex;align-items:center;padding:4px 14px;border-radius:100px;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:12px}
+.phb-name{font-family:'Fraunces',serif;font-size:clamp(32px,5vw,56px);font-weight:900;color:#fff;letter-spacing:-.04em;line-height:.95;margin-bottom:8px}
+.phb-title{font-size:15px;color:rgba(247,244,239,.5);margin-bottom:14px}
+.phb-meta{display:flex;flex-wrap:wrap;gap:14px}
+.phb-meta-item{display:flex;align-items:center;gap:6px;font-size:13px;color:rgba(247,244,239,.45)}
+.phb-meta-item strong{color:rgba(247,244,239,.75);font-weight:500}
+.phb-actions{display:flex;flex-direction:column;gap:10px;padding-bottom:24px;align-items:flex-end}
+.btn-connect-hero{background:var(--accent);color:#fff;padding:13px 26px;border-radius:100px;font-size:14px;font-weight:700;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .25s;white-space:nowrap}
+.btn-connect-hero:hover{background:#C46A08;transform:translateY(-2px)}
+.btn-edit-hero{background:rgba(247,244,239,.08);border:1px solid rgba(247,244,239,.15);color:rgba(247,244,239,.7);padding:11px 22px;border-radius:100px;font-size:13px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .25s;white-space:nowrap}
+.btn-edit-hero:hover{background:rgba(247,244,239,.15);color:#fff}
+.phb-tabs{max-width:1100px;margin:0 auto;display:flex;gap:0;position:relative;z-index:1;padding-top:20px}
+.phb-tab{padding:13px 22px;font-size:13.5px;font-weight:600;color:rgba(247,244,239,.4);cursor:pointer;transition:all .2s;border-bottom:2px solid transparent;background:none;border-top:none;border-left:none;border-right:none;font-family:'DM Sans',sans-serif}
+.phb-tab.on{color:#fff;border-bottom-color:var(--accent)}
+.phb-tab:hover{color:rgba(247,244,239,.8)}
+.profile-body{max-width:1100px;margin:0 auto;padding:48px 40px;display:grid;grid-template-columns:1fr 300px;gap:28px;align-items:start}
+.profile-left{display:flex;flex-direction:column;gap:20px}
+.pcard{background:var(--warm);border:1px solid var(--border);border-radius:20px;overflow:hidden;transition:border-color .25s}
+.pcard:hover{border-color:var(--mid)}
+.pcard-header{padding:20px 26px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.pcard-title{font-family:'Fraunces',serif;font-size:16px;font-weight:700;color:var(--black);letter-spacing:-.02em;display:flex;align-items:center;gap:8px}
+.pcard-body{padding:24px 26px}
+.story-text{font-size:15.5px;color:var(--muted);line-height:1.85}
+.story-text p{margin-bottom:16px}
+.story-text p:last-child{margin-bottom:0}
+.story-quote{border-left:3px solid var(--accent);padding:14px 18px;margin:20px 0;background:rgba(232,130,12,.05);border-radius:0 10px 10px 0}
+.story-quote p{font-family:'Fraunces',serif;font-size:18px;font-weight:300;font-style:italic;color:var(--black);line-height:1.5;margin:0}
+.need-box{background:rgba(217,79,61,.05);border:1.5px solid rgba(217,79,61,.2);border-radius:12px;padding:18px 20px;margin-top:16px}
+.nb-label{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--need);margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.nb-text{font-size:14.5px;color:var(--black);line-height:1.7}
+.skills-wrap{display:flex;flex-wrap:wrap;gap:10px}
+.skill-chip{display:flex;align-items:center;gap:6px;background:var(--off);border:1.5px solid var(--border);padding:8px 16px;border-radius:100px;font-size:13.5px;font-weight:500;color:var(--black);transition:all .25s}
+.skill-chip:hover{border-color:var(--accent);color:var(--accent)}
+/* Profile right sidebar */
+.profile-right{display:flex;flex-direction:column;gap:16px;position:sticky;top:80px}
+.pright-card{background:var(--warm);border:1px solid var(--border);border-radius:16px;padding:22px}
+.pright-title{font-family:'Fraunces',serif;font-size:15px;font-weight:700;color:var(--black);margin-bottom:14px;letter-spacing:-.02em}
+.qi-list{display:flex;flex-direction:column;gap:10px}
+.qi-item{display:flex;align-items:flex-start;gap:10px}
+.qi-icon{font-size:15px;width:22px;text-align:center;flex-shrink:0;margin-top:2px}
+.qi-label{font-size:10.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:2px}
+.qi-val{font-size:13.5px;color:var(--black);line-height:1.4}
+.connect-card-right{background:var(--black);border-radius:16px;padding:24px;text-align:center}
+.ccr-title{font-family:'Fraunces',serif;font-size:18px;font-weight:700;color:#fff;margin-bottom:8px;letter-spacing:-.02em}
+.ccr-desc{font-size:13px;color:rgba(247,244,239,.45);line-height:1.6;margin-bottom:16px}
+.ccr-btn{width:100%;padding:13px;background:var(--accent);color:#fff;border:none;border-radius:100px;font-size:13.5px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s;margin-bottom:8px}
+.ccr-btn:hover{background:#C46A08}
+.ccr-privacy{font-size:11px;color:rgba(247,244,239,.3);line-height:1.6}
+.share-card-right{background:var(--warm);border:1px solid var(--border);border-radius:16px;padding:20px}
+.share-btns-right{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.shr-btn-sm{flex:1;padding:9px;border-radius:10px;font-size:12px;font-weight:600;border:1px solid var(--border);background:var(--off);color:var(--muted);cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s;text-align:center}
+.shr-btn-sm:hover{background:var(--black);color:var(--off);border-color:var(--black)}
+/* Profile tabs content */
+.ptab-content{display:none}
+.ptab-content.on{display:flex;flex-direction:column;gap:20px}
+@media(max-width:900px){
+  .phb-inner{grid-template-columns:auto 1fr;grid-template-rows:auto auto}
+  .phb-actions{grid-column:1/-1;flex-direction:row;padding-bottom:0;align-items:center;justify-content:flex-start}
+  .profile-body{grid-template-columns:1fr;gap:20px;padding:32px 24px}
+  .profile-right{position:static}
+  .profile-hero-band{padding:80px 24px 0}
+  .phb-tabs{overflow-x:auto;padding-bottom:0}
+  .phb-tab{white-space:nowrap;padding:12px 16px}
+}
+@media(max-width:540px){
+  .phb-av{width:80px;height:80px;font-size:28px}
+  .phb-inner{gap:16px}
+}
 #page-admin{background:var(--warm)}
 .admin-wrap{max-width:1100px;margin:0 auto;padding:100px 40px 80px}
 .admin-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:32px;flex-wrap:wrap;gap:16px}
@@ -654,6 +748,80 @@ footer p{font-size:13px;color:rgba(247,244,239,.35)}
   </div>
 </section>
 
+<!-- PROFILE PAGE -->
+<section id="page-profile" class="page">
+  <div class="profile-hero-band">
+    <div class="phb-bg"></div>
+    <div class="phb-inner">
+      <div class="phb-av-wrap">
+        <div class="phb-av" id="prof-av">—</div>
+      </div>
+      <div class="phb-info">
+        <span class="phb-role-badge" id="prof-role-badge"></span>
+        <div class="phb-name" id="prof-name">—</div>
+        <div class="phb-title" id="prof-title">—</div>
+        <div class="phb-meta" id="prof-meta"></div>
+      </div>
+      <div class="phb-actions" id="prof-actions"></div>
+    </div>
+    <div class="phb-tabs" id="prof-tabs">
+      <button class="phb-tab on" onclick="switchProfTab('about',this)">About</button>
+      <button class="phb-tab" onclick="switchProfTab('skills',this)">Skills</button>
+      <button class="phb-tab" onclick="switchProfTab('connections',this)">Connections</button>
+    </div>
+  </div>
+  <div class="profile-body">
+    <div class="profile-left">
+      <!-- ABOUT TAB -->
+      <div class="ptab-content on" id="ptab-about">
+        <div class="pcard">
+          <div class="pcard-header"><div class="pcard-title">✍️ <span id="prof-story-title">Story</span></div></div>
+          <div class="pcard-body">
+            <div class="story-text" id="prof-story-body">Loading…</div>
+          </div>
+        </div>
+      </div>
+      <!-- SKILLS TAB -->
+      <div class="ptab-content" id="ptab-skills">
+        <div class="pcard">
+          <div class="pcard-header"><div class="pcard-title">💼 Skills & Expertise</div></div>
+          <div class="pcard-body">
+            <div class="skills-wrap" id="prof-skills-list"></div>
+            <div style="margin-top:20px" id="prof-avail-wrap"></div>
+          </div>
+        </div>
+      </div>
+      <!-- CONNECTIONS TAB -->
+      <div class="ptab-content" id="ptab-connections">
+        <div class="pcard">
+          <div class="pcard-header"><div class="pcard-title">🔗 Connections</div></div>
+          <div class="pcard-body" id="prof-conns-body">Loading…</div>
+        </div>
+      </div>
+    </div>
+    <div class="profile-right">
+      <div class="connect-card-right" id="prof-connect-card">
+        <div class="ccr-title" id="ccr-title">Connect</div>
+        <p class="ccr-desc" id="ccr-desc">Send a connection request.</p>
+        <button class="ccr-btn" id="ccr-btn" onclick="handleProfConnect()">✦ Connect</button>
+        <p class="ccr-privacy">🔒 Contact info stays private until both agree.</p>
+      </div>
+      <div class="pright-card">
+        <div class="pright-title">Quick Info</div>
+        <div class="qi-list" id="prof-quick-info"></div>
+      </div>
+      <div class="share-card-right">
+        <div class="pright-title" style="margin-bottom:6px">Share this profile</div>
+        <p style="font-size:12px;color:var(--muted)">Know someone who should connect?</p>
+        <div class="share-btns-right">
+          <button class="shr-btn-sm" onclick="shareProfWhatsApp()">WhatsApp</button>
+          <button class="shr-btn-sm" onclick="shareProfCopy()">Copy Link</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- STORIES -->
 <section id="page-stories" class="page">
   <div class="stories-wrap">
@@ -867,7 +1035,7 @@ async function handleLogin(){
     updateNavAuth();
     const profile=await loadCurrentProfile();
     toast('Welcome back 🙏');
-    if(profile){showPage('dashboard');}else{showPage('onboard');}
+    if(profile){showProfilePage(profile);}else{showPage('onboard');}
   }catch(err){showAuthErr('Something went wrong.');}
   finally{btn.disabled=false;btn.textContent='Sign In →';}
 }
@@ -883,12 +1051,13 @@ async function handleLogout(){
 async function requireAuthOrOnboard(){
   if(!currentUser){showAuth('signup');return;}
   const profile=await loadCurrentProfile();
-  if(profile){showPage('dashboard');}else{showPage('onboard');}
+  if(profile){showProfilePage(profile);}else{showPage('onboard');}
 }
 async function goToMyProfile(){
   if(!currentUser){showAuth('login');return;}
   const profile=await loadCurrentProfile();
-  if(profile){showPage('dashboard');}else{showPage('onboard');}
+  if(profile){showProfilePage(profile);}
+  else{showPage('onboard');}
 }
 async function loadCurrentProfile(){
   if(!currentUser)return null;
@@ -959,7 +1128,7 @@ async function submitProfile(){
   try{
     const{error}=await sb.from('profiles').upsert(profile,{onConflict:'id'});
     if(error){console.error('Submit error:',error);toast(error.message);return;}
-    currentProfile=profile;toast('Profile submitted 🙏');showPage('dashboard');
+    currentProfile=profile;toast('Profile submitted 🙏');showProfilePage(currentProfile);
   }catch(err){toast('Could not submit profile.');}
   finally{btn.disabled=false;btn.textContent='Submit Profile 🙏';}
 }
@@ -987,6 +1156,16 @@ async function loadProfiles(){
     allProfiles=visible;
     if(!visible.length){box.innerHTML='<div class="empty-state"><span>🌱</span><h3>Be the first.</h3><p>No approved profiles yet. Join DESERVED and be the first person Calgary sees here.</p></div>';return;}
     box.innerHTML=visible.map(renderProfileCard).join('');
+  // Make cards clickable
+  document.querySelectorAll('.profile-card[data-uid]').forEach(card=>{
+    card.style.cursor='pointer';
+    card.addEventListener('click',function(e){
+      if(e.target.classList.contains('pc-connect-btn'))return;
+      const uid=this.dataset.uid;
+      const p=visible.find(x=>x.user_id===uid);
+      if(p)showProfilePage(p);
+    });
+  });
   }catch(err){box.innerHTML='<div class="empty-state"><span>⚠️</span><h3>Could not load profiles.</h3></div>';}
 }
 function setFilter(filter,btn){
@@ -1007,7 +1186,7 @@ function renderProfileCard(p){
   const storyPreview=(p.story||'').substring(0,100)+((p.story||'').length>100?'…':'');
   const isOwn=p.user_id===currentUser?.id;
   return `
-    <div class="profile-card">
+    <div class="profile-card" data-uid="${p.user_id}">
       <div class="pc-top">
         <div class="pc-av" style="background:${color}">${escHtml(initial)}</div>
         <div>
@@ -1041,7 +1220,7 @@ async function handleResetPassword(){
     toast('Password updated 🔒');
     setTimeout(async()=>{
       const profile=await loadCurrentProfile();
-      if(profile){showPage('dashboard');}else{showPage('onboard');}
+      if(profile){showProfilePage(profile);}else{showPage('onboard');}
     },1500);
   }catch(err){showAuthErr('Something went wrong. Please try again.');}
   finally{btn.disabled=false;btn.textContent='Set New Password →';}
@@ -1240,7 +1419,156 @@ sb.auth.onAuthStateChange(async(event,session)=>{
   }
 });
 
-// ── ADMIN ──
+// ── PROFILE PAGE ──
+let viewingProfile=null;
+
+function switchProfTab(tab,btn){
+  document.querySelectorAll('.phb-tab').forEach(b=>b.classList.remove('on'));
+  if(btn)btn.classList.add('on');
+  document.querySelectorAll('.ptab-content').forEach(c=>c.classList.remove('on'));
+  const el=document.getElementById('ptab-'+tab);
+  if(el)el.classList.add('on');
+}
+
+async function showProfilePage(profile){
+  viewingProfile=profile;
+  const isOwn=profile.user_id===currentUser?.id;
+  const colors=['#C46A08','#2A7D4F','#4A6FA5','#8B5E3C','#6B3FA0','#C0392B'];
+  const name=`${profile.first_name||''} ${profile.last_name||''}`.trim()||'Member';
+  const initial=name.charAt(0).toUpperCase();
+  const color=colors[name.charCodeAt(0)%colors.length];
+  const skills=Array.isArray(profile.skills)?profile.skills:typeof profile.skills==='string'?profile.skills.split(',').map(s=>s.trim()).filter(Boolean):[];
+  const badgeClass=profile.role==='need'?'badge-need':profile.role==='give'?'badge-give':profile.role==='both'?'badge-both':'badge-member';
+  const badgeText=profile.role==='need'?'🙋 Looking for work':profile.role==='give'?'🤝 Offering help':profile.role==='both'?'⚡ Need & Give':'Member';
+
+  // Avatar
+  const avEl=document.getElementById('prof-av');
+  avEl.textContent=initial;avEl.style.background=`linear-gradient(135deg,${color},${color}dd)`;
+
+  // Role badge
+  const rb=document.getElementById('prof-role-badge');
+  rb.textContent=badgeText;rb.className='phb-role-badge pc-badge '+badgeClass;
+  rb.style.cssText='display:inline-flex;align-items:center;padding:4px 14px;border-radius:100px;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:12px';
+
+  // Name & title
+  document.getElementById('prof-name').textContent=name;
+  document.getElementById('prof-title').textContent=(skills.slice(0,2).join(' · ')||'Member')+' · '+(profile.city_area||'Calgary');
+  document.getElementById('prof-story-title').textContent=name.split(' ')[0]+'\'s Story';
+
+  // Meta row
+  const meta=document.getElementById('prof-meta');
+  meta.innerHTML=[
+    profile.city_area?`<span class="phb-meta-item">📍 <strong>${escHtml(profile.city_area)}</strong></span>`:'',
+    profile.origin?`<span class="phb-meta-item">🌍 <strong>From ${escHtml(profile.origin)}</strong></span>`:'',
+    profile.calgary_time?`<span class="phb-meta-item">🗓️ <strong>${escHtml(profile.calgary_time)} in Calgary</strong></span>`:'',
+    profile.languages?`<span class="phb-meta-item">🗣️ <strong>${escHtml(profile.languages)}</strong></span>`:'',
+  ].join('');
+
+  // Actions
+  const actions=document.getElementById('prof-actions');
+  if(isOwn){
+    actions.innerHTML=`<button class="btn-edit-hero" onclick="showPage('onboard')">✏️ Edit Profile</button>
+    <button class="btn-edit-hero" onclick="showPage('dashboard')">📊 Dashboard</button>`;
+  } else {
+    actions.innerHTML=`<button class="btn-connect-hero" onclick="handleProfConnect()">✦ Connect with ${escHtml(name.split(' ')[0])}</button>`;
+  }
+
+  // Connect card
+  const ccr=document.getElementById('prof-connect-card');
+  if(isOwn){
+    ccr.innerHTML=`<div class="ccr-title">Your Profile</div>
+    <p class="ccr-desc">This is how others see you on DESERVED.</p>
+    <button class="ccr-btn" onclick="showPage('dashboard')">View Dashboard →</button>`;
+  } else {
+    document.getElementById('ccr-title').textContent='Connect with '+name.split(' ')[0];
+    document.getElementById('ccr-desc').textContent='Send a message. They\'ll decide whether to connect. Contact stays private.';
+    document.getElementById('ccr-btn').textContent='✦ Connect with '+name.split(' ')[0];
+  }
+
+  // Story
+  const storyBody=document.getElementById('prof-story-body');
+  if(profile.story){
+    storyBody.innerHTML=`<p>${escHtml(profile.story)}</p>`;
+    if(profile.need_type||profile.need_description){
+      storyBody.innerHTML+=`<div class="need-box">
+        <div class="nb-label">🙋 What ${escHtml(name.split(' ')[0])} needs</div>
+        <div class="nb-text">${escHtml(profile.need_type||'')}${profile.need_description?' — '+escHtml(profile.need_description):''}</div>
+      </div>`;
+    }
+  } else {
+    storyBody.innerHTML=`<p style="color:var(--muted);font-style:italic">No story added yet.</p>`;
+  }
+
+  // Skills
+  const skillsList=document.getElementById('prof-skills-list');
+  skillsList.innerHTML=skills.length?skills.map(s=>`<div class="skill-chip">${escHtml(s)}</div>`).join(''):'<p style="color:var(--muted)">No skills added yet.</p>';
+
+  // Availability
+  const availWrap=document.getElementById('prof-avail-wrap');
+  availWrap.innerHTML=profile.experience?`<div style="margin-top:4px"><div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:8px">Experience</div><div style="font-size:14px;color:var(--black)">${escHtml(profile.experience)}</div></div>`:'';
+
+  // Quick info
+  document.getElementById('prof-quick-info').innerHTML=[
+    profile.city_area?`<div class="qi-item"><span class="qi-icon">📍</span><div><div class="qi-label">Location</div><div class="qi-val">${escHtml(profile.city_area)}</div></div></div>`:'',
+    profile.origin?`<div class="qi-item"><span class="qi-icon">🌍</span><div><div class="qi-label">Originally From</div><div class="qi-val">${escHtml(profile.origin)}</div></div></div>`:'',
+    profile.calgary_time?`<div class="qi-item"><span class="qi-icon">🗓️</span><div><div class="qi-label">In Calgary</div><div class="qi-val">${escHtml(profile.calgary_time)}</div></div></div>`:'',
+    profile.languages?`<div class="qi-item"><span class="qi-icon">🗣️</span><div><div class="qi-label">Languages</div><div class="qi-val">${escHtml(profile.languages)}</div></div></div>`:'',
+    profile.experience?`<div class="qi-item"><span class="qi-icon">💼</span><div><div class="qi-label">Experience</div><div class="qi-val">${escHtml(profile.experience)}</div></div></div>`:'',
+    `<div class="qi-item"><span class="qi-icon">✅</span><div><div class="qi-label">Status</div><div class="qi-val" style="color:var(--give);font-weight:600">Verified by DESERVED</div></div></div>`,
+  ].filter(Boolean).join('');
+
+  // Connections tab — only for own profile
+  const connsBody=document.getElementById('prof-conns-body');
+  if(isOwn){
+    const{data:conns}=await sb.from('connections').select('*').or(`requester_id.eq.${currentUser.id},receiver_id.eq.${currentUser.id}`).order('created_at',{ascending:false});
+    if(!conns||conns.length===0){
+      connsBody.innerHTML=`<p style="font-size:14px;color:var(--muted)">No connections yet. <button onclick="showPage('browse')" style="background:none;border:none;color:var(--accent);cursor:pointer;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;padding:0">Browse profiles</button> and send your first connection.</p>`;
+    } else {
+      const otherIds=conns.map(c=>c.requester_id===currentUser.id?c.receiver_id:c.requester_id);
+      const{data:others}=await sb.from('profiles').select('user_id,first_name,last_name,email,city_area').in('user_id',otherIds);
+      const pm={};(others||[]).forEach(p=>pm[p.user_id]=p);
+      const connColors=['#C46A08','#2A7D4F','#4A6FA5','#8B5E3C','#6B3FA0'];
+      connsBody.innerHTML=conns.map((c,i)=>{
+        const oid=c.requester_id===currentUser.id?c.receiver_id:c.requester_id;
+        const o=pm[oid];
+        const oname=o?`${o.first_name||''} ${o.last_name||''}`.trim():'Someone';
+        const oinit=oname.charAt(0).toUpperCase();
+        const cc=connColors[i%connColors.length];
+        const isReq=c.requester_id===currentUser.id;
+        const sClass=c.status==='accepted'?'s-accepted':c.status==='declined'?'s-declined':'s-pending';
+        const sTxt=c.status==='accepted'?'Connected':c.status==='declined'?'Declined':'Pending';
+        const emailHtml=c.status==='accepted'&&o?.email?`<span class="ci-email">📧 ${escHtml(o.email)}</span>`:'';
+        const actHtml=!isReq&&c.status==='pending'?`<button class="btn-accept" onclick="respondToConnection('${c.id}','accepted')">Accept ✓</button><button class="btn-decline-sm" onclick="respondToConnection('${c.id}','declined')">Decline</button>`:'';
+        return `<div class="conn-item"><div class="ci-av" style="background:${cc}">${escHtml(oinit)}</div><div class="ci-info"><div class="ci-name">${escHtml(oname)} <span style="font-size:11px;color:var(--muted);font-weight:400">${isReq?'→ You sent':'← Incoming'}</span></div>${c.message?`<div class="ci-msg">"${escHtml(c.message.substring(0,60))}…"</div>`:''}<div class="ci-bottom"><span class="ci-status ${sClass}">${sTxt}</span>${emailHtml}${actHtml}</div></div></div>`;
+      }).join('');
+    }
+  } else {
+    // Hide connections tab for other people's profiles
+    const connTab=document.querySelector('[onclick*="connections"]');
+    if(connTab)connTab.style.display='none';
+    connsBody.innerHTML='';
+  }
+
+  // Reset to about tab
+  switchProfTab('about',document.querySelector('.phb-tab'));
+
+  showPage('profile');
+}
+
+function handleProfConnect(){
+  if(!viewingProfile)return;
+  const name=`${viewingProfile.first_name||''} ${viewingProfile.last_name||''}`.trim()||'this person';
+  openConnModal(viewingProfile.user_id,name);
+}
+
+function shareProfWhatsApp(){
+  const url=window.location.href;
+  const name=`${viewingProfile?.first_name||''} ${viewingProfile?.last_name||''}`.trim();
+  window.open('https://wa.me/?text='+encodeURIComponent(`Check out ${name}'s profile on DESERVED: ${url}`),'_blank');
+}
+function shareProfCopy(){
+  navigator.clipboard.writeText(window.location.href).then(()=>toast('Link copied! 🔗'));
+}
 const ADMIN_ID='98cae623-f687-4657-a1df-6c6852e908bd';
 
 function isAdmin(){return currentUser?.id===ADMIN_ID}
@@ -1387,7 +1715,7 @@ async function initApp(){
         return;
       }
       const profile=await loadCurrentProfile();
-      if(profile){showPage('dashboard');}else{showPage('onboard');}
+      if(profile){showProfilePage(profile);}else{showPage('onboard');}
     }else{
       showPage('home');
     }
