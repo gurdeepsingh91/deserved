@@ -585,7 +585,17 @@ function showPage(name){
   if(!target){toast('Page not found.');return;}
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   target.classList.add('active');
-  window.scrollTo({top:0,behavior:'instant'});
+  // Scroll to the top of the target page, accounting for fixed nav
+  const navH=62;
+  if(name==='home'){
+    window.scrollTo({top:0,behavior:'instant'});
+  } else {
+    setTimeout(()=>{
+      const rect=target.getBoundingClientRect();
+      const scrollTop=window.pageYOffset+rect.top-navH;
+      window.scrollTo({top:scrollTop,behavior:'instant'});
+    },10);
+  }
   closeMob();
   if(name==='browse')loadProfiles();
   if(name==='dashboard')loadDashboard();
