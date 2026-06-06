@@ -541,6 +541,15 @@ h1.home-h .ac{color:var(--accent)}
   .phb-av{width:80px;height:80px;font-size:28px}
   .phb-inner{gap:16px}
 }
+/* ── NOTIFICATION BADGE ── */
+.nav-notif-wrap{position:relative;display:inline-flex}
+.nav-notif-dot{position:absolute;top:-3px;right:-3px;width:8px;height:8px;background:var(--need);border-radius:50%;border:2px solid var(--off);display:none}
+.nav-notif-count{position:absolute;top:-6px;right:-8px;min-width:18px;height:18px;background:var(--need);border-radius:100px;font-size:10px;font-weight:800;color:#fff;display:none;align-items:center;justify-content:center;padding:0 4px;border:2px solid var(--off);font-family:'DM Sans',sans-serif}
+.nav-notif-count.show{display:inline-flex}
+.nav-notif-dot.show{display:block}
+/* Mobile notification */
+.mob-notif-count{display:inline-flex;align-items:center;justify-content:center;min-width:20px;height:20px;background:var(--need);border-radius:100px;font-size:11px;font-weight:800;color:#fff;padding:0 5px;margin-left:8px;font-family:'DM Sans',sans-serif}
+
 /* ── CONNECTIONS PAGE ── */
 #page-connections{background:var(--off)}
 .conns-wrap{max-width:860px;margin:0 auto;padding:100px 40px 80px}
@@ -712,7 +721,7 @@ footer p{font-size:13px;color:rgba(247,244,239,.35)}
   <button onclick="closeMob();showPage('home')">Home</button>
   <button onclick="closeMob();showPage('browse')">Browse People</button>
   <button onclick="closeMob();showPage('stories')">Stories</button>
-  <button id="mob-connections-btn" style="display:none" onclick="closeMob();showPage('connections')">My Connections</button>
+  <button id="mob-connections-btn" style="display:none" onclick="closeMob();showPage('connections')">My Connections <span class="mob-notif-count" id="mob-notif-count" style="display:none"></span></button>
   <button id="mob-auth-btn" onclick="handleMobAuth()">Join / Sign In</button>
 </div>
 
@@ -731,7 +740,10 @@ footer p{font-size:13px;color:rgba(247,244,239,.35)}
     </span>
     <span id="nav-user" style="display:none">
       <button class="btn-nav-outline" onclick="goToMyProfile()">My Profile</button>
-      <button class="btn-nav-outline" onclick="showPage('connections')" style="position:relative" id="nav-conns-btn">Connections</button>
+      <span class="nav-notif-wrap">
+        <button class="btn-nav-outline" onclick="showPage('connections')" id="nav-conns-btn">Connections</button>
+        <span class="nav-notif-count" id="nav-notif-count"></span>
+      </span>
       <button id="nav-admin-btn" class="btn-nav-outline" style="display:none;color:var(--accent);border-color:var(--accent)" onclick="showPage('admin')">⚙ Admin</button>
       <button class="btn-nav-danger" onclick="handleLogout()">Sign Out</button>
     </span>
@@ -1629,7 +1641,7 @@ function showPage(name,skipHistory=false){
   closeMob();
   if(name==='browse')loadProfiles();
   if(name==='dashboard')loadDashboard();
-  if(name==='connections')loadConnectionsPage();
+  if(name==='connections'){loadConnectionsPage();clearNotificationBadge();}
   if(name==='home'){loadStats();updateHomeState();}
   if(name==='admin')loadAdminData();
 }
@@ -1722,12 +1734,61 @@ function updateNavAuth(){
     if(mob)mob.textContent='My Profile';
     if(mobConns)mobConns.style.display='block';
     updateAdminNav();
+    checkPendingNotifications();
   }else{
     g.style.display='inline-flex';u.style.display='none';
     if(mob)mob.textContent='Join / Sign In';
     if(mobConns)mobConns.style.display='none';
+    clearNotificationBadge();
   }
   updateHomeState();
+}
+
+// ── NOTIFICATIONS ──
+let notifInterval=null;
+
+async function checkPendingNotifications(){
+  if(!currentUser)return;
+  try{
+    const{count}=await sb
+      .from('connections')
+      .select('*',{count:'exact',head:true})
+      .eq('receiver_id',currentUser.id)
+      .eq('status','pending');
+
+    const num=count||0;
+    updateNotificationBadge(num);
+  }catch(e){/* silent fail */}
+}
+
+function updateNotificationBadge(count){
+  const navBadge=document.getElementById('nav-notif-count');
+  const mobBadge=document.getElementById('mob-notif-count');
+
+  if(count>0){
+    if(navBadge){navBadge.textContent=count>9?'9+':count;navBadge.classList.add('show');}
+    if(mobBadge){mobBadge.textContent=count>9?'9+':count;mobBadge.style.display='inline-flex';}
+  }else{
+    clearNotificationBadge();
+  }
+}
+
+function clearNotificationBadge(){
+  const navBadge=document.getElementById('nav-notif-count');
+  const mobBadge=document.getElementById('mob-notif-count');
+  if(navBadge){navBadge.textContent='';navBadge.classList.remove('show');}
+  if(mobBadge){mobBadge.style.display='none';}
+}
+
+function startNotifPolling(){
+  // Check every 60 seconds for new requests
+  if(notifInterval)clearInterval(notifInterval);
+  notifInterval=setInterval(()=>{
+    if(currentUser)checkPendingNotifications();
+  },60000);
+}
+function stopNotifPolling(){
+  if(notifInterval){clearInterval(notifInterval);notifInterval=null;}
 }
 
 function showAuth(mode='login'){showPage('auth');showAuthForm(mode)}
@@ -2472,6 +2533,8 @@ async function respondToConnection(connId,status){
   }else{
     toast('Connection declined.');
   }
+  // Refresh notification count
+  checkPendingNotifications();
   // Reload whichever page is active
   const profPage=document.getElementById('page-profile');
   const dashPage=document.getElementById('page-dashboard');
@@ -2878,7 +2941,12 @@ async function openProfileFromHash(slug){
 sb.auth.onAuthStateChange(async(event,session)=>{
   currentUser=session?.user||null;
   updateNavAuth();
-  if(!currentUser){currentProfile=null;}
+  if(!currentUser){
+    currentProfile=null;
+    stopNotifPolling();
+  } else {
+    startNotifPolling();
+  }
   // Handle password reset event
   if(event==='PASSWORD_RECOVERY'){
     showPage('auth');
@@ -3610,6 +3678,7 @@ async function initApp(){
     currentUser=session?.user||null;
     updateNavAuth();
     if(currentUser){
+      startNotifPolling();
       // Check if this is a password recovery session
       if(session?.user?.recovery_sent_at||hash.includes('type=recovery')){
         showPage('auth');
