@@ -541,6 +541,45 @@ h1.home-h .ac{color:var(--accent)}
   .phb-av{width:80px;height:80px;font-size:28px}
   .phb-inner{gap:16px}
 }
+/* ── CONNECTIONS PAGE ── */
+#page-connections{background:var(--off)}
+.conns-wrap{max-width:860px;margin:0 auto;padding:100px 40px 80px}
+.conns-header{margin-bottom:28px}
+.conns-title{font-family:'Fraunces',serif;font-size:clamp(28px,4vw,44px);font-weight:900;letter-spacing:-.04em;color:var(--black);margin-bottom:6px}
+.conns-subtitle{font-size:14px;color:var(--muted)}
+.conns-filter-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px}
+.conns-chip{padding:8px 16px;border-radius:100px;font-size:13px;font-weight:600;border:1.5px solid var(--border);background:var(--off);color:var(--muted);cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s}
+.conns-chip:hover{border-color:var(--black);color:var(--black)}
+.conns-chip.on{background:var(--black);color:var(--off);border-color:var(--black)}
+.conns-chip.on-incoming{background:var(--accent);color:#fff;border-color:var(--accent)}
+.conns-chip.on-connected{background:var(--give);color:#fff;border-color:var(--give)}
+.conns-list{display:flex;flex-direction:column;gap:12px}
+.conn-full-card{background:var(--warm);border:1px solid var(--border);border-radius:18px;padding:22px 24px;transition:all .3s}
+.conn-full-card:hover{box-shadow:0 8px 24px rgba(0,0,0,.07)}
+.cfc-top{display:flex;align-items:flex-start;gap:14px;margin-bottom:12px}
+.cfc-av{width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-size:18px;font-weight:700;color:#fff;flex-shrink:0}
+.cfc-name{font-family:'Fraunces',serif;font-size:17px;font-weight:700;color:var(--black);letter-spacing:-.02em}
+.cfc-meta{font-size:12.5px;color:var(--muted);margin-top:3px}
+.cfc-dir{font-size:11px;color:var(--muted);margin-top:2px}
+.cfc-badge{font-size:11px;font-weight:700;padding:4px 12px;border-radius:100px;white-space:nowrap;margin-left:auto;flex-shrink:0}
+.cfc-badge.s-pending{background:rgba(232,130,12,.1);color:var(--accent)}
+.cfc-badge.s-accepted{background:rgba(42,125,79,.1);color:var(--give)}
+.cfc-badge.s-declined{background:rgba(217,79,61,.1);color:var(--need)}
+.cfc-msg{font-size:13.5px;color:var(--muted);line-height:1.7;font-style:italic;padding:12px 14px;background:var(--off);border-radius:10px;margin-bottom:14px}
+.cfc-email{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--give);background:rgba(42,125,79,.08);border:1px solid rgba(42,125,79,.2);padding:7px 14px;border-radius:100px}
+.cfc-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px;padding-top:14px;border-top:1px solid var(--border);align-items:center}
+.cfc-date{font-size:11.5px;color:var(--muted);margin-left:auto}
+.cfc-btn-accept{background:var(--give);color:#fff;padding:9px 20px;border-radius:100px;font-size:13px;font-weight:700;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s}
+.cfc-btn-accept:hover{background:#1f5f3a}
+.cfc-btn-decline{background:transparent;border:1.5px solid var(--border);color:var(--muted);padding:8px 16px;border-radius:100px;font-size:13px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s}
+.cfc-btn-decline:hover{border-color:var(--need);color:var(--need)}
+.cfc-btn-view{background:var(--off);border:1.5px solid var(--border);color:var(--black);padding:8px 16px;border-radius:100px;font-size:13px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s}
+.cfc-btn-view:hover{background:var(--black);color:var(--off);border-color:var(--black)}
+.conns-empty{text-align:center;padding:48px 20px;color:var(--muted);background:var(--warm);border:1px dashed var(--border);border-radius:16px}
+.conns-empty span{font-size:40px;display:block;margin-bottom:12px}
+.conns-empty h3{font-family:'Fraunces',serif;font-size:20px;color:var(--black);margin-bottom:8px}
+@media(max-width:900px){.conns-wrap{padding:80px 20px 60px}}
+
 #page-admin{background:var(--warm)}
 .admin-wrap{max-width:1100px;margin:0 auto;padding:100px 40px 80px}
 .admin-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:32px;flex-wrap:wrap;gap:16px}
@@ -673,6 +712,7 @@ footer p{font-size:13px;color:rgba(247,244,239,.35)}
   <button onclick="closeMob();showPage('home')">Home</button>
   <button onclick="closeMob();showPage('browse')">Browse People</button>
   <button onclick="closeMob();showPage('stories')">Stories</button>
+  <button id="mob-connections-btn" style="display:none" onclick="closeMob();showPage('connections')">My Connections</button>
   <button id="mob-auth-btn" onclick="handleMobAuth()">Join / Sign In</button>
 </div>
 
@@ -691,6 +731,7 @@ footer p{font-size:13px;color:rgba(247,244,239,.35)}
     </span>
     <span id="nav-user" style="display:none">
       <button class="btn-nav-outline" onclick="goToMyProfile()">My Profile</button>
+      <button class="btn-nav-outline" onclick="showPage('connections')" style="position:relative" id="nav-conns-btn">Connections</button>
       <button id="nav-admin-btn" class="btn-nav-outline" style="display:none;color:var(--accent);border-color:var(--accent)" onclick="showPage('admin')">⚙ Admin</button>
       <button class="btn-nav-danger" onclick="handleLogout()">Sign Out</button>
     </span>
@@ -1394,6 +1435,26 @@ footer p{font-size:13px;color:rgba(247,244,239,.35)}
   </div>
 </section>
 
+<!-- CONNECTIONS PAGE -->
+<section id="page-connections" class="page">
+  <div class="conns-wrap">
+    <div class="conns-header">
+      <h2 class="conns-title">My Connections</h2>
+      <p class="conns-subtitle">Manage your requests, accepted connections, and contact details.</p>
+    </div>
+    <div class="conns-filter-row" id="conns-filter-row">
+      <button class="conns-chip on" onclick="filterConnsPage('all',this)">All</button>
+      <button class="conns-chip" onclick="filterConnsPage('incoming',this)">Incoming Requests</button>
+      <button class="conns-chip" onclick="filterConnsPage('sent',this)">Sent Requests</button>
+      <button class="conns-chip" onclick="filterConnsPage('connected',this)">Connected</button>
+      <button class="conns-chip" onclick="filterConnsPage('declined',this)">Declined</button>
+    </div>
+    <div class="conns-list" id="conns-page-list">
+      <div class="conns-empty"><span>🔗</span><h3>Loading connections…</h3></div>
+    </div>
+  </div>
+</section>
+
 <!-- ADMIN -->
 <section id="page-admin" class="page">
   <div class="admin-wrap">
@@ -1568,6 +1629,7 @@ function showPage(name,skipHistory=false){
   closeMob();
   if(name==='browse')loadProfiles();
   if(name==='dashboard')loadDashboard();
+  if(name==='connections')loadConnectionsPage();
   if(name==='home'){loadStats();updateHomeState();}
   if(name==='admin')loadAdminData();
 }
@@ -1654,13 +1716,16 @@ function updateNavAuth(){
   const g=document.getElementById('nav-guest');
   const u=document.getElementById('nav-user');
   const mob=document.getElementById('mob-auth-btn');
+  const mobConns=document.getElementById('mob-connections-btn');
   if(currentUser){
     g.style.display='none';u.style.display='inline-flex';
     if(mob)mob.textContent='My Profile';
+    if(mobConns)mobConns.style.display='block';
     updateAdminNav();
   }else{
     g.style.display='inline-flex';u.style.display='none';
     if(mob)mob.textContent='Join / Sign In';
+    if(mobConns)mobConns.style.display='none';
   }
   updateHomeState();
 }
@@ -2608,17 +2673,151 @@ async function loadDashboard(){
     </div>
 
     <div class="dash-connections">
-      <div class="dc-title">🔗 Connections ${incoming.length?`<span class="conn-badge">${incoming.length}</span>`:''}</div>
+      <div class="dc-title" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
+        <span>🔗 Connections ${incoming.length?`<span class="conn-badge">${incoming.length}</span>`:''}</span>
+        <button onclick="showPage('connections')" style="font-size:12.5px;font-weight:700;color:var(--accent);background:none;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;text-decoration:underline;text-underline-offset:3px;padding:0">View All Connections →</button>
+      </div>
       <div class="dash-conn-tabs">
-        <span class="dash-conn-chip warn">Incoming ${incoming.length}</span>
-        <span class="dash-conn-chip warn">Outgoing ${outgoing.length}</span>
-        <span class="dash-conn-chip good">Connected ${accepted.length}</span>
+        <span class="dash-conn-chip ${incoming.length?'warn':''}">Incoming ${incoming.length}</span>
+        <span class="dash-conn-chip ${outgoing.length?'warn':''}">Outgoing ${outgoing.length}</span>
+        <span class="dash-conn-chip ${accepted.length?'good':''}">Connected ${accepted.length}</span>
         <span class="dash-conn-chip">Declined ${declined.length}</span>
       </div>
-      ${renderConnSection('Incoming requests',incoming,'No incoming requests yet.')}
-      ${renderConnSection('Outgoing requests',outgoing,'No outgoing requests waiting right now.')}
-      ${renderConnSection('Accepted connections',accepted,'No accepted connections yet.')}
+      ${incoming.length?`
+        <div class="dash-conn-section">
+          <div class="dash-conn-heading">Incoming requests</div>
+          ${incoming.slice(0,3).map(renderConnItem).join('')}
+          ${incoming.length>3?`<button onclick="showPage('connections')" style="font-size:13px;color:var(--accent);background:none;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:600;padding:8px 0">+ ${incoming.length-3} more — View All →</button>`:''}
+        </div>`:''}
+      ${accepted.length?`
+        <div class="dash-conn-section">
+          <div class="dash-conn-heading">Recent connections</div>
+          ${accepted.slice(0,3).map(renderConnItem).join('')}
+          ${accepted.length>3?`<button onclick="showPage('connections')" style="font-size:13px;color:var(--accent);background:none;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:600;padding:8px 0">+ ${accepted.length-3} more — View All →</button>`:''}
+        </div>`:''}
+      ${!incoming.length&&!accepted.length?`<p style="font-size:13.5px;color:var(--muted);margin-top:12px">No connections yet. <button onclick="showPage('browse')" style="background:none;border:none;color:var(--accent);cursor:pointer;font-family:'DM Sans',sans-serif;font-size:13.5px;font-weight:600;padding:0">Browse people →</button></p>`:''}
     </div>`;
+}
+
+// ── CONNECTIONS PAGE ──
+let connsPageAll=[];
+let connsPageFilter='all';
+let connsPageProfileMap={};
+
+async function loadConnectionsPage(){
+  if(!currentUser){showPage('home');return;}
+  const box=document.getElementById('conns-page-list');
+  box.innerHTML='<div class="conns-empty"><span>🔗</span><h3>Loading…</h3></div>';
+
+  try{
+    const{data:conns,error}=await sb.from('connections')
+      .select('*')
+      .or(`requester_id.eq.${currentUser.id},receiver_id.eq.${currentUser.id}`)
+      .order('created_at',{ascending:false});
+
+    if(error){box.innerHTML='<div class="conns-empty"><span>⚠️</span><h3>Could not load connections.</h3></div>';return;}
+
+    connsPageAll=conns||[];
+
+    // Fetch other people's profiles
+    const otherIds=[...new Set(connsPageAll.map(c=>c.requester_id===currentUser.id?c.receiver_id:c.requester_id))];
+    connsPageProfileMap={};
+    if(otherIds.length){
+      const{data:others}=await sb.from('profiles').select('user_id,first_name,last_name,email,city_area').in('user_id',otherIds);
+      (others||[]).forEach(p=>connsPageProfileMap[p.user_id]=p);
+    }
+
+    renderConnsPage();
+  }catch(err){
+    box.innerHTML='<div class="conns-empty"><span>⚠️</span><h3>Something went wrong.</h3></div>';
+  }
+}
+
+function filterConnsPage(filter,btn){
+  connsPageFilter=filter;
+  document.querySelectorAll('.conns-chip').forEach(c=>{c.classList.remove('on','on-incoming','on-connected');});
+  if(filter==='incoming')btn.classList.add('on-incoming');
+  else if(filter==='connected')btn.classList.add('on-connected');
+  else btn.classList.add('on');
+  renderConnsPage();
+}
+
+function renderConnsPage(){
+  const box=document.getElementById('conns-page-list');
+  let filtered=connsPageAll;
+  if(connsPageFilter==='incoming') filtered=connsPageAll.filter(c=>c.receiver_id===currentUser.id&&c.status==='pending');
+  else if(connsPageFilter==='sent') filtered=connsPageAll.filter(c=>c.requester_id===currentUser.id&&c.status==='pending');
+  else if(connsPageFilter==='connected') filtered=connsPageAll.filter(c=>c.status==='accepted');
+  else if(connsPageFilter==='declined') filtered=connsPageAll.filter(c=>c.status==='declined');
+
+  if(!filtered.length){
+    const msgs={all:'No connections yet.',incoming:'No incoming requests.',sent:'No sent requests waiting.',connected:'No accepted connections yet.',declined:'No declined connections.'};
+    box.innerHTML=`<div class="conns-empty"><span>🔗</span><h3>${msgs[connsPageFilter]||'Nothing here yet.'}</h3><p style="font-size:14px;margin-top:4px">Browse people and start connecting.</p><button class="dash-mini-btn" onclick="showPage('browse')" style="margin-top:14px">Browse People →</button></div>`;
+    return;
+  }
+
+  const colors=['#C46A08','#2A7D4F','#4A6FA5','#8B5E3C','#6B3FA0','#C0392B'];
+  box.innerHTML=filtered.map((c,i)=>{
+    const otherId=c.requester_id===currentUser.id?c.receiver_id:c.requester_id;
+    const other=connsPageProfileMap[otherId];
+    const name=other?`${other.first_name||''} ${other.last_name||''}`.trim():'Someone';
+    const initial=name.charAt(0).toUpperCase();
+    const color=colors[i%colors.length];
+    const isRequester=c.requester_id===currentUser.id;
+    const statusBadge=c.status==='accepted'?'s-accepted':c.status==='declined'?'s-declined':'s-pending';
+    const statusText=c.status==='accepted'?'✓ Connected':c.status==='declined'?'Declined':isRequester?'⏳ Waiting':'⏳ Incoming';
+    const dir=isRequester?'You sent this request':'They sent you this request';
+    const date=new Date(c.created_at).toLocaleDateString('en-CA',{month:'short',day:'numeric',year:'numeric'});
+
+    const emailRow=c.status==='accepted'&&other?.email
+      ?`<div style="margin-top:10px"><span class="cfc-email">📧 ${escHtml(other.email)}</span></div>`:'';
+
+    const actions=c.status==='pending'&&!isRequester?`
+      <button class="cfc-btn-accept" onclick="connPageRespond('${c.id}','accepted')">Accept ✓</button>
+      <button class="cfc-btn-decline" onclick="connPageRespond('${c.id}','declined')">Decline</button>`
+      :c.status==='pending'&&isRequester?`<span style="font-size:13px;color:var(--muted);font-style:italic">Waiting for ${escHtml(name.split(' ')[0])} to respond…</span>`
+      :'';
+
+    const viewBtn=other?`<button class="cfc-btn-view" onclick="viewConnProfile('${otherId}')">View Profile →</button>`:'';
+
+    return `
+      <div class="conn-full-card">
+        <div class="cfc-top">
+          <div class="cfc-av" style="background:${color}">${escHtml(initial)}</div>
+          <div style="flex:1;min-width:0">
+            <div class="cfc-name">${escHtml(name)}</div>
+            <div class="cfc-meta">${escHtml(other?.city_area||'Calgary')}</div>
+            <div class="cfc-dir">${dir}</div>
+          </div>
+          <span class="cfc-badge ${statusBadge}">${statusText}</span>
+        </div>
+        ${c.message?`<div class="cfc-msg">"${escHtml(c.message)}"</div>`:''}
+        ${emailRow}
+        <div class="cfc-actions">
+          ${actions}
+          ${viewBtn}
+          <span class="cfc-date">${date}</span>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+async function connPageRespond(connId,status){
+  const{error}=await sb.from('connections').update({status,responded_at:new Date().toISOString()}).eq('id',connId);
+  if(error){toast('Error: '+error.message);return;}
+  toast(status==='accepted'?'🎉 Connected! Contact info is now visible.':'Connection declined.');
+  await loadConnectionsPage();
+}
+
+async function viewConnProfile(userId){
+  const p=connsPageAll.find(c=>{
+    const oid=c.requester_id===currentUser.id?c.receiver_id:c.requester_id;
+    return oid===userId;
+  });
+  // Try to get full profile
+  const{data:prof}=await sb.from('profiles').select('*').eq('user_id',userId).maybeSingle();
+  if(prof)showProfilePage(prof,true);
+  else toast('Could not load profile.');
 }
 
 function dashboardCopyProfileLink(){
