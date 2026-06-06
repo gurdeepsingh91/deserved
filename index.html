@@ -335,6 +335,18 @@ h1.home-h .ac{color:var(--accent)}
 .btn-modal-cancel{padding:14px 20px;background:transparent;border:1.5px solid var(--border);color:var(--muted);border-radius:100px;font-size:14px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s}
 .btn-modal-cancel:hover{border-color:var(--black);color:var(--black)}
 .modal-privacy{font-size:12px;color:var(--muted);text-align:center;margin-top:12px;line-height:1.6}
+.report-reason-select{width:100%;background:var(--warm);border:1.5px solid var(--border);color:var(--black);padding:13px 14px;border-radius:12px;font-size:14px;font-family:'DM Sans',sans-serif;outline:none;margin-bottom:12px}
+.report-reason-select:focus{border-color:var(--need);box-shadow:0 0 0 3px rgba(217,79,61,.1)}
+.report-warning{background:rgba(217,79,61,.06);border:1px solid rgba(217,79,61,.18);border-radius:14px;padding:13px 14px;font-size:12.5px;color:var(--muted);line-height:1.6;margin-top:12px}
+.btn-report{background:transparent;border:1.5px solid rgba(217,79,61,.28);color:var(--need);border-radius:100px;padding:10px 18px;font-size:13px;font-weight:700;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all .2s}
+.btn-report:hover{background:rgba(217,79,61,.07)}
+.report-item{background:var(--off);border:1px solid var(--border);border-radius:16px;padding:18px 20px;margin-bottom:12px}
+.report-top{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:8px}
+.report-title{font-family:'Fraunces',serif;font-size:18px;font-weight:800;color:var(--black);letter-spacing:-.02em}
+.report-status{font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:.08em;padding:4px 10px;border-radius:100px;background:rgba(217,79,61,.08);color:var(--need)}
+.report-meta{font-size:12px;color:var(--muted);line-height:1.6}
+.report-details{font-size:13.5px;color:var(--muted);line-height:1.7;background:var(--warm);border:1px solid var(--border);border-radius:12px;padding:12px 14px;margin-top:10px}
+
 /* Connection items in dashboard */
 .conn-item{display:flex;align-items:flex-start;gap:12px;padding:16px 0;border-bottom:1px solid var(--border)}
 .conn-item:last-child{border-bottom:none;padding-bottom:0}
@@ -379,6 +391,31 @@ h1.home-h .ac{color:var(--accent)}
 .story-step p{font-size:13px;color:var(--muted);line-height:1.65}
 .story-note{background:rgba(42,125,79,.06);border:1px solid rgba(42,125,79,.18);border-radius:18px;padding:18px 20px;margin-top:18px;font-size:13.5px;color:var(--muted);line-height:1.7}
 @media(max-width:900px){.stories-grid,.story-process{grid-template-columns:1fr}.story-feature{padding:28px}.stories-wrap{padding:80px 24px}}
+
+
+/* ── TRUST / LEGAL PAGES ── */
+#page-guidelines,#page-safety,#page-terms,#page-contact{background:var(--off)}
+.trust-page-wrap{max-width:920px;margin:0 auto;padding:100px 40px 80px}
+.trust-page-hero{text-align:center;max-width:680px;margin:0 auto 34px}
+.trust-page-kicker{font-size:11px;font-weight:900;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:10px}
+.trust-page-title{font-family:'Fraunces',serif;font-size:clamp(34px,5vw,58px);font-weight:900;letter-spacing:-.05em;color:var(--black);line-height:.98;margin-bottom:14px}
+.trust-page-title .it{font-style:italic;font-weight:300;color:var(--muted)}
+.trust-page-sub{font-size:15.5px;color:var(--muted);line-height:1.75}
+.trust-card-stack{display:grid;gap:14px}
+.trust-info-card{background:var(--warm);border:1px solid var(--border);border-radius:22px;padding:26px}
+.trust-info-card h3{font-family:'Fraunces',serif;font-size:22px;font-weight:800;letter-spacing:-.03em;color:var(--black);margin-bottom:10px}
+.trust-info-card p,.trust-info-card li{font-size:14px;color:var(--muted);line-height:1.75}
+.trust-info-card ul{margin:10px 0 0 20px;padding:0}
+.trust-mini-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:14px}
+.trust-mini-box{background:var(--off);border:1px solid var(--border);border-radius:16px;padding:18px}
+.trust-mini-box strong{display:block;font-family:'Fraunces',serif;font-size:17px;color:var(--black);margin-bottom:6px}
+.trust-mini-box span{font-size:13px;color:var(--muted);line-height:1.65}
+.report-box{background:rgba(217,79,61,.06);border:1px solid rgba(217,79,61,.18);border-radius:18px;padding:20px;margin-top:14px}
+.report-box strong{color:var(--need)}
+.footer-links{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:12px}
+.footer-links button{background:none;border:none;color:var(--muted);font-size:12.5px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;padding:4px 6px}
+.footer-links button:hover{color:var(--accent)}
+@media(max-width:760px){.trust-page-wrap{padding:80px 24px}.trust-mini-grid{grid-template-columns:1fr}}
 
 /* ── PROFILE PAGE ── */
 #page-profile{background:var(--off)}
@@ -467,6 +504,15 @@ h1.home-h .ac{color:var(--accent)}
 .focus-text{font-family:'Fraunces',serif;font-size:18px;font-weight:700;color:var(--black);letter-spacing:-.02em;line-height:1.35}
 .ask-chips{display:flex;flex-wrap:wrap;gap:8px}
 .ask-chip{background:var(--off);border:1.5px solid var(--border);border-radius:100px;padding:8px 14px;font-size:13px;font-weight:600;color:var(--black)}
+.proof-links{display:flex;flex-wrap:wrap;gap:8px}
+.proof-link{display:inline-flex;align-items:center;gap:6px;background:var(--off);border:1.5px solid var(--border);border-radius:100px;padding:8px 14px;font-size:13px;font-weight:700;color:var(--black);text-decoration:none;transition:all .2s}
+.proof-link:hover{border-color:var(--accent);color:var(--accent)}
+.photo-preview{width:72px;height:72px;border-radius:50%;background:var(--warm);border:1.5px solid var(--border);object-fit:cover;display:none;margin-top:10px}
+.verification-badge{display:inline-flex;align-items:center;gap:5px;margin-top:7px;font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;border-radius:100px;padding:4px 10px}
+.vb-basic{color:var(--muted);background:rgba(0,0,0,.04);border:1px solid var(--border)}
+.vb-proof{color:var(--accent);background:rgba(232,130,12,.08);border:1px solid rgba(232,130,12,.18)}
+.vb-verified{color:var(--give);background:rgba(42,125,79,.08);border:1px solid rgba(42,125,79,.18)}
+
 .intent-select{width:100%;background:var(--warm);border:1.5px solid var(--border);color:var(--black);padding:13px 14px;border-radius:12px;font-size:14px;font-family:'DM Sans',sans-serif;outline:none;margin-bottom:12px}
 .intent-select:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(232,130,12,.1)}
 
@@ -1090,6 +1136,11 @@ footer p{font-size:13px;color:rgba(247,244,239,.35)}
               <div class="pcard-title" style="font-size:15px;margin-bottom:12px">Ask me about</div>
               <div class="ask-chips" id="prof-ask-list"></div>
             </div>
+            <div style="margin-top:22px" id="prof-proof-wrap">
+              <div class="pcard-title" style="font-size:15px;margin-bottom:12px">Portfolio / Proof</div>
+              <div class="proof-links" id="prof-proof-links"></div>
+              <div class="profile-note" id="prof-proof-note" style="margin-top:12px;display:none"></div>
+            </div>
             <div style="margin-top:22px">
               <div class="pcard-title" style="font-size:15px;margin-bottom:12px">Good match for</div>
               <div class="match-list" id="prof-match-list"></div>
@@ -1121,7 +1172,7 @@ footer p{font-size:13px;color:rgba(247,244,239,.35)}
         <div class="pright-title">Trust & Responsibility</div>
         <div class="strength-list" id="prof-trust-list"></div>
         <div class="profile-note" style="margin-top:14px">
-          <strong>Important:</strong> DESERVED helps people discover and connect, but we do not run background checks, verify work history, guarantee services, or supervise private conversations. Share personal information, meet, hire, collaborate, or pay someone only at your own discretion.
+          <strong>Important:</strong> DESERVED helps people discover and connect, but we do not run background checks, verify work history, guarantee services, or supervise private conversations. Share personal information, meet, hire, collaborate, or pay someone only at your own discretion. If something seems wrong, use the Report button.
         </div>
       </div>
       <div class="share-card-right">
@@ -1202,6 +1253,147 @@ footer p{font-size:13px;color:rgba(247,244,239,.35)}
   </div>
 </section>
 
+
+<!-- COMMUNITY GUIDELINES -->
+<section id="page-guidelines" class="page">
+  <div class="trust-page-wrap">
+    <div class="trust-page-hero">
+      <div class="trust-page-kicker">DESERVED Trust</div>
+      <h2 class="trust-page-title">Community<br><span class="it">Guidelines.</span></h2>
+      <p class="trust-page-sub">DESERVED is built for real Calgary people, useful connections, and respectful opportunity. These simple rules help keep the platform clean and trustworthy.</p>
+    </div>
+    <div class="trust-card-stack">
+      <div class="trust-info-card">
+        <h3>Be real.</h3>
+        <p>Use honest information. Do not create fake profiles, fake skills, fake opportunities, fake stories, or misleading claims.</p>
+      </div>
+      <div class="trust-info-card">
+        <h3>Be respectful.</h3>
+        <p>No harassment, hate, threats, discrimination, spam, scams, pressure tactics, or inappropriate messages. Contact people only for relevant and respectful reasons.</p>
+      </div>
+      <div class="trust-info-card">
+        <h3>Be useful.</h3>
+        <p>DESERVED is not for random posting or attention seeking. Share what you can do, what you need, what you offer, and how someone can connect with purpose.</p>
+      </div>
+      <div class="trust-info-card">
+        <h3>Respect privacy.</h3>
+        <p>Do not share someone else's private contact details, screenshots, messages, address, workplace, or personal information without permission.</p>
+      </div>
+      <div class="trust-info-card">
+        <h3>Admin review matters.</h3>
+        <p>Profiles, reports, and stories may be reviewed by the DESERVED admin team. We may reject, hide, or remove profiles that appear unsafe, fake, disrespectful, incomplete, or not aligned with the platform.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRIVACY / SAFETY -->
+<section id="page-safety" class="page">
+  <div class="trust-page-wrap">
+    <div class="trust-page-hero">
+      <div class="trust-page-kicker">Privacy & Safety</div>
+      <h2 class="trust-page-title">Connect carefully.<br><span class="it">Stay responsible.</span></h2>
+      <p class="trust-page-sub">DESERVED helps people discover and connect. It does not replace your own judgment, safety checks, or responsibility when you communicate, meet, hire, collaborate, or share information.</p>
+    </div>
+    <div class="trust-card-stack">
+      <div class="trust-info-card">
+        <h3>What DESERVED does</h3>
+        <ul>
+          <li>Provides a platform for people to create profiles and be discovered.</li>
+          <li>Uses admin review to reduce spam, fake profiles, and low-quality submissions.</li>
+          <li>Uses double opt-in connection requests before contact information is shared.</li>
+          <li>Allows users to report concerns or issues.</li>
+        </ul>
+      </div>
+      <div class="trust-info-card">
+        <h3>What DESERVED does not do</h3>
+        <ul>
+          <li>We do not run background checks.</li>
+          <li>We do not verify criminal history, employment history, certifications, identity documents, or financial claims.</li>
+          <li>We do not guarantee someone’s services, skills, behaviour, availability, safety, or outcomes.</li>
+          <li>We do not supervise private conversations, meetings, payments, jobs, projects, or collaborations.</li>
+        </ul>
+      </div>
+      <div class="trust-info-card">
+        <h3>Your responsibility</h3>
+        <p>Share personal information carefully. Meet in safe public places when appropriate. Verify important claims yourself. Use written agreements for paid work. Do not send money or sensitive information unless you fully trust the situation.</p>
+      </div>
+      <div class="report-box">
+        <p><strong>Need to report something?</strong> Use the Contact / Report Issue page and include the profile name, what happened, and any useful details. We will review it as soon as possible.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TERMS -->
+<section id="page-terms" class="page">
+  <div class="trust-page-wrap">
+    <div class="trust-page-hero">
+      <div class="trust-page-kicker">Simple Terms</div>
+      <h2 class="trust-page-title">Terms of<br><span class="it">Use.</span></h2>
+      <p class="trust-page-sub">These simple terms explain the basic understanding for using DESERVED. They are written clearly for early-stage use and can be expanded later as the platform grows.</p>
+    </div>
+    <div class="trust-card-stack">
+      <div class="trust-info-card">
+        <h3>1. Platform purpose</h3>
+        <p>DESERVED is a community connection platform. It helps people share profiles, skills, stories, needs, offers, and connection requests.</p>
+      </div>
+      <div class="trust-info-card">
+        <h3>2. No guarantees</h3>
+        <p>DESERVED does not guarantee jobs, clients, income, collaborations, mentorship, services, safety, or results. Any connection or opportunity depends on the users involved.</p>
+      </div>
+      <div class="trust-info-card">
+        <h3>3. User responsibility</h3>
+        <p>You are responsible for what you post, who you contact, what information you share, and any private decisions you make after connecting.</p>
+      </div>
+      <div class="trust-info-card">
+        <h3>4. Admin rights</h3>
+        <p>DESERVED may review, approve, reject, hide, or remove profiles, stories, reports, and content that appears unsafe, fake, spammy, incomplete, disrespectful, or harmful to the community.</p>
+      </div>
+      <div class="trust-info-card">
+        <h3>5. Early platform notice</h3>
+        <p>DESERVED is currently an early Calgary-first platform. Features, policies, pages, and rules may be updated as the platform grows.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT / REPORT -->
+<section id="page-contact" class="page">
+  <div class="trust-page-wrap">
+    <div class="trust-page-hero">
+      <div class="trust-page-kicker">Support</div>
+      <h2 class="trust-page-title">Contact or<br><span class="it">Report Issue.</span></h2>
+      <p class="trust-page-sub">Use this page to report a profile, connection concern, safety issue, fake information, spam, or platform problem.</p>
+    </div>
+    <div class="trust-card-stack">
+      <div class="trust-info-card">
+        <h3>What to include</h3>
+        <ul>
+          <li>Your name and email.</li>
+          <li>The profile name or email involved, if known.</li>
+          <li>What happened.</li>
+          <li>Any screenshots or details that help explain the issue.</li>
+        </ul>
+      </div>
+      <div class="trust-info-card">
+        <h3>Report categories</h3>
+        <div class="trust-mini-grid">
+          <div class="trust-mini-box"><strong>Fake profile</strong><span>Someone appears to be using false or misleading information.</span></div>
+          <div class="trust-mini-box"><strong>Spam or scam</strong><span>Someone is sending irrelevant, suspicious, or money-focused messages.</span></div>
+          <div class="trust-mini-box"><strong>Unsafe behaviour</strong><span>Harassment, pressure, threats, discrimination, or inappropriate contact.</span></div>
+          <div class="trust-mini-box"><strong>Technical issue</strong><span>Something on the website is not working properly.</span></div>
+        </div>
+      </div>
+      <div class="trust-info-card">
+        <h3>Contact</h3>
+        <p>For now, please contact the DESERVED admin directly with the details of the issue. A built-in report form will be added in the next platform step.</p>
+        <button class="btn-primary" onclick="window.location.href='mailto:hello@deserved.ca?subject=DESERVED%20Report%20or%20Support%20Request'">Email DESERVED Support →</button>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ADMIN -->
 <section id="page-admin" class="page">
   <div class="admin-wrap">
@@ -1253,11 +1445,53 @@ footer p{font-size:13px;color:rgba(247,244,239,.35)}
     <div id="admin-rejected-list" class="admin-queue">
       <div class="admin-empty"><span>📝</span>Loading rejected profiles…</div>
     </div>
+    <div class="admin-section-title" style="margin-top:8px">
+      <span>🚩 Profile Reports</span>
+      <span id="reports-count" style="font-size:14px;color:var(--need);font-weight:600"></span>
+    </div>
+    <div id="admin-reports-list" class="admin-queue">
+      <div class="admin-empty"><span>🚩</span>Loading reports…</div>
+    </div>
   </div>
 </section>
 
+
+<!-- REPORT PROFILE MODAL -->
+<div class="modal-overlay" id="report-modal" onclick="handleReportModalBg(event)">
+  <div class="modal-box">
+    <div class="modal-title">Report profile</div>
+    <div class="modal-desc" id="report-desc">Tell us what seems wrong. Reports go to admin review.</div>
+    <div class="modal-fg">
+      <select id="report-reason" class="report-reason-select">
+        <option value="">Choose a reason…</option>
+        <option>Fake or misleading profile</option>
+        <option>Spam or scam</option>
+        <option>Unsafe or inappropriate behaviour</option>
+        <option>Harassment or discrimination</option>
+        <option>Wrong category or low-quality profile</option>
+        <option>Technical issue with this profile</option>
+        <option>Other concern</option>
+      </select>
+      <textarea id="report-details" placeholder="Add details that help admin review this report…" maxlength="600" rows="4"></textarea>
+    </div>
+    <div class="report-warning">
+      Reports are reviewed by DESERVED admin. Please be accurate and respectful. False or abusive reports may be ignored.
+    </div>
+    <div class="modal-btns">
+      <button class="btn-modal-cancel" onclick="closeReportModal()">Cancel</button>
+      <button class="btn-modal-send" id="btn-send-report" onclick="submitProfileReport()" style="background:var(--need)">Submit Report</button>
+    </div>
+  </div>
+</div>
+
 <footer>
   <p>DESERVED © 2026 — Built in Calgary for everyone who deserves to be seen. 🙏</p>
+  <div class="footer-links">
+    <button onclick="showPage('guidelines')">Community Guidelines</button>
+    <button onclick="showPage('safety')">Privacy & Safety</button>
+    <button onclick="showPage('terms')">Terms</button>
+    <button onclick="showPage('contact')">Contact / Report Issue</button>
+  </div>
 </footer>
 
 <script>
@@ -1269,7 +1503,7 @@ const sb=createClient(SUPABASE_URL,SUPABASE_ANON_KEY,{
   auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true,storage:window.localStorage,storageKey:'deserved-auth-session'}
 });
 
-let currentUser=null,currentProfile=null,currentFilter='all',browseCategory='all',allProfiles=[],myConnections=[],editMode=false,profileReturnTarget=null,adminAllProfiles=[],adminStatusFilter='all';
+let currentUser=null,currentProfile=null,currentFilter='all',browseCategory='all',allProfiles=[],myConnections=[],editMode=false,profileReturnTarget=null,adminAllProfiles=[],adminStatusFilter='all',reportingUserId=null,reportingProfileName='';
 let appInitialized=false;
 let handlingBrowserNav=false;
 let onboard={role:'',skills:[]};
@@ -1649,12 +1883,22 @@ function prefillOnboardForm(p){
   setVal('origin',p.origin);
   setVal('calgary-time',p.calgary_time);
   setVal('languages',p.languages);
+  setVal('profile-photo-url',p.profile_photo_url);
+  setVal('portfolio-url',p.portfolio_url);
+  setVal('linkedin-url',p.linkedin_url);
+  setVal('instagram-url',p.instagram_url);
+  setVal('youtube-url',p.youtube_url);
+  setVal('resume-url',p.resume_url);
+  setVal('proof-note',p.proof_note);
+  previewProfilePhoto();
 
   document.querySelectorAll('.step').forEach(s=>s.classList.remove('active'));
   document.getElementById('step-1')?.classList.add('active');
   const progress=document.getElementById('progress-fill');
   if(progress)progress.style.width='25%';
 
+  const photoPreview=document.getElementById('photo-preview');
+  if(photoPreview){photoPreview.removeAttribute('src');photoPreview.style.display='none';}
   const btn=document.getElementById('btn-submit-profile');
   if(btn)btn.textContent='Save Changes ✓';
   updateOnboardEditMode(true);
@@ -1666,7 +1910,7 @@ function resetOnboardFormForNewProfile(){
   onboard={role:'',skills:[]};
   document.querySelectorAll('.role-card').forEach(c=>c.classList.remove('active'));
   renderSkills();
-  ['need-type','need-desc','current-focus','ask-me-about','experience','story','origin','calgary-time','languages'].forEach(id=>{
+  ['need-type','need-desc','current-focus','ask-me-about','experience','story','origin','calgary-time','languages','profile-photo-url','portfolio-url','linkedin-url','instagram-url','youtube-url','resume-url','proof-note'].forEach(id=>{
     const el=document.getElementById(id);
     if(el)el.value='';
   });
@@ -1681,6 +1925,48 @@ function resetOnboardFormForNewProfile(){
   const btn=document.getElementById('btn-submit-profile');
   if(btn)btn.textContent='Submit Profile 🙏';
   updateOnboardEditMode(false);
+}
+
+
+function previewProfilePhoto(){
+  const url=document.getElementById('profile-photo-url')?.value.trim();
+  const img=document.getElementById('photo-preview');
+  if(!img)return;
+  if(url){
+    img.src=url;
+    img.style.display='block';
+    img.onerror=()=>{img.style.display='none';};
+  }else{
+    img.removeAttribute('src');
+    img.style.display='none';
+  }
+}
+
+function safeExternalUrl(url){
+  const clean=String(url||'').trim();
+  if(!clean)return '';
+  try{
+    const u=new URL(clean);
+    if(u.protocol==='http:'||u.protocol==='https:')return u.href;
+  }catch(e){}
+  return '';
+}
+
+function linkLabel(url,type){
+  if(type)return type;
+  try{return new URL(url).hostname.replace('www.','');}catch(e){return 'Link';}
+}
+
+function verificationClass(status){
+  if(status==='verified')return 'vb-verified';
+  if(status==='proof_added')return 'vb-proof';
+  return 'vb-basic';
+}
+
+function verificationText(status){
+  if(status==='verified')return '✓ Verified by DESERVED';
+  if(status==='proof_added')return '✦ Proof Added';
+  return 'Basic Review';
 }
 
 // ── SUBMIT PROFILE ──
@@ -1711,6 +1997,21 @@ async function submitProfile(){
     origin:document.getElementById('origin').value.trim(),
     calgary_time:document.getElementById('calgary-time').value,
     languages:document.getElementById('languages').value.trim(),
+    profile_photo_url:safeExternalUrl(document.getElementById('profile-photo-url')?.value),
+    portfolio_url:safeExternalUrl(document.getElementById('portfolio-url')?.value),
+    linkedin_url:safeExternalUrl(document.getElementById('linkedin-url')?.value),
+    instagram_url:safeExternalUrl(document.getElementById('instagram-url')?.value),
+    youtube_url:safeExternalUrl(document.getElementById('youtube-url')?.value),
+    resume_url:safeExternalUrl(document.getElementById('resume-url')?.value),
+    proof_note:document.getElementById('proof-note')?.value.trim()||'',
+    verification_status:(
+      safeExternalUrl(document.getElementById('portfolio-url')?.value)||
+      safeExternalUrl(document.getElementById('linkedin-url')?.value)||
+      safeExternalUrl(document.getElementById('instagram-url')?.value)||
+      safeExternalUrl(document.getElementById('youtube-url')?.value)||
+      safeExternalUrl(document.getElementById('resume-url')?.value)||
+      (document.getElementById('proof-note')?.value.trim()||'')
+    )?'proof_added':'basic',
     status:'pending'
   };
   const btn=document.getElementById('btn-submit-profile');
@@ -1978,11 +2279,11 @@ function renderProfileCard(p){
   return `
     <div class="profile-card" data-uid="${p.user_id}" data-slug="${profileSlug(p)}">
       <div class="pc-top">
-        <div class="pc-av" style="background:${color}">${escHtml(initial)}</div>
+        ${p.profile_photo_url?`<img class="pc-av" src="${escHtml(p.profile_photo_url)}" alt="${escHtml(name)}" style="background:${color};object-fit:cover">`:`<div class="pc-av" style="background:${color}">${escHtml(initial)}</div>`}
         <div>
           <div class="pc-name">${escHtml(name)}</div>
           <div class="pc-sub">${escHtml(p.city_area||'Calgary')}</div>
-          <span class="pc-badge ${badgeClass}">${badgeText}</span>${isFoundingMember(p)?`<div class="founding-badge">✦ Founding Member</div>`:``}
+          <span class="pc-badge ${badgeClass}">${badgeText}</span>${isFoundingMember(p)?`<div class="founding-badge">✦ Founding Member</div>`:``}${p.verification_status?`<div class="verification-badge ${verificationClass(p.verification_status)}">${verificationText(p.verification_status)}</div>`:``}
         </div>
       </div>
       ${storyPreview?`<div class="pc-story">"${escHtml(storyPreview)}"</div>`:''}
@@ -2216,6 +2517,8 @@ async function loadDashboard(){
     ['Skills added',skills.length>0],
     ['Current focus added',!!currentProfile.current_focus],
     ['Ask Me About added',!!currentProfile.ask_me_about],
+    ['Profile photo optional',!!currentProfile.profile_photo_url],
+    ['Proof link added',!!(currentProfile.portfolio_url||currentProfile.linkedin_url||currentProfile.instagram_url||currentProfile.youtube_url||currentProfile.resume_url||currentProfile.proof_note)],
     ['Human reviewed',currentProfile.status==='approved']
   ];
 
@@ -2275,7 +2578,7 @@ async function loadDashboard(){
     <div class="dash-grid">
       <div class="dash-profile-card">
         <div class="dpc-top">
-          <div class="dpc-av" style="background:${color}">${escHtml(initial)}</div>
+          ${currentProfile.profile_photo_url?`<img class="dpc-av" src="${escHtml(currentProfile.profile_photo_url)}" alt="${escHtml(name)}" style="background:${color};object-fit:cover">`:`<div class="dpc-av" style="background:${color}">${escHtml(initial)}</div>`}
           <div>
             <div class="dpc-name">${escHtml(name)}</div>
             <div class="dpc-sub">${skills.slice(0,3).join(' · ')||'Member'} · ${escHtml(currentProfile.city_area||'Calgary')}</div>
@@ -2476,6 +2779,7 @@ function profileCompleteness(profile,skills=[]){
     ['Skills added',skills.length>0],
     ['Location added',!!profile.city_area],
     ['Languages added',!!profile.languages],
+    ['Proof link added',!!(profile.portfolio_url||profile.linkedin_url||profile.instagram_url||profile.youtube_url||profile.resume_url||profile.proof_note)],
     ['Human reviewed',profile.status==='approved']
   ];
   return checks;
@@ -2538,19 +2842,19 @@ async function showProfilePage(profile,pushHistory=true){
     if(conn&&conn.status==='accepted'){
       // Already connected — show email
       const theirEmail=conn.requester_id===currentUser?.id?null:null; // loaded via profile fetch
-      actions.innerHTML=`<span style="display:inline-flex;align-items:center;gap:8px;background:rgba(42,125,79,.15);border:1px solid rgba(42,125,79,.3);padding:10px 18px;border-radius:100px;font-size:13px;font-weight:600;color:#fff">✓ Connected</span>`;
+      actions.innerHTML=`<span style="display:inline-flex;align-items:center;gap:8px;background:rgba(42,125,79,.15);border:1px solid rgba(42,125,79,.3);padding:10px 18px;border-radius:100px;font-size:13px;font-weight:600;color:#fff">✓ Connected</span><button class="btn-report" onclick="openReportModal('${profile.user_id}','${escJs(name)}')">Report</button>`;
       ccr.innerHTML=`<div class="ccr-title" style="color:#fff">✓ Connected</div>
       <p class="ccr-desc">You're connected with ${escHtml(name.split(' ')[0])}. Reach out directly.</p>
       <button class="ccr-btn" style="background:var(--give)" onclick="showPage('dashboard')">View in Dashboard →</button>`;
     } else if(conn&&conn.status==='pending'){
       const isSent=conn.requester_id===currentUser?.id;
-      actions.innerHTML=`<span style="display:inline-flex;align-items:center;gap:8px;background:rgba(232,130,12,.15);border:1px solid rgba(232,130,12,.3);padding:10px 18px;border-radius:100px;font-size:13px;font-weight:600;color:#fff">${isSent?'⏳ Request Sent':'⏳ Request Incoming'}</span>`;
+      actions.innerHTML=`<span style="display:inline-flex;align-items:center;gap:8px;background:rgba(232,130,12,.15);border:1px solid rgba(232,130,12,.3);padding:10px 18px;border-radius:100px;font-size:13px;font-weight:600;color:#fff">${isSent?'⏳ Request Sent':'⏳ Request Incoming'}</span><button class="btn-report" onclick="openReportModal('${profile.user_id}','${escJs(name)}')">Report</button>`;
       ccr.innerHTML=`<div class="ccr-title" style="color:#fff">${isSent?'Request Sent':'They want to connect!'}</div>
       <p class="ccr-desc">${isSent?'Waiting for '+escHtml(name.split(' ')[0])+' to respond.':'Go to your dashboard to accept or decline.'}</p>
       ${!isSent?`<button class="ccr-btn" onclick="showPage('dashboard')">Respond in Dashboard →</button>`:''}`;
     } else {
       // Not connected
-      actions.innerHTML=`<button class="btn-connect-hero" onclick="handleProfConnect()">✦ Connect with ${escHtml(name.split(' ')[0])}</button>`;
+      actions.innerHTML=`<button class="btn-connect-hero" onclick="handleProfConnect()">✦ Connect with ${escHtml(name.split(' ')[0])}</button><button class="btn-report" onclick="openReportModal('${profile.user_id}','${escJs(name)}')">Report</button>`;
       ccr.innerHTML=`<div class="ccr-title">Connect with ${escHtml(name.split(' ')[0])}</div>
       <p class="ccr-desc">Send a message. They'll decide whether to connect. Your contact info stays private.</p>
       <button class="ccr-btn" onclick="handleProfConnect()">✦ Connect with ${escHtml(name.split(' ')[0])}</button>
@@ -2608,6 +2912,27 @@ async function showProfilePage(profile,pushHistory=true){
     askWrap.style.display=asks.length?'block':'none';
     askList.innerHTML=asks.map(a=>`<span class="ask-chip">${escHtml(a)}</span>`).join('');
   }
+
+  const proofWrap=document.getElementById('prof-proof-wrap');
+  const proofLinks=document.getElementById('prof-proof-links');
+  const proofNote=document.getElementById('prof-proof-note');
+  if(proofWrap&&proofLinks){
+    const links=[
+      ['Portfolio',profile.portfolio_url],
+      ['LinkedIn',profile.linkedin_url],
+      ['Instagram',profile.instagram_url],
+      ['YouTube',profile.youtube_url],
+      ['Resume / Certificate',profile.resume_url]
+    ].filter(([label,url])=>url);
+    const hasProof=links.length||profile.proof_note;
+    proofWrap.style.display=hasProof?'block':'none';
+    proofLinks.innerHTML=links.map(([label,url])=>`<a class="proof-link" href="${escHtml(url)}" target="_blank" rel="noopener noreferrer">↗ ${escHtml(label)}</a>`).join('');
+    if(proofNote){
+      proofNote.style.display=profile.proof_note?'block':'none';
+      proofNote.innerHTML=profile.proof_note?`<strong>Proof note:</strong> ${escHtml(profile.proof_note)}`:'';
+    }
+  }
+
   const matchList=document.getElementById('prof-match-list');
   if(matchList)matchList.innerHTML=matches.map(m=>`<span class="match-chip">${escHtml(m)}</span>`).join('');
 
@@ -2624,6 +2949,7 @@ async function showProfilePage(profile,pushHistory=true){
     profile.experience?`<div class="qi-item"><span class="qi-icon">💼</span><div><div class="qi-label">Experience</div><div class="qi-val">${escHtml(profile.experience)}</div></div></div>`:'',
     `<div class="qi-item"><span class="qi-icon">✅</span><div><div class="qi-label">Status</div><div class="qi-val" style="color:var(--give);font-weight:600">Verified by DESERVED</div></div></div>`,
     isFoundingMember(profile)?`<div class="qi-item"><span class="qi-icon">✦</span><div><div class="qi-label">Badge</div><div class="qi-val" style="color:var(--accent);font-weight:700">Founding Member · Calgary</div></div></div>`:'',
+    profile.verification_status?`<div class="qi-item"><span class="qi-icon">🧾</span><div><div class="qi-label">Proof Level</div><div class="qi-val" style="font-weight:700">${escHtml(verificationText(profile.verification_status))}</div></div></div>`:'',
   ].filter(Boolean).join('');
 
   const trustList=document.getElementById('prof-trust-list');
@@ -2715,6 +3041,8 @@ function adminProfileChecks(p){
     ['Need / Offer',!!p.need_type||p.role==='give'],
     ['Current Focus',!!p.current_focus],
     ['Ask Me About',!!p.ask_me_about],
+    ['Photo',!!p.profile_photo_url],
+    ['Proof Link',!!(p.portfolio_url||p.linkedin_url||p.instagram_url||p.youtube_url||p.resume_url||p.proof_note)],
     ['Location',!!p.city_area],
     ['Languages',!!p.languages]
   ];
@@ -2772,6 +3100,62 @@ async function loadAdminData(){
   document.getElementById('adm-founding').textContent=approved;
 
   applyAdminFilters();
+  loadAdminReports();
+}
+
+
+async function loadAdminReports(){
+  if(!isAdmin())return;
+  const box=document.getElementById('admin-reports-list');
+  const count=document.getElementById('reports-count');
+  if(!box)return;
+  try{
+    const{data,error}=await sb.from('flags').select('*').order('created_at',{ascending:false}).limit(25);
+    if(error){
+      box.innerHTML=`<div class="admin-empty"><span>⚠️</span>Could not load reports: ${escHtml(error.message)}</div>`;
+      return;
+    }
+    const reports=data||[];
+    if(count)count.textContent=reports.length?`${reports.length} recent`:'';
+    if(!reports.length){
+      box.innerHTML='<div class="admin-empty"><span>✅</span>No profile reports yet.</div>';
+      return;
+    }
+    const userIds=[...new Set(reports.flatMap(r=>[r.reporter_id,r.reported_user_id]).filter(Boolean))];
+    let profileMap={};
+    if(userIds.length){
+      const{data:profiles}=await sb.from('profiles').select('user_id,first_name,last_name,email,city_area').in('user_id',userIds);
+      (profiles||[]).forEach(p=>profileMap[p.user_id]=p);
+    }
+    box.innerHTML=reports.map(r=>{
+      const reporter=profileMap[r.reporter_id];
+      const reported=profileMap[r.reported_user_id];
+      const reporterName=reporter?`${reporter.first_name||''} ${reporter.last_name||''}`.trim():r.reporter_id;
+      const reportedName=reported?`${reported.first_name||''} ${reported.last_name||''}`.trim():r.reported_user_id;
+      const date=r.created_at?new Date(r.created_at).toLocaleDateString('en-CA',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'}):'—';
+      return `<div class="report-item">
+        <div class="report-top">
+          <div class="report-title">${escHtml(r.reason||'Profile report')}</div>
+          <span class="report-status">${escHtml(r.status||'open')}</span>
+        </div>
+        <div class="report-meta">Reported profile: <strong>${escHtml(reportedName||'Unknown')}</strong> · Reporter: ${escHtml(reporterName||'Unknown')} · ${date}</div>
+        <div class="report-details">${escHtml(r.details||'No details provided.')}</div>
+        <div class="ai-actions" style="margin-top:12px">
+          ${reported?`<button class="btn-view-sm" onclick="adminViewProfile('${reported.user_id}')">View Reported Profile</button>`:''}
+          <button class="btn-delete-sm" onclick="markReportReviewed('${r.id}')">Mark Reviewed</button>
+        </div>
+      </div>`;
+    }).join('');
+  }catch(err){
+    box.innerHTML='<div class="admin-empty"><span>⚠️</span>Could not load reports.</div>';
+  }
+}
+
+async function markReportReviewed(id){
+  const{error}=await sb.from('flags').update({status:'reviewed'}).eq('id',id);
+  if(error){toast('Could not update report: '+error.message);return;}
+  toast('Report marked reviewed.');
+  loadAdminReports();
 }
 
 function setAdminFilter(filter,btn){
@@ -2851,6 +3235,7 @@ function renderAdminQueue(containerId,profiles,type){
         <div class="admin-item-body">
           ${p.current_focus?`<div class="ai-highlight"><div class="ai-highlight-title">Current Focus</div><div class="ai-highlight-text">${escHtml(p.current_focus)}</div></div>`:''}
           ${p.ask_me_about?`<div class="ai-highlight"><div class="ai-highlight-title">Ask Me About</div><div class="ai-highlight-text">${escHtml(p.ask_me_about)}</div></div>`:''}
+          ${(p.portfolio_url||p.linkedin_url||p.instagram_url||p.youtube_url||p.resume_url||p.proof_note)?`<div class="ai-highlight"><div class="ai-highlight-title">Proof / Portfolio</div><div class="ai-highlight-text">${[p.portfolio_url,p.linkedin_url,p.instagram_url,p.youtube_url,p.resume_url].filter(Boolean).map(u=>`<a href="${escHtml(u)}" target="_blank" rel="noopener noreferrer" style="color:var(--accent);font-weight:700;margin-right:10px">↗ ${escHtml(linkLabel(u))}</a>`).join('')}${p.proof_note?`<div style="margin-top:8px">${escHtml(p.proof_note)}</div>`:''}</div></div>`:''}
           <div class="ai-review-list">
             ${checks.map(([label,ok])=>`<div class="ai-review-check ${ok?'good':'warn'}"><span>${ok?'✓':'○'}</span><span>${escHtml(label)}</span></div>`).join('')}
           </div>
