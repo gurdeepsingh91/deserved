@@ -383,6 +383,18 @@ h1.home-h .ac{color:var(--accent)}
 .ccr-btn:hover{background:#C46A08}
 .ccr-privacy{font-size:11px;color:rgba(247,244,239,.3);line-height:1.6}
 .share-card-right{background:var(--warm);border:1px solid var(--border);border-radius:16px;padding:20px}
+.glance-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.glance-item{background:var(--off);border:1px solid var(--border);border-radius:14px;padding:14px 16px}
+.glance-label{font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.glance-val{font-size:13.5px;color:var(--black);line-height:1.45;font-weight:600}
+.match-list{display:flex;flex-wrap:wrap;gap:8px}
+.match-chip{background:var(--off);border:1px solid var(--border);border-radius:100px;padding:7px 13px;font-size:12.5px;font-weight:600;color:var(--muted)}
+.profile-note{background:rgba(232,130,12,.06);border:1px solid rgba(232,130,12,.18);border-radius:14px;padding:15px 16px;font-size:13px;color:var(--muted);line-height:1.65}
+.profile-note strong{color:var(--black)}
+.strength-list{display:flex;flex-direction:column;gap:8px}
+.strength-item{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted)}
+.strength-item.good span:first-child{color:var(--give)}
+
 .share-btns-right{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
 .shr-btn-sm{flex:1;padding:9px;border-radius:10px;font-size:12px;font-weight:600;border:1px solid var(--border);background:var(--off);color:var(--muted);cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s;text-align:center}
 .shr-btn-sm:hover{background:var(--black);color:var(--off);border-color:var(--black)}
@@ -585,7 +597,7 @@ footer p{font-size:13px;color:rgba(247,244,239,.35)}
       <button class="btn-modal-cancel" onclick="closeConnModal()">Cancel</button>
       <button class="btn-modal-send" id="btn-modal-send" onclick="sendConnectionRequest()">Send Request →</button>
     </div>
-    <p class="modal-privacy">🔒 Double opt-in. Both people must agree before contact info is shared.</p>
+    <p class="modal-privacy">🔒 Double opt-in. Share info carefully — DESERVED does not run background checks.</p>
   </div>
 </div>
 
@@ -712,7 +724,7 @@ footer p{font-size:13px;color:rgba(247,244,239,.35)}
 <section id="page-onboard" class="page">
   <div class="onboard-inner">
     <div class="progress-wrap"><div class="progress-fill" id="progress-fill" style="width:25%"></div></div>
-    <div class="edit-mode-note" id="edit-mode-note">✏️ You are editing your existing profile. Your approval status will stay the same after saving.</div>
+    <div class="edit-mode-note" id="edit-mode-note">✏️ You are editing your existing profile. After saving, your profile will go back to pending review before it is live again.</div>
 
     <div id="step-1" class="step active">
       <div class="step-tag">Step 1 of 4 — Your purpose</div>
@@ -926,6 +938,18 @@ footer p{font-size:13px;color:rgba(247,244,239,.35)}
             <div class="story-text" id="prof-story-body">Loading…</div>
           </div>
         </div>
+        <div class="pcard">
+          <div class="pcard-header"><div class="pcard-title">⚡ At a Glance</div></div>
+          <div class="pcard-body">
+            <div class="glance-grid" id="prof-glance-grid"></div>
+          </div>
+        </div>
+        <div class="pcard">
+          <div class="pcard-header"><div class="pcard-title">🤝 Why Connect?</div></div>
+          <div class="pcard-body">
+            <div class="story-text" id="prof-why-connect">Loading…</div>
+          </div>
+        </div>
       </div>
       <!-- SKILLS TAB -->
       <div class="ptab-content" id="ptab-skills">
@@ -933,6 +957,10 @@ footer p{font-size:13px;color:rgba(247,244,239,.35)}
           <div class="pcard-header"><div class="pcard-title">💼 Skills & Expertise</div></div>
           <div class="pcard-body">
             <div class="skills-wrap" id="prof-skills-list"></div>
+            <div style="margin-top:22px">
+              <div class="pcard-title" style="font-size:15px;margin-bottom:12px">Good match for</div>
+              <div class="match-list" id="prof-match-list"></div>
+            </div>
             <div style="margin-top:20px" id="prof-avail-wrap"></div>
           </div>
         </div>
@@ -950,11 +978,18 @@ footer p{font-size:13px;color:rgba(247,244,239,.35)}
         <div class="ccr-title" id="ccr-title">Connect</div>
         <p class="ccr-desc" id="ccr-desc">Send a connection request.</p>
         <button class="ccr-btn" id="ccr-btn" onclick="handleProfConnect()">✦ Connect</button>
-        <p class="ccr-privacy">🔒 Contact info stays private until both agree.</p>
+        <p class="ccr-privacy">🔒 Contact info stays private until both agree. Use your own judgment after connecting.</p>
       </div>
       <div class="pright-card">
         <div class="pright-title">Quick Info</div>
         <div class="qi-list" id="prof-quick-info"></div>
+      </div>
+      <div class="pright-card" id="prof-trust-card">
+        <div class="pright-title">Trust & Responsibility</div>
+        <div class="strength-list" id="prof-trust-list"></div>
+        <div class="profile-note" style="margin-top:14px">
+          <strong>Important:</strong> DESERVED helps people discover and connect, but we do not run background checks, verify work history, guarantee services, or supervise private conversations. Share personal information, meet, hire, collaborate, or pay someone only at your own discretion.
+        </div>
       </div>
       <div class="share-card-right">
         <div class="pright-title" style="margin-bottom:6px">Share this profile</div>
@@ -1386,7 +1421,7 @@ function updateOnboardEditMode(isEdit){
   if(isEdit){
     if(tag)tag.textContent='Edit Profile — Step 1 of 4';
     if(title)title.innerHTML='Edit your<br><span class="it">profile.</span>';
-    if(desc)desc.textContent='Update your story, skills, needs, or what you offer. Your current approval status stays the same.';
+    if(desc)desc.textContent='Update your story, skills, needs, or what you offer. After saving, your profile will be reviewed again before going live.';
   }else{
     if(tag)tag.textContent='Step 1 of 4 — Your purpose';
     if(title)title.innerHTML='What brings<br><span class="it">you here?</span>';
@@ -1484,7 +1519,7 @@ async function submitProfile(){
     origin:document.getElementById('origin').value.trim(),
     calgary_time:document.getElementById('calgary-time').value,
     languages:document.getElementById('languages').value.trim(),
-    status:editMode?(currentProfile?.status||'pending'):'pending'
+    status:'pending'
   };
   const btn=document.getElementById('btn-submit-profile');
   btn.disabled=true;btn.textContent=editMode?'Saving…':'Submitting…';
@@ -1496,7 +1531,7 @@ async function submitProfile(){
     localStorage.setItem('deserved_signup_first',currentProfile.first_name||first);
     localStorage.setItem('deserved_signup_last',currentProfile.last_name||last);
     localStorage.setItem('deserved_signup_area',currentProfile.city_area||area);
-    toast(editMode?'Profile updated ✓':'Profile submitted 🙏');
+    toast(editMode?'Changes submitted for review ✓':'Profile submitted 🙏');
     editMode=false;
     profileReturnTarget=null;
     btn.textContent='Submit Profile 🙏';
@@ -1991,6 +2026,48 @@ function switchProfTab(tab,btn){
   if(el)el.classList.add('on');
 }
 
+
+function profileMatchIdeas(profile,skills=[]){
+  const role=profile.role;
+  const skillText=skills.join(' ').toLowerCase();
+  const ideas=[];
+  if(role==='need'||role==='both')ideas.push('Local opportunities');
+  if(role==='give'||role==='both')ideas.push('People seeking help');
+  if(skillText.includes('web')||skillText.includes('app')||skillText.includes('ai'))ideas.push('Digital projects');
+  if(skillText.includes('teaching')||skillText.includes('mentor')||skillText.includes('tutor'))ideas.push('Mentorship');
+  if(skillText.includes('music')||skillText.includes('sing'))ideas.push('Creative collaborations');
+  if(skillText.includes('cook')||skillText.includes('food'))ideas.push('Food/events');
+  if(skillText.includes('design')||skillText.includes('photo')||skillText.includes('content'))ideas.push('Brand/content work');
+  ideas.push('Community connections');
+  return [...new Set(ideas)].slice(0,6);
+}
+
+function buildWhyConnect(profile,skills=[]){
+  const name=(profile.first_name||'this member').trim();
+  const skillPart=skills.slice(0,3).join(', ');
+  if(profile.role==='give'){
+    return `Connect with ${name} if you are looking for support around ${skillPart||'their skills'}, guidance, collaboration, or local community help.`;
+  }
+  if(profile.role==='need'){
+    return `Connect with ${name} if you can help with ${profile.need_type||'an opportunity'}, offer guidance, share a useful connection, or support their next step.`;
+  }
+  if(profile.role==='both'){
+    return `Connect with ${name} if you see a fit around ${skillPart||'their skills'}, collaboration, mentorship, local opportunities, or mutual support.`;
+  }
+  return `Connect with ${name} if their story, skills, or goals align with something you can offer or need.`;
+}
+
+function profileCompleteness(profile,skills=[]){
+  const checks=[
+    ['Story added',!!profile.story],
+    ['Skills added',skills.length>0],
+    ['Location added',!!profile.city_area],
+    ['Languages added',!!profile.languages],
+    ['Human reviewed',profile.status==='approved']
+  ];
+  return checks;
+}
+
 async function showProfilePage(profile,pushHistory=true){
   viewingProfile=profile;
   if(appInitialized&&pushHistory&&!handlingBrowserNav){
@@ -2005,6 +2082,8 @@ async function showProfilePage(profile,pushHistory=true){
   const skills=Array.isArray(profile.skills)?profile.skills:typeof profile.skills==='string'?profile.skills.split(',').map(s=>s.trim()).filter(Boolean):[];
   const badgeClass=profile.role==='need'?'badge-need':profile.role==='give'?'badge-give':profile.role==='both'?'badge-both':'badge-member';
   const badgeText=profile.role==='need'?'🙋 Looking for work':profile.role==='give'?'🤝 Offering help':profile.role==='both'?'⚡ Need & Give':'Member';
+  const matches=profileMatchIdeas(profile,skills);
+  const whyConnect=buildWhyConnect(profile,skills);
 
   // Avatar
   const avEl=document.getElementById('prof-av');
@@ -2080,9 +2159,28 @@ async function showProfilePage(profile,pushHistory=true){
     storyBody.innerHTML=`<p style="color:var(--muted);font-style:italic">No story added yet.</p>`;
   }
 
+  // At a glance + why connect
+  const glance=document.getElementById('prof-glance-grid');
+  if(glance){
+    const looking=profile.need_type||(
+      profile.role==='give'?'Offering help':profile.role==='both'?'Open to giving and receiving':'Looking for opportunity'
+    );
+    const canOffer=skills.slice(0,3).join(' · ')||'Story, experience, and community connection';
+    glance.innerHTML=[
+      ['Looking for',looking],
+      ['Can offer',canOffer],
+      ['Experience',profile.experience||'Not specified yet'],
+      ['Open to',matches.slice(0,2).join(' · ')||'Local connections']
+    ].map(([label,val])=>`<div class="glance-item"><div class="glance-label">${escHtml(label)}</div><div class="glance-val">${escHtml(val)}</div></div>`).join('');
+  }
+  const why=document.getElementById('prof-why-connect');
+  if(why)why.innerHTML=`<p>${escHtml(whyConnect)}</p>`;
+
   // Skills
   const skillsList=document.getElementById('prof-skills-list');
   skillsList.innerHTML=skills.length?skills.map(s=>`<div class="skill-chip">${escHtml(s)}</div>`).join(''):'<p style="color:var(--muted)">No skills added yet.</p>';
+  const matchList=document.getElementById('prof-match-list');
+  if(matchList)matchList.innerHTML=matches.map(m=>`<span class="match-chip">${escHtml(m)}</span>`).join('');
 
   // Availability
   const availWrap=document.getElementById('prof-avail-wrap');
@@ -2098,6 +2196,16 @@ async function showProfilePage(profile,pushHistory=true){
     `<div class="qi-item"><span class="qi-icon">✅</span><div><div class="qi-label">Status</div><div class="qi-val" style="color:var(--give);font-weight:600">Verified by DESERVED</div></div></div>`,
     isFoundingMember(profile)?`<div class="qi-item"><span class="qi-icon">✦</span><div><div class="qi-label">Badge</div><div class="qi-val" style="color:var(--accent);font-weight:700">Founding Member · Calgary</div></div></div>`:'',
   ].filter(Boolean).join('');
+
+  const trustList=document.getElementById('prof-trust-list');
+  if(trustList){
+    const checks=profileCompleteness(profile,skills);
+    trustList.innerHTML=[
+      ...checks.map(([label,ok])=>`<div class="strength-item ${ok?'good':''}"><span>${ok?'✓':'○'}</span><span>${escHtml(label)}</span></div>`),
+      `<div class="strength-item good"><span>✓</span><span>Double opt-in contact sharing</span></div>`,
+      `<div class="strength-item"><span>!</span><span>DESERVED is not a background-check service</span></div>`
+    ].join('');
+  }
 
   // Connections tab — only for own profile
   const connsBody=document.getElementById('prof-conns-body');
