@@ -2565,9 +2565,9 @@ async function loadDashboard(){
 
     return `
       <div class="conn-item">
-        <div class="ci-av" style="background:${cc}">${escHtml(otherInitial)}</div>
+        <div class="ci-av" style="background:${cc};cursor:pointer" onclick="viewConnProfile('${otherId}')">${escHtml(otherInitial)}</div>
         <div class="ci-info">
-          <div class="ci-name">${escHtml(otherName)} <span style="font-size:11px;color:var(--muted);font-weight:400">${dir}</span></div>
+          <div class="ci-name"><button onclick="viewConnProfile('${otherId}')" style="background:none;border:none;font-size:14px;font-weight:600;color:var(--black);cursor:pointer;font-family:'DM Sans',sans-serif;padding:0;text-decoration:underline;text-underline-offset:3px">${escHtml(otherName)}</button> <span style="font-size:11px;color:var(--muted);font-weight:400">${dir}</span></div>
           ${c.intent?`<div class="ci-msg" style="font-style:normal;font-weight:600;color:var(--accent)">Intent: ${escHtml(c.intent)}</div>`:''}
           ${c.message?`<div class="ci-msg">"${escHtml(c.message.substring(0,90))}${c.message.length>90?'…':''}"</div>`:''}
           <div class="ci-bottom">
@@ -2783,9 +2783,9 @@ function renderConnsPage(){
     return `
       <div class="conn-full-card">
         <div class="cfc-top">
-          <div class="cfc-av" style="background:${color}">${escHtml(initial)}</div>
+          <div class="cfc-av" style="background:${color};cursor:${other?'pointer':'default'}" ${other?`onclick="viewConnProfile('${otherId}')"`:''}>${escHtml(initial)}</div>
           <div style="flex:1;min-width:0">
-            <div class="cfc-name">${escHtml(name)}</div>
+            <div class="cfc-name">${other?`<button onclick="viewConnProfile('${otherId}')" style="background:none;border:none;font-family:'Fraunces',serif;font-size:17px;font-weight:700;color:var(--black);letter-spacing:-.02em;cursor:pointer;padding:0;text-decoration:underline;text-underline-offset:3px">${escHtml(name)}</button>`:escHtml(name)}</div>
             <div class="cfc-meta">${escHtml(other?.city_area||'Calgary')}</div>
             <div class="cfc-dir">${dir}</div>
           </div>
@@ -3251,7 +3251,7 @@ async function showProfilePage(profile,pushHistory=true){
         const sTxt=c.status==='accepted'?'Connected':c.status==='declined'?'Declined':'Pending';
         const emailHtml=c.status==='accepted'&&o?.email?`<span class="ci-email">📧 ${escHtml(o.email)}</span>`:'';
         const actHtml=!isReq&&c.status==='pending'?`<button class="btn-accept" onclick="respondToConnection('${c.id}','accepted')">Accept ✓</button><button class="btn-decline-sm" onclick="respondToConnection('${c.id}','declined')">Decline</button>`:'';
-        return `<div class="conn-item"><div class="ci-av" style="background:${cc}">${escHtml(oinit)}</div><div class="ci-info"><div class="ci-name">${escHtml(oname)} <span style="font-size:11px;color:var(--muted);font-weight:400">${isReq?'→ You sent':'← Incoming'}</span></div>${c.intent?`<div class="ci-msg" style="font-style:normal;font-weight:600;color:var(--accent)">Intent: ${escHtml(c.intent)}</div>`:''}${c.message?`<div class="ci-msg">"${escHtml(c.message.substring(0,60))}…"</div>`:''}<div class="ci-bottom"><span class="ci-status ${sClass}">${sTxt}</span>${emailHtml}${actHtml}</div></div></div>`;
+        return `<div class="conn-item"><div class="ci-av" style="background:${cc};cursor:pointer" onclick="viewConnProfile('${oid}')">${escHtml(oinit)}</div><div class="ci-info"><div class="ci-name"><button onclick="viewConnProfile('${oid}')" style="background:none;border:none;font-size:14px;font-weight:600;color:var(--black);cursor:pointer;font-family:'DM Sans',sans-serif;padding:0;text-decoration:underline;text-underline-offset:3px">${escHtml(oname)}</button> <span style="font-size:11px;color:var(--muted);font-weight:400">${isReq?'→ You sent':'← Incoming'}</span></div>${c.intent?`<div class="ci-msg" style="font-style:normal;font-weight:600;color:var(--accent)">Intent: ${escHtml(c.intent)}</div>`:''}${c.message?`<div class="ci-msg">"${escHtml(c.message.substring(0,60))}…"</div>`:''}<div class="ci-bottom"><span class="ci-status ${sClass}">${sTxt}</span>${emailHtml}${actHtml}</div></div></div>`;
       }).join('');
     }
   } else {
