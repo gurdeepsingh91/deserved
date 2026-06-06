@@ -550,7 +550,16 @@ h1.home-h .ac{color:var(--accent)}
 /* Mobile notification */
 .mob-notif-count{display:inline-flex;align-items:center;justify-content:center;min-width:20px;height:20px;background:var(--need);border-radius:100px;font-size:11px;font-weight:800;color:#fff;padding:0 5px;margin-left:8px;font-family:'DM Sans',sans-serif}
 
-/* ── CONNECTIONS PAGE ── */
+/* ── APPROVAL BANNER ── */
+.approval-banner{background:linear-gradient(135deg,rgba(42,125,79,.12),rgba(42,125,79,.06));border:1.5px solid rgba(42,125,79,.3);border-radius:20px;padding:24px 28px;margin-bottom:20px;display:flex;align-items:flex-start;gap:16px;animation:bannerIn .6s cubic-bezier(.23,1,.32,1)}
+@keyframes bannerIn{from{opacity:0;transform:translateY(-12px)}to{opacity:1;transform:translateY(0)}}
+.ab-icon{font-size:32px;flex-shrink:0}
+.ab-title{font-family:'Fraunces',serif;font-size:18px;font-weight:800;color:var(--give);letter-spacing:-.02em;margin-bottom:4px}
+.ab-desc{font-size:13.5px;color:var(--muted);line-height:1.7}
+.ab-dismiss{background:none;border:none;color:var(--muted);cursor:pointer;font-size:18px;padding:0;margin-left:auto;flex-shrink:0;font-family:'DM Sans',sans-serif;line-height:1;opacity:.6;transition:opacity .2s}
+.ab-dismiss:hover{opacity:1}
+/* Accepted connection banner */
+.accepted-banner{background:linear-gradient(135deg,rgba(232,130,12,.1),rgba(232,130,12,.05));border:1.5px solid rgba(232,130,12,.25);border-radius:20px;padding:22px 26px;margin-bottom:16px;display:flex;align-items:flex-start;gap:14px;animation:bannerIn .5s cubic-bezier(.23,1,.32,1)}
 #page-connections{background:var(--off)}
 .conns-wrap{max-width:860px;margin:0 auto;padding:100px 40px 80px}
 .conns-header{margin-bottom:28px}
@@ -1640,8 +1649,8 @@ function showPage(name,skipHistory=false){
   }
   closeMob();
   if(name==='browse')loadProfiles();
-  if(name==='dashboard')loadDashboard();
-  if(name==='connections'){loadConnectionsPage();clearNotificationBadge();}
+  if(name==='dashboard'){loadDashboard();setTimeout(markNotifsAsSeen,3000);}// Mark seen after 3s so banner shows first
+  if(name==='connections'){loadConnectionsPage();clearNotificationBadge();markNotifsAsSeen();}
   if(name==='home'){loadStats();updateHomeState();}
   if(name==='admin')loadAdminData();
 }
@@ -1746,25 +1755,44 @@ function updateNavAuth(){
 
 // ── NOTIFICATIONS ──
 let notifInterval=null;
+let lastSeenNotifKey='deserved-last-seen-notifs';
 
 async function checkPendingNotifications(){
   if(!currentUser)return;
   try{
-    const{count}=await sb
+    // Count 1: incoming pending requests
+    const{count:pendingCount}=await sb
       .from('connections')
       .select('*',{count:'exact',head:true})
       .eq('receiver_id',currentUser.id)
       .eq('status','pending');
 
-    const num=count||0;
-    updateNotificationBadge(num);
+    // Count 2: recently accepted connections where I was the requester (unseen)
+    // "Unseen" = accepted in the last 7 days and not yet acknowledged
+    const seenKey=`${lastSeenNotifKey}-${currentUser.id}`;
+    const lastSeen=localStorage.getItem(seenKey)||'1970-01-01';
+    const{data:newlyAccepted}=await sb
+      .from('connections')
+      .select('id')
+      .eq('requester_id',currentUser.id)
+      .eq('status','accepted')
+      .gt('responded_at',lastSeen);
+
+    const acceptedCount=(newlyAccepted||[]).length;
+    const total=(pendingCount||0)+acceptedCount;
+    updateNotificationBadge(total);
   }catch(e){/* silent fail */}
+}
+
+function markNotifsAsSeen(){
+  if(!currentUser)return;
+  const seenKey=`${lastSeenNotifKey}-${currentUser.id}`;
+  localStorage.setItem(seenKey,new Date().toISOString());
 }
 
 function updateNotificationBadge(count){
   const navBadge=document.getElementById('nav-notif-count');
   const mobBadge=document.getElementById('mob-notif-count');
-
   if(count>0){
     if(navBadge){navBadge.textContent=count>9?'9+':count;navBadge.classList.add('show');}
     if(mobBadge){mobBadge.textContent=count>9?'9+':count;mobBadge.style.display='inline-flex';}
@@ -1781,7 +1809,6 @@ function clearNotificationBadge(){
 }
 
 function startNotifPolling(){
-  // Check every 60 seconds for new requests
   if(notifInterval)clearInterval(notifInterval);
   notifInterval=setInterval(()=>{
     if(currentUser)checkPendingNotifications();
@@ -2610,6 +2637,56 @@ async function loadDashboard(){
     (otherProfiles||[]).forEach(p=>profileMap[p.user_id]=p);
   }
 
+  // ── BANNERS ──
+  // 1. Profile approved banner (show once — dismissed via localStorage)
+  const approvedBannerKey=`deserved-approved-seen-${currentUser.id}`;
+  const approvedBannerSeen=localStorage.getItem(approvedBannerKey);
+  const showApprovedBanner=currentProfile.status==='approved'&&!approvedBannerSeen;
+
+  // 2. Newly accepted connections banner (connections I sent that were recently accepted, unseen)
+  const seenKey=`deserved-last-seen-notifs-${currentUser.id}`;
+  const lastSeen=localStorage.getItem(seenKey)||'1970-01-01';
+  const newlyAccepted=allConns.filter(c=>
+    c.requester_id===currentUser.id&&
+    c.status==='accepted'&&
+    c.responded_at&&
+    new Date(c.responded_at)>new Date(lastSeen)
+  );
+
+  // Build banner HTML
+  let bannersHtml='';
+
+  if(showApprovedBanner){
+    bannersHtml+=`
+      <div class="approval-banner" id="approval-banner">
+        <span class="ab-icon">🎉</span>
+        <div style="flex:1">
+          <div class="ab-title">You're live, ${escHtml(name.split(' ')[0])}!</div>
+          <div class="ab-desc">Your profile has been approved by DESERVED. Calgary can now discover your story and connect with you. Share your profile link and let people know you're here.</div>
+          <button class="dash-mini-btn" onclick="dashboardCopyProfileLink()" style="margin-top:10px">Copy Profile Link</button>
+        </div>
+        <button class="ab-dismiss" onclick="dismissApprovalBanner()" title="Dismiss">✕</button>
+      </div>`;
+  }
+
+  if(newlyAccepted.length>0){
+    newlyAccepted.forEach(c=>{
+      const otherId=c.receiver_id;
+      const other=profileMap[otherId];
+      const otherName=other?`${other.first_name||''} ${other.last_name||''}`.trim():'Someone';
+      const otherInitial=otherName.charAt(0).toUpperCase();
+      bannersHtml+=`
+        <div class="accepted-banner">
+          <span style="font-size:28px;flex-shrink:0">🤝</span>
+          <div style="flex:1">
+            <div style="font-family:'Fraunces',serif;font-size:16px;font-weight:800;color:var(--black);margin-bottom:4px">${escHtml(otherName)} accepted your connection!</div>
+            <div style="font-size:13.5px;color:var(--muted);line-height:1.6">You're now connected. ${other?.email?`Their contact: <strong style="color:var(--give)">${escHtml(other.email)}</strong>`:'Head to Connections to see their contact info.'}</div>
+          </div>
+          ${other?`<button class="cfc-btn-view" onclick="viewConnProfile('${otherId}')" style="flex-shrink:0">View Profile →</button>`:''}
+        </div>`;
+    });
+  }
+
   const connColors=['#C46A08','#2A7D4F','#4A6FA5','#8B5E3C','#6B3FA0','#C0392B'];
   const renderConnItem=(c,i)=>{
     const otherId=c.requester_id===currentUser.id?c.receiver_id:c.requester_id;
@@ -2691,6 +2768,7 @@ async function loadDashboard(){
   }
 
   box.innerHTML=`
+    ${bannersHtml}
     <div class="dash-status ${statusClass}">
       <span class="ds-icon">${statusIcon}</span>
       <div><div class="ds-title">${statusTitle}</div><div class="ds-desc">${escHtml(statusDesc)}</div></div>
@@ -2881,6 +2959,19 @@ async function viewConnProfile(userId){
   const{data:prof}=await sb.from('profiles').select('*').eq('user_id',userId).maybeSingle();
   if(prof)showProfilePage(prof,true);
   else toast('Could not load profile.');
+}
+
+function dismissApprovalBanner(){
+  if(!currentUser)return;
+  const key=`deserved-approved-seen-${currentUser.id}`;
+  localStorage.setItem(key,'true');
+  const banner=document.getElementById('approval-banner');
+  if(banner){banner.style.transition='all .4s';banner.style.opacity='0';banner.style.transform='translateY(-8px)';setTimeout(()=>banner.remove(),400);}
+}
+
+function dismissAcceptedBanners(){
+  // Called when user visits connections page — marks all as seen
+  markNotifsAsSeen();
 }
 
 function dashboardCopyProfileLink(){
