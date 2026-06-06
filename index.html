@@ -764,9 +764,9 @@ footer p{font-size:13px;color:rgba(247,244,239,.35)}
     </div>
     <div class="home-trust" id="home-trust">Human-reviewed profiles · Double opt-in connections · Built in Calgary</div>
     <div class="home-stats">
-      <div class="sr"><div class="hs-num" id="stat-members">—</div><div class="hs-label">Members</div></div>
-      <div class="sr"><div class="hs-num" id="stat-connections">—</div><div class="hs-label">Connections Made</div></div>
-      <div class="sr"><div class="hs-num">$0</div><div class="hs-label">Free to Join</div></div>
+      <div class="sr"><div class="hs-num" id="stat-members">—</div><div class="hs-label">Members Live</div></div>
+      <div class="sr"><div class="hs-num" id="stat-connections">—</div><div class="hs-label">Connection Made</div></div>
+      <div class="sr"><div class="hs-num" id="stat-founding-spots">—</div><div class="hs-label">Founding Spots Open</div></div>
     </div>
     <div class="home-how" id="home-how">
       <div class="hh-card sr">
@@ -2036,10 +2036,20 @@ async function submitProfile(){
 // ── STATS ──
 async function loadStats(){
   try{
-    const{count:pc}=await sb.from('profiles').select('*',{count:'exact',head:true});
-    const{count:cc}=await sb.from('connections').select('*',{count:'exact',head:true});
-    document.getElementById('stat-members').textContent=pc??0;
-    document.getElementById('stat-connections').textContent=cc??0;
+    const FOUNDING_GOAL=59;
+    const{count:pc}=await sb.from('profiles').select('*',{count:'exact',head:true}).eq('status','approved');
+    const{count:cc}=await sb.from('connections').select('*',{count:'exact',head:true}).eq('status','accepted');
+    const liveMembers=pc??0;
+    const realConnections=cc??0;
+    const spotsOpen=Math.max(FOUNDING_GOAL-liveMembers,0);
+
+    const membersEl=document.getElementById('stat-members');
+    const connsEl=document.getElementById('stat-connections');
+    const spotsEl=document.getElementById('stat-founding-spots');
+
+    if(membersEl)membersEl.textContent=liveMembers;
+    if(connsEl)connsEl.textContent=realConnections;
+    if(spotsEl)spotsEl.textContent=spotsOpen;
   }catch(e){}
 }
 
