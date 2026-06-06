@@ -169,6 +169,18 @@ h1.home-h .ac{color:var(--accent)}
 .browse-head{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:28px;flex-wrap:wrap;gap:16px}
 .browse-title{font-family:'Fraunces',serif;font-size:clamp(32px,5vw,52px);font-weight:900;letter-spacing:-.04em;color:var(--black)}
 .browse-title .it{font-style:italic;font-weight:300;color:var(--muted)}
+
+.browse-tools{background:var(--warm);border:1px solid var(--border);border-radius:18px;padding:16px;margin-bottom:16px;display:grid;grid-template-columns:1.3fr .7fr;gap:12px}
+.browse-search{width:100%;background:var(--off);border:1.5px solid var(--border);border-radius:100px;padding:12px 16px;font-size:14px;font-family:'DM Sans',sans-serif;color:var(--black);outline:none}
+.browse-search:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(232,130,12,.08)}
+.browse-select{width:100%;background:var(--off);border:1.5px solid var(--border);border-radius:100px;padding:12px 16px;font-size:14px;font-family:'DM Sans',sans-serif;color:var(--black);outline:none}
+.browse-mini-row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:-8px 0 18px;flex-wrap:wrap}
+.browse-count{font-size:12.5px;color:var(--muted);font-weight:700}
+.browse-clear{font-size:12.5px;font-weight:800;color:var(--accent);background:none;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;padding:0}
+.category-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.cat-chip{padding:7px 14px;border-radius:100px;font-size:12px;font-weight:700;border:1.5px solid var(--border);background:var(--off);color:var(--muted);cursor:pointer;transition:all .2s;font-family:'DM Sans',sans-serif}
+.cat-chip:hover,.cat-chip.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+@media(max-width:760px){.browse-tools{grid-template-columns:1fr}}
 .filter-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:28px}
 .filter-chip{padding:8px 18px;border-radius:100px;font-size:13px;font-weight:600;border:1.5px solid var(--border);background:var(--off);color:var(--muted);cursor:pointer;transition:all .2s;font-family:'DM Sans',sans-serif}
 .filter-chip:hover,.filter-chip.active{background:var(--black);color:var(--off);border-color:var(--black)}
@@ -225,6 +237,27 @@ h1.home-h .ac{color:var(--accent)}
 .admin-tools{background:var(--off);border:1px solid var(--border);border-radius:16px;padding:16px;margin-bottom:24px;display:flex;gap:10px;flex-wrap:wrap;align-items:center}
 .admin-search{flex:1;min-width:220px;background:var(--warm);border:1.5px solid var(--border);border-radius:100px;padding:11px 16px;font-size:14px;font-family:'DM Sans',sans-serif;outline:none;color:var(--black)}
 .admin-search:focus{border-color:var(--accent)}
+.admin-review-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:24px}
+.admin-review-card{background:var(--off);border:1px solid var(--border);border-radius:16px;padding:16px 18px}
+.arc-label{font-size:11px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.arc-val{font-family:'Fraunces',serif;font-size:24px;font-weight:900;color:var(--black);letter-spacing:-.04em}
+.arc-note{font-size:12px;color:var(--muted);margin-top:4px;line-height:1.45}
+.admin-chip.attn{border-color:rgba(217,79,61,.3);color:var(--need)}
+.admin-chip.attn.active,.admin-chip.attn:hover{background:var(--need);color:#fff;border-color:var(--need)}
+.ai-quality{display:flex;gap:6px;flex-wrap:wrap;margin-top:7px}
+.ai-qchip{font-size:10.5px;font-weight:800;border-radius:100px;padding:3px 8px;background:var(--warm);border:1px solid var(--border);color:var(--muted)}
+.ai-qchip.good{background:rgba(42,125,79,.07);border-color:rgba(42,125,79,.2);color:var(--give)}
+.ai-qchip.warn{background:rgba(217,79,61,.07);border-color:rgba(217,79,61,.2);color:var(--need)}
+.ai-highlight{background:rgba(232,130,12,.06);border:1px solid rgba(232,130,12,.18);border-radius:14px;padding:14px 16px;margin:14px 0}
+.ai-highlight-title{font-size:10.5px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:6px}
+.ai-highlight-text{font-size:13px;color:var(--black);line-height:1.55;font-weight:600}
+.ai-review-list{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin:12px 0}
+.ai-review-check{font-size:12px;color:var(--muted);display:flex;gap:7px;align-items:center}
+.ai-review-check.good span:first-child{color:var(--give)}
+.ai-review-check.warn span:first-child{color:var(--need)}
+@media(max-width:900px){.admin-review-strip{grid-template-columns:repeat(2,1fr)}.ai-review-list{grid-template-columns:1fr}}
+@media(max-width:540px){.admin-review-strip{grid-template-columns:1fr}}
+
 .admin-chip{padding:9px 16px;border-radius:100px;font-size:12.5px;font-weight:700;border:1.5px solid var(--border);background:var(--off);color:var(--muted);cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s}
 .admin-chip:hover,.admin-chip.active{background:var(--black);color:var(--off);border-color:var(--black)}
 .btn-view-sm{background:var(--black);color:var(--off);padding:9px 18px;border-radius:100px;font-size:13px;font-weight:600;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s}
@@ -321,12 +354,31 @@ h1.home-h .ac{color:var(--accent)}
 .btn-decline-sm:hover{border-color:var(--need);color:var(--need)}
 .conn-badge{background:var(--need);color:#fff;font-size:10px;font-weight:700;padding:2px 7px;border-radius:100px;margin-left:4px}
 #page-stories{background:var(--off)}
-.stories-wrap{max-width:900px;margin:0 auto;padding:100px 40px 80px;text-align:center}
+.stories-wrap{max-width:1060px;margin:0 auto;padding:100px 40px 80px}
+.stories-hero{text-align:center;max-width:680px;margin:0 auto 36px}
 .stories-wrap h2{font-family:'Fraunces',serif;font-size:clamp(36px,5vw,60px);font-weight:900;letter-spacing:-.04em;color:var(--black);margin-bottom:16px}
 .stories-wrap h2 .it{font-style:italic;font-weight:300;color:var(--muted)}
-.stories-coming{background:var(--warm);border:1px solid var(--border);border-radius:24px;padding:48px 40px;margin-top:40px;text-align:left}
-.stories-coming h3{font-family:'Fraunces',serif;font-size:24px;font-weight:700;color:var(--black);margin-bottom:12px;letter-spacing:-.02em}
-.stories-coming p{font-size:15px;color:var(--muted);line-height:1.75}
+.stories-sub{font-size:16px;color:var(--muted);line-height:1.7}
+.stories-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:18px;margin-top:28px}
+.story-feature{background:var(--warm);border:1px solid var(--border);border-radius:24px;padding:34px;position:relative;overflow:hidden}
+.story-feature::after{content:'';position:absolute;right:-70px;top:-70px;width:180px;height:180px;border-radius:50%;background:rgba(232,130,12,.08)}
+.story-kicker{font-size:11px;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:10px}
+.story-title{font-family:'Fraunces',serif;font-size:32px;font-weight:900;letter-spacing:-.04em;color:var(--black);line-height:1.05;margin-bottom:12px}
+.story-text{font-size:15px;color:var(--muted);line-height:1.8;margin-bottom:18px}
+.story-actions{display:flex;gap:10px;flex-wrap:wrap}
+.story-side{display:grid;gap:14px}
+.story-card{background:var(--warm);border:1px solid var(--border);border-radius:20px;padding:22px}
+.story-card h3{font-family:'Fraunces',serif;font-size:20px;font-weight:800;color:var(--black);letter-spacing:-.03em;margin-bottom:8px}
+.story-card p{font-size:14px;color:var(--muted);line-height:1.7}
+.story-pill-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.story-pill{font-size:11.5px;font-weight:800;border:1px solid var(--border);background:var(--off);color:var(--muted);padding:5px 10px;border-radius:100px}
+.story-process{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:20px}
+.story-step{background:var(--warm);border:1px solid var(--border);border-radius:18px;padding:20px}
+.story-step span{display:inline-flex;width:26px;height:26px;align-items:center;justify-content:center;border-radius:50%;background:var(--black);color:var(--off);font-size:12px;font-weight:900;margin-bottom:10px}
+.story-step strong{display:block;font-family:'Fraunces',serif;font-size:17px;color:var(--black);margin-bottom:6px}
+.story-step p{font-size:13px;color:var(--muted);line-height:1.65}
+.story-note{background:rgba(42,125,79,.06);border:1px solid rgba(42,125,79,.18);border-radius:18px;padding:18px 20px;margin-top:18px;font-size:13.5px;color:var(--muted);line-height:1.7}
+@media(max-width:900px){.stories-grid,.story-process{grid-template-columns:1fr}.story-feature{padding:28px}.stories-wrap{padding:80px 24px}}
 
 /* ── PROFILE PAGE ── */
 #page-profile{background:var(--off)}
@@ -918,11 +970,37 @@ footer p{font-size:13px;color:rgba(247,244,239,.35)}
         <p style="font-size:14px;color:var(--muted);margin-top:6px">Every profile reviewed by a real human.</p>
       </div>
     </div>
+    <div class="browse-tools">
+      <input id="browse-search" class="browse-search" type="search" placeholder="Search by name, skill, focus, language, or area…" oninput="applyBrowseFilters()">
+      <select id="browse-area" class="browse-select" onchange="applyBrowseFilters()">
+        <option value="all">All Calgary areas</option>
+        <option value="NE Calgary">NE Calgary</option>
+        <option value="NW Calgary">NW Calgary</option>
+        <option value="SE Calgary">SE Calgary</option>
+        <option value="SW Calgary">SW Calgary</option>
+        <option value="Downtown Calgary">Downtown Calgary</option>
+        <option value="Outside Calgary">Outside Calgary</option>
+      </select>
+    </div>
     <div class="filter-row">
       <button class="filter-chip active" onclick="setFilter('all',this)">All People</button>
       <button class="filter-chip" onclick="setFilter('need',this)">Looking for work</button>
       <button class="filter-chip" onclick="setFilter('give',this)">Offering help</button>
       <button class="filter-chip" onclick="setFilter('both',this)">Both</button>
+    </div>
+    <div class="category-row">
+      <button class="cat-chip active" onclick="setBrowseCategory('all',this)">All Categories</button>
+      <button class="cat-chip" onclick="setBrowseCategory('web',this)">Web / AI</button>
+      <button class="cat-chip" onclick="setBrowseCategory('teaching',this)">Teaching</button>
+      <button class="cat-chip" onclick="setBrowseCategory('music',this)">Music</button>
+      <button class="cat-chip" onclick="setBrowseCategory('business',this)">Business</button>
+      <button class="cat-chip" onclick="setBrowseCategory('creative',this)">Creative</button>
+      <button class="cat-chip" onclick="setBrowseCategory('mentor',this)">Mentorship</button>
+      <button class="cat-chip" onclick="setBrowseCategory('food',this)">Food / Events</button>
+    </div>
+    <div class="browse-mini-row">
+      <div class="browse-count" id="browse-count">Showing profiles…</div>
+      <button class="browse-clear" onclick="clearBrowseFilters()">Clear filters</button>
     </div>
     <div id="profiles-grid" class="profiles-grid">
       <div class="empty-state"><span>🔍</span><h3>Loading profiles…</h3></div>
@@ -1066,12 +1144,60 @@ footer p{font-size:13px;color:rgba(247,244,239,.35)}
 <!-- STORIES -->
 <section id="page-stories" class="page">
   <div class="stories-wrap">
-    <h2>Real stories.<br><span class="it">Real Calgary.</span></h2>
-    <p style="font-size:16px;color:var(--muted);max-width:500px;margin:0 auto">Coming soon — stories of people who deserved a chance and got one. And those still waiting.</p>
-    <div class="stories-coming">
-      <h3>DESERVED is not just profiles.</h3>
-      <p>Every week, a real story from someone in Calgary — their journey, their wall, their breakthrough. Fighting fake narratives with overwhelming human truth.</p>
-      <button class="btn-primary" onclick="requireAuthOrOnboard()" style="margin-top:20px">Join & Submit Your Story →</button>
+    <div class="stories-hero">
+      <h2>Stories that<br><span class="it">create opportunity.</span></h2>
+      <p class="stories-sub">DESERVED Stories is where Calgary connections turn into real outcomes — mentorship, collaborations, work, help, and small wins that matter.</p>
+    </div>
+
+    <div class="stories-grid">
+      <div class="story-feature">
+        <div class="story-kicker">Coming Soon · Calgary Outcomes</div>
+        <div class="story-title">Not a feed. Not popularity. Real proof that someone was seen.</div>
+        <p class="story-text">When a DESERVED connection leads to something meaningful, the member can submit a short outcome story. Admin reviews it before it appears here, so this page stays useful, respectful, and real.</p>
+        <div class="story-actions">
+          <button class="btn-primary" onclick="requireAuthOrOnboard()">Create Your Profile →</button>
+          <button class="btn-outline" onclick="showPage('browse')">Browse People</button>
+        </div>
+      </div>
+
+      <div class="story-side">
+        <div class="story-card">
+          <h3>What counts as a story?</h3>
+          <p>A mentor replied. A business found help. A creator found a collaborator. A newcomer got guidance. A student found support. A small opportunity became real.</p>
+          <div class="story-pill-row">
+            <span class="story-pill">Mentorship</span>
+            <span class="story-pill">Collaboration</span>
+            <span class="story-pill">Work</span>
+            <span class="story-pill">Community Help</span>
+          </div>
+        </div>
+        <div class="story-card">
+          <h3>Why it matters</h3>
+          <p>DESERVED is built to show that people are more than resumes, references, algorithms, and first impressions. Stories help Calgary see the outcomes, not just the profiles.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="story-process">
+      <div class="story-step">
+        <span>1</span>
+        <strong>Connect</strong>
+        <p>Two people connect through a double opt-in request.</p>
+      </div>
+      <div class="story-step">
+        <span>2</span>
+        <strong>Something happens</strong>
+        <p>They help, collaborate, guide, hire, teach, or support each other.</p>
+      </div>
+      <div class="story-step">
+        <span>3</span>
+        <strong>Story gets reviewed</strong>
+        <p>A short outcome story can be submitted and approved before going public.</p>
+      </div>
+    </div>
+
+    <div class="story-note">
+      <strong style="color:var(--black)">Safety note:</strong> Stories will never publish private contact details, payment details, or sensitive personal information. DESERVED may share outcomes, but users are responsible for their own private conversations and decisions.
     </div>
   </div>
 </section>
@@ -1096,8 +1222,15 @@ footer p{font-size:13px;color:rgba(247,244,239,.35)}
       <input class="admin-search" id="admin-search" type="search" placeholder="Search members by name, email, skill, or area…" oninput="applyAdminFilters()">
       <button class="admin-chip active" onclick="setAdminFilter('all',this)">All</button>
       <button class="admin-chip" onclick="setAdminFilter('pending',this)">Pending</button>
+      <button class="admin-chip attn" onclick="setAdminFilter('attention',this)">Needs Attention</button>
       <button class="admin-chip" onclick="setAdminFilter('approved',this)">Approved</button>
       <button class="admin-chip" onclick="setAdminFilter('rejected',this)">Rejected</button>
+    </div>
+    <div class="admin-review-strip">
+      <div class="admin-review-card"><div class="arc-label">Review Quality</div><div class="arc-val" id="adm-quality">—</div><div class="arc-note">Complete pending profiles</div></div>
+      <div class="admin-review-card"><div class="arc-label">Needs Attention</div><div class="arc-val" id="adm-attention">—</div><div class="arc-note">Missing key info</div></div>
+      <div class="admin-review-card"><div class="arc-label">Recently Edited</div><div class="arc-val" id="adm-edited">—</div><div class="arc-note">Back in review</div></div>
+      <div class="admin-review-card"><div class="arc-label">Founding Members</div><div class="arc-val" id="adm-founding">—</div><div class="arc-note">Approved profiles</div></div>
     </div>
     <div class="admin-section-title">
       <span>⏳ Pending Review</span>
@@ -1136,7 +1269,7 @@ const sb=createClient(SUPABASE_URL,SUPABASE_ANON_KEY,{
   auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true,storage:window.localStorage,storageKey:'deserved-auth-session'}
 });
 
-let currentUser=null,currentProfile=null,currentFilter='all',allProfiles=[],myConnections=[],editMode=false,profileReturnTarget=null,adminAllProfiles=[],adminStatusFilter='all';
+let currentUser=null,currentProfile=null,currentFilter='all',browseCategory='all',allProfiles=[],myConnections=[],editMode=false,profileReturnTarget=null,adminAllProfiles=[],adminStatusFilter='all';
 let appInitialized=false;
 let handlingBrowserNav=false;
 let onboard={role:'',skills:[]};
@@ -1614,36 +1747,124 @@ async function loadProfiles(){
   const box=document.getElementById('profiles-grid');
   box.innerHTML='<div class="empty-state"><span>🔍</span><h3>Loading profiles…</h3></div>';
   try{
-    let query=sb.from('profiles').select('*').order('created_at',{ascending:false});
-    if(currentFilter!=='all')query=query.eq('role',currentFilter);
-    const{data,error}=await query;
+    const{data,error}=await sb.from('profiles').select('*').order('created_at',{ascending:false});
     if(error){box.innerHTML=`<div class="empty-state"><span>⚠️</span><h3>Could not load profiles</h3><p>${escHtml(error.message)}</p></div>`;return;}
     const visible=(data||[]).filter(p=>p.status==='approved'||p.user_id===currentUser?.id);
     allProfiles=visible;
     renderBrowsePreviewLoop(visible);
+
     // Load my connections if signed in
     if(currentUser){
       const{data:conns}=await sb.from('connections').select('*').or(`requester_id.eq.${currentUser.id},receiver_id.eq.${currentUser.id}`);
       myConnections=conns||[];
     }
-    if(!visible.length){renderBrowsePreviewLoop([]);box.innerHTML='<div class="empty-state"><span>🌱</span><h3>Be the first.</h3><p>No approved profiles yet. Join DESERVED and be the first person Calgary sees here.</p></div>';return;}
-    box.innerHTML=visible.map(renderProfileCard).join('');
-    // Make cards clickable
-    document.querySelectorAll('.profile-card[data-uid]').forEach(card=>{
-      card.style.cursor='pointer';
-      card.addEventListener('click',function(e){
-        if(e.target.classList.contains('pc-connect-btn')||e.target.classList.contains('pc-connected-btn'))return;
-        const uid=this.dataset.uid;
-        const p=visible.find(x=>x.user_id===uid);
-        if(p)showProfilePage(p,true);
-      });
-    });
-  }catch(err){box.innerHTML='<div class="empty-state"><span>⚠️</span><h3>Could not load profiles.</h3></div>';}
+
+    renderFilteredProfiles();
+  }catch(err){
+    box.innerHTML='<div class="empty-state"><span>⚠️</span><h3>Could not load profiles.</h3></div>';
+  }
 }
+
+function profileSearchText(p){
+  const skills=Array.isArray(p.skills)?p.skills:typeof p.skills==='string'?p.skills.split(','):[];
+  return [
+    p.first_name,p.last_name,p.city_area,p.origin,p.languages,p.role,p.need_type,p.need_description,
+    p.current_focus,p.ask_me_about,p.story,p.experience,...skills
+  ].filter(Boolean).join(' ').toLowerCase();
+}
+
+function categoryMatches(p,cat){
+  if(cat==='all')return true;
+  const text=profileSearchText(p);
+  const groups={
+    web:['web','website','app','ai','automation','digital','software','coding','design'],
+    teaching:['teach','teacher','tutor','school','study','education','math','homework'],
+    music:['music','sing','singer','song','songwriting','lyric','composition','performance'],
+    business:['business','marketing','sales','strategy','startup','brand','client'],
+    creative:['creative','photo','video','content','design','art','creator','media'],
+    mentor:['mentor','guide','coaching','career','resume','support','advice'],
+    food:['food','cook','cooking','events','market','catering']
+  };
+  return (groups[cat]||[]).some(k=>text.includes(k));
+}
+
+function getFilteredProfiles(){
+  const q=(document.getElementById('browse-search')?.value||'').trim().toLowerCase();
+  const area=document.getElementById('browse-area')?.value||'all';
+  return allProfiles.filter(p=>{
+    const roleOk=currentFilter==='all'||p.role===currentFilter;
+    const areaOk=area==='all'||p.city_area===area;
+    const catOk=categoryMatches(p,browseCategory);
+    const qOk=!q||profileSearchText(p).includes(q);
+    return roleOk&&areaOk&&catOk&&qOk;
+  });
+}
+
+function renderFilteredProfiles(){
+  const box=document.getElementById('profiles-grid');
+  const countEl=document.getElementById('browse-count');
+  const filtered=getFilteredProfiles();
+
+  if(countEl){
+    const total=allProfiles.length;
+    countEl.textContent=`Showing ${filtered.length} of ${total} profile${total===1?'':'s'}`;
+  }
+
+  if(!allProfiles.length){
+    renderBrowsePreviewLoop([]);
+    box.innerHTML='<div class="empty-state"><span>🌱</span><h3>Be the first.</h3><p>No approved profiles yet. Join DESERVED and be the first person Calgary sees here.</p></div>';
+    return;
+  }
+
+  if(!filtered.length){
+    box.innerHTML='<div class="empty-state"><span>🔎</span><h3>No profiles found.</h3><p>Try clearing filters or searching a different skill, area, or category.</p></div>';
+    return;
+  }
+
+  box.innerHTML=filtered.map(renderProfileCard).join('');
+
+  // Make cards clickable
+  document.querySelectorAll('.profile-card[data-uid]').forEach(card=>{
+    card.style.cursor='pointer';
+    card.addEventListener('click',function(e){
+      if(e.target.classList.contains('pc-connect-btn')||e.target.classList.contains('pc-connected-btn'))return;
+      const uid=this.dataset.uid;
+      const p=filtered.find(x=>x.user_id===uid);
+      if(p)showProfilePage(p,true);
+    });
+  });
+}
+
+function applyBrowseFilters(){
+  renderFilteredProfiles();
+}
+
+function setBrowseCategory(cat,btn){
+  browseCategory=cat;
+  document.querySelectorAll('.cat-chip').forEach(b=>b.classList.remove('active'));
+  if(btn)btn.classList.add('active');
+  renderFilteredProfiles();
+}
+
+function clearBrowseFilters(){
+  currentFilter='all';
+  browseCategory='all';
+  const search=document.getElementById('browse-search');
+  const area=document.getElementById('browse-area');
+  if(search)search.value='';
+  if(area)area.value='all';
+  document.querySelectorAll('.filter-chip').forEach(b=>b.classList.remove('active'));
+  document.querySelector('.filter-chip')?.classList.add('active');
+  document.querySelectorAll('.cat-chip').forEach(b=>b.classList.remove('active'));
+  document.querySelector('.cat-chip')?.classList.add('active');
+  renderFilteredProfiles();
+}
+
 function setFilter(filter,btn){
   currentFilter=filter;
   document.querySelectorAll('.filter-chip').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');loadProfiles();
+  if(btn)btn.classList.add('active');
+  renderFilteredProfiles();
 }
 
 
@@ -2485,6 +2706,37 @@ function updateAdminNav(){
   if(btn)btn.style.display=isAdmin()?'inline-flex':'none';
 }
 
+
+function adminProfileChecks(p){
+  const skills=Array.isArray(p.skills)?p.skills:typeof p.skills==='string'?p.skills.split(',').map(s=>s.trim()).filter(Boolean):[];
+  return [
+    ['Story',!!p.story],
+    ['Skills',skills.length>0],
+    ['Need / Offer',!!p.need_type||p.role==='give'],
+    ['Current Focus',!!p.current_focus],
+    ['Ask Me About',!!p.ask_me_about],
+    ['Location',!!p.city_area],
+    ['Languages',!!p.languages]
+  ];
+}
+
+function adminCompletenessScore(p){
+  const checks=adminProfileChecks(p);
+  const done=checks.filter(c=>c[1]).length;
+  return Math.round((done/checks.length)*100);
+}
+
+function adminNeedsAttention(p){
+  return adminCompletenessScore(p)<70 || !p.story || !p.city_area || !(Array.isArray(p.skills)?p.skills.length:typeof p.skills==='string'?p.skills.trim():false);
+}
+
+function adminIsRecentlyEdited(p){
+  if(!p.updated_at||!p.created_at)return false;
+  const u=new Date(p.updated_at).getTime();
+  const c=new Date(p.created_at).getTime();
+  return Math.abs(u-c)>60000 && p.status==='pending';
+}
+
 async function loadAdminData(){
   if(!currentUser){
     // Wait a moment for session to load
@@ -2497,9 +2749,13 @@ async function loadAdminData(){
   adminAllProfiles=profiles||[];
 
   const total=adminAllProfiles.length;
-  const pending=adminAllProfiles.filter(p=>p.status==='pending').length;
+  const pendingProfilesRaw=adminAllProfiles.filter(p=>p.status==='pending');
+  const pending=pendingProfilesRaw.length;
   const approved=adminAllProfiles.filter(p=>p.status==='approved').length;
   const rejected=adminAllProfiles.filter(p=>p.status==='rejected').length;
+  const needsAttention=pendingProfilesRaw.filter(adminNeedsAttention).length;
+  const recentlyEdited=pendingProfilesRaw.filter(adminIsRecentlyEdited).length;
+  const quality=pending?Math.round(pendingProfilesRaw.filter(p=>adminCompletenessScore(p)>=70).length/pending*100):100;
   const{count:conns}=await sb.from('connections').select('*',{count:'exact',head:true});
 
   document.getElementById('adm-total').textContent=total;
@@ -2510,6 +2766,10 @@ async function loadAdminData(){
   document.getElementById('approved-count').textContent=approved?`${approved} members`:'';
   const rejectedCount=document.getElementById('rejected-count');
   if(rejectedCount)rejectedCount.textContent=rejected?`${rejected} rejected`:'';
+  document.getElementById('adm-quality').textContent=quality+'%';
+  document.getElementById('adm-attention').textContent=needsAttention;
+  document.getElementById('adm-edited').textContent=recentlyEdited;
+  document.getElementById('adm-founding').textContent=approved;
 
   applyAdminFilters();
 }
@@ -2528,7 +2788,7 @@ function applyAdminFilters(){
       p.first_name,p.last_name,p.email,p.city_area,p.origin,p.languages,p.role,p.status,p.need_type,p.need_description,p.story,
       ...(Array.isArray(p.skills)?p.skills:typeof p.skills==='string'?p.skills.split(','):[])
     ].filter(Boolean).join(' ').toLowerCase();
-    const statusOk=adminStatusFilter==='all'||p.status===adminStatusFilter;
+    const statusOk=adminStatusFilter==='all'||(adminStatusFilter==='attention'?adminNeedsAttention(p):p.status===adminStatusFilter);
     const searchOk=!q||hay.includes(q);
     return statusOk&&searchOk;
   };
@@ -2566,6 +2826,10 @@ function renderAdminQueue(containerId,profiles,type){
     const badgeClass=p.role==='need'?'badge-need':p.role==='give'?'badge-give':p.role==='both'?'badge-both':'badge-member';
     const badgeText=p.role==='need'?'🙋 Looking':p.role==='give'?'🤝 Giving':p.role==='both'?'⚡ Both':'Member';
     const date=p.created_at?new Date(p.created_at).toLocaleDateString('en-CA',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'}):'—';
+    const score=adminCompletenessScore(p);
+    const checks=adminProfileChecks(p);
+    const attention=adminNeedsAttention(p);
+    const edited=adminIsRecentlyEdited(p);
     return `
       <div class="admin-item" id="ai-${p.id}">
         <div class="admin-item-header" onclick="toggleAdminItem('${p.id}')">
@@ -2573,12 +2837,23 @@ function renderAdminQueue(containerId,profiles,type){
           <div>
             <div class="ai-name">${escHtml(name)} ${isFoundingMember(p)?'<span class="founding-badge" style="margin-left:6px;margin-top:0">✦ Founding</span>':''}</div>
             <div class="ai-sub">${escHtml(p.city_area||'Calgary')} · ${escHtml(p.email||'')}</div>
+            <div class="ai-quality">
+              <span class="ai-qchip ${score>=70?'good':'warn'}">${score}% complete</span>
+              ${attention?'<span class="ai-qchip warn">Needs attention</span>':''}
+              ${edited?'<span class="ai-qchip">Recently edited</span>':''}
+              ${p.current_focus?'<span class="ai-qchip good">Focus added</span>':''}
+            </div>
           </div>
           <span class="ai-role pc-badge ${badgeClass}">${badgeText}</span>
           <span class="ai-time">${date}</span>
           <button class="ai-chevron">▼</button>
         </div>
         <div class="admin-item-body">
+          ${p.current_focus?`<div class="ai-highlight"><div class="ai-highlight-title">Current Focus</div><div class="ai-highlight-text">${escHtml(p.current_focus)}</div></div>`:''}
+          ${p.ask_me_about?`<div class="ai-highlight"><div class="ai-highlight-title">Ask Me About</div><div class="ai-highlight-text">${escHtml(p.ask_me_about)}</div></div>`:''}
+          <div class="ai-review-list">
+            ${checks.map(([label,ok])=>`<div class="ai-review-check ${ok?'good':'warn'}"><span>${ok?'✓':'○'}</span><span>${escHtml(label)}</span></div>`).join('')}
+          </div>
           <div class="ai-grid">
             <div><div class="ai-field-label">Email</div><div class="ai-field-val">${escHtml(p.email||'—')}</div></div>
             <div><div class="ai-field-label">Location</div><div class="ai-field-val">${escHtml(p.city_area||'—')}</div></div>
@@ -2589,11 +2864,12 @@ function renderAdminQueue(containerId,profiles,type){
             <div><div class="ai-field-label">Looking For</div><div class="ai-field-val">${escHtml(p.need_type||'—')}</div></div>
             <div><div class="ai-field-label">Status</div><div class="ai-field-val">${escHtml(p.status||'—')}</div></div>
           </div>
+          ${p.need_description?`<div class="ai-story"><div class="ai-field-label" style="margin-bottom:8px">Need / Offer Details</div><p>${escHtml(p.need_description)}</p></div>`:''}
           ${p.story?`<div class="ai-story"><div class="ai-field-label" style="margin-bottom:8px">Their Story</div><p>${escHtml(p.story)}</p></div>`:''}
           ${skills.length?`<div><div class="ai-field-label" style="margin-bottom:8px">Skills</div><div class="ai-skills">${skills.map(s=>`<span class="ai-skill">${escHtml(s)}</span>`).join('')}</div></div>`:''}
           ${p.rejection_reason?`<div class="ai-story" style="border:1px solid rgba(217,79,61,.18)"><div class="ai-field-label" style="margin-bottom:8px;color:var(--need)">Rejection Reason</div><p>${escHtml(p.rejection_reason)}</p></div>`:''}
           <div class="ai-actions">
-            <button class="btn-view-sm" onclick="adminViewProfile('${p.id}')">View Profile</button>
+            <button class="btn-view-sm" onclick="adminViewProfile('${p.id}')">View Public Profile</button>
             ${type==='pending'?`
               <button class="btn-approve" onclick="approveProfile('${p.id}','${escJs(name)}')">✓ Approve</button>
               <button class="btn-reject" onclick="showRejectBox('${p.id}')">✕ Reject</button>
@@ -2612,7 +2888,6 @@ function renderAdminQueue(containerId,profiles,type){
       </div>`;
   }).join('');
 }
-
 
 function adminViewProfile(id){
   const p=adminAllProfiles.find(x=>x.id===id||x.user_id===id);
