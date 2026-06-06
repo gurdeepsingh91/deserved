@@ -2751,19 +2751,66 @@ function profileMatchIdeas(profile,skills=[]){
   return [...new Set(ideas)].slice(0,6);
 }
 
-function buildWhyConnect(profile,skills=[]){
+
+function possessiveName(profile){
+  const name=(profile.first_name||'this member').trim();
+  return name.endsWith('s')?`${name}'`:`${name}'s`;
+}
+
+function normalizePublicPhrase(text,profile,isOwn=false){
+  let t=String(text||'').trim();
+  if(!t)return '';
+  if(isOwn)return t;
+
+  const first=(profile.first_name||'this member').trim();
+  const poss=possessiveName(profile);
+
+  // Keep transformations intentionally conservative.
+  t=t
+    .replace(/\bmyself\b/gi, first)
+    .replace(/\bmy\b/gi, poss)
+    .replace(/\bmine\b/gi, `${poss}`)
+    .replace(/\bme\b/gi, first)
+    .replace(/\bI am\b/gi, `${first} is`)
+    .replace(/\bI'm\b/gi, `${first} is`)
+    .replace(/\bi’m\b/gi, `${first} is`)
+    .replace(/\bI have\b/gi, `${first} has`)
+    .replace(/\bI need\b/gi, `${first} needs`)
+    .replace(/\bI want\b/gi, `${first} wants`)
+    .replace(/\bI can\b/gi, `${first} can`)
+    .replace(/\bI\b/g, first);
+
+  return t.charAt(0).toUpperCase()+t.slice(1);
+}
+
+function lowerFirstForSentence(text){
+  const t=String(text||'').trim();
+  if(!t)return '';
+  return t.charAt(0).toLowerCase()+t.slice(1);
+}
+
+function buildWhyConnect(profile,skills=[],isOwn=false){
   const name=(profile.first_name||'this member').trim();
   const skillPart=skills.slice(0,3).join(', ');
+  const goal=lowerFirstForSentence(normalizePublicPhrase(profile.need_type||profile.need_description||'this goal',profile,isOwn));
+
+  if(isOwn){
+    if(profile.role==='give')return `People can connect with you if they are looking for support around ${skillPart||'your skills'}, guidance, collaboration, or local community help.`;
+    if(profile.role==='need')return `People can connect with you if they can help with ${goal}, offer guidance, share a useful connection, or support your next step.`;
+    if(profile.role==='both')return `People can connect with you if they see a fit around ${skillPart||'your skills'}, collaboration, mentorship, local opportunities, or mutual support.`;
+    return `People can connect with you if your story, skills, or goals align with something they can offer or need.`;
+  }
+
   if(profile.role==='give'){
-    return `Connect with ${name} if you are looking for support around ${skillPart||'their skills'}, guidance, collaboration, or local community help.`;
+    return `Connect with ${name} if you are looking for support around ${skillPart||possessiveName(profile)+' skills'}, guidance, collaboration, or local community help.`;
   }
   if(profile.role==='need'){
-    return `Connect with ${name} if you can help with ${profile.need_type||'an opportunity'}, offer guidance, share a useful connection, or support their next step.`;
+    return `Connect with ${name} if you can help with ${goal}, offer guidance, share a useful connection, or support ${possessiveName(profile)} next step.`;
   }
   if(profile.role==='both'){
-    return `Connect with ${name} if you see a fit around ${skillPart||'their skills'}, collaboration, mentorship, local opportunities, or mutual support.`;
+    return `Connect with ${name} if you see a fit around ${skillPart||possessiveName(profile)+' skills'}, collaboration, mentorship, local opportunities, or mutual support.`;
   }
-  return `Connect with ${name} if their story, skills, or goals align with something you can offer or need.`;
+  return `Connect with ${name} if ${possessiveName(profile)} story, skills, or goals align with something you can offer or need.`;
 }
 
 
@@ -2774,11 +2821,20 @@ function askTopics(profile,skills=[]){
   return [...new Set(combined.map(s=>s.trim()).filter(Boolean))].slice(0,8);
 }
 
-function defaultCurrentFocus(profile,skills=[]){
-  if(profile.current_focus)return profile.current_focus;
+function defaultCurrentFocus(profile,skills=[],isOwn=false){
+  if(profile.current_focus){
+    const text=normalizePublicPhrase(profile.current_focus,profile,isOwn);
+    return isOwn?text:`${profile.first_name||'This member'} is currently ${lowerFirstForSentence(text).replace(/^is currently\s+/i,'')}`;
+  }
   const name=profile.first_name||'This member';
-  if(profile.role==='give')return `${name} is currently open to helping with ${skills.slice(0,2).join(' and ')||'their skills'}.`;
-  if(profile.role==='need')return `${name} is currently looking for ${profile.need_type||'a local opportunity'}.`;
+  if(isOwn){
+    if(profile.role==='give')return `You are currently open to helping with ${skills.slice(0,2).join(' and ')||'your skills'}.`;
+    if(profile.role==='need')return `You are currently looking for ${profile.need_type||'a local opportunity'}.`;
+    if(profile.role==='both')return `You are open to both giving help and finding the right local opportunity.`;
+    return `You are open to meaningful Calgary connections.`;
+  }
+  if(profile.role==='give')return `${name} is currently open to helping with ${skills.slice(0,2).join(' and ')||possessiveName(profile)+' skills'}.`;
+  if(profile.role==='need')return `${name} is currently looking for ${normalizePublicPhrase(profile.need_type||'a local opportunity',profile,false)}.`;
   if(profile.role==='both')return `${name} is open to both giving help and finding the right local opportunity.`;
   return `${name} is open to meaningful Calgary connections.`;
 }
@@ -2810,9 +2866,11 @@ async function showProfilePage(profile,pushHistory=true){
   const badgeClass=profile.role==='need'?'badge-need':profile.role==='give'?'badge-give':profile.role==='both'?'badge-both':'badge-member';
   const badgeText=profile.role==='need'?'🙋 Looking for work':profile.role==='give'?'🤝 Offering help':profile.role==='both'?'⚡ Need & Give':'Member';
   const matches=profileMatchIdeas(profile,skills);
-  const whyConnect=buildWhyConnect(profile,skills);
+  const whyConnect=buildWhyConnect(profile,skills,isOwn);
   const asks=askTopics(profile,skills);
-  const focusText=defaultCurrentFocus(profile,skills);
+  const focusText=defaultCurrentFocus(profile,skills,isOwn);
+  const displayNeedType=normalizePublicPhrase(profile.need_type||'',profile,isOwn);
+  const displayNeedDesc=normalizePublicPhrase(profile.need_description||'',profile,isOwn);
 
   // Avatar
   const avEl=document.getElementById('prof-av');
@@ -2889,7 +2947,7 @@ async function showProfilePage(profile,pushHistory=true){
       const needColor=profile.role==='give'?'var(--give)':profile.role==='both'?'var(--both)':'var(--need)';
       storyBody.innerHTML+=`<div class="need-box" style="border-color:${needColor}20;background:${needColor}08">
         <div class="nb-label" style="color:${needColor}">${needLabel}</div>
-        <div class="nb-text">${escHtml(profile.need_type||'')}${profile.need_description?' — '+escHtml(profile.need_description):''}</div>
+        <div class="nb-text">${escHtml(displayNeedType||'')}${displayNeedDesc?' — '+escHtml(displayNeedDesc):''}</div>
       </div>`;
     }
   } else {
@@ -2899,7 +2957,7 @@ async function showProfilePage(profile,pushHistory=true){
   // At a glance + why connect
   const glance=document.getElementById('prof-glance-grid');
   if(glance){
-    const looking=profile.need_type||(
+    const looking=displayNeedType||(
       profile.role==='give'?'Offering help':profile.role==='both'?'Open to giving and receiving':'Looking for opportunity'
     );
     const canOffer=skills.slice(0,3).join(' · ')||'Story, experience, and community connection';
