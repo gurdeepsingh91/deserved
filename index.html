@@ -248,6 +248,27 @@ h1.home-h .ac{color:var(--accent)}
 .ds-title{font-family:'Fraunces',serif;font-size:17px;font-weight:700;color:var(--black);margin-bottom:3px}
 .ds-desc{font-size:13.5px;color:var(--muted);line-height:1.6}
 .dash-profile-card{background:var(--warm);border:1px solid var(--border);border-radius:20px;padding:28px;margin-bottom:20px}
+.dash-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:18px;margin-bottom:18px}
+.dash-card{background:var(--warm);border:1px solid var(--border);border-radius:20px;padding:24px}
+.dash-card-title{font-family:'Fraunces',serif;font-size:18px;font-weight:800;color:var(--black);letter-spacing:-.02em;margin-bottom:12px}
+.dash-link-box{background:var(--off);border:1px solid var(--border);border-radius:14px;padding:12px 14px;font-size:12.5px;color:var(--muted);line-height:1.5;word-break:break-all;margin-bottom:12px}
+.dash-action-row{display:flex;gap:10px;flex-wrap:wrap}
+.dash-mini-btn{background:var(--black);color:var(--off);border:none;border-radius:100px;padding:10px 16px;font-size:13px;font-weight:700;font-family:'DM Sans',sans-serif;cursor:pointer}
+.dash-mini-btn.light{background:var(--off);color:var(--black);border:1.5px solid var(--border)}
+.next-action{background:rgba(232,130,12,.07);border:1px solid rgba(232,130,12,.2);border-radius:16px;padding:18px;margin-bottom:10px}
+.next-action strong{font-family:'Fraunces',serif;color:var(--black);font-size:17px;display:block;margin-bottom:5px}
+.next-action span{font-size:13.5px;color:var(--muted);line-height:1.55}
+.dash-conn-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.dash-conn-chip{font-size:12px;font-weight:800;border:1.5px solid var(--border);background:var(--off);color:var(--muted);border-radius:100px;padding:7px 12px}
+.dash-conn-chip.good{color:var(--give);border-color:rgba(42,125,79,.25);background:rgba(42,125,79,.06)}
+.dash-conn-chip.warn{color:var(--accent);border-color:rgba(232,130,12,.25);background:rgba(232,130,12,.06)}
+.dash-conn-section{margin-top:16px}
+.dash-conn-heading{font-size:12px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.dash-checklist{display:flex;flex-direction:column;gap:8px}
+.dash-check{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted)}
+.dash-check.ok span:first-child{color:var(--give)}
+@media(max-width:900px){.dash-grid{grid-template-columns:1fr}}
+
 .dpc-top{display:flex;align-items:flex-start;gap:16px;margin-bottom:16px}
 .dpc-av{width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-size:20px;font-weight:700;color:#fff;flex-shrink:0}
 .dpc-name{font-family:'Fraunces',serif;font-size:20px;font-weight:700;color:var(--black);letter-spacing:-.02em}
@@ -1868,6 +1889,7 @@ async function respondToConnection(connId,status){
 async function loadDashboard(){
   const box=document.getElementById('dashboard-content');
   const nameEl=document.getElementById('dash-name');
+
   if(!currentProfile){
     if(nameEl)nameEl.textContent='friend.';
     box.innerHTML=`
@@ -1876,69 +1898,134 @@ async function loadDashboard(){
         <div><div class="ds-title">Complete your profile</div>
         <div class="ds-desc">You haven't submitted your profile yet. It takes 5 minutes.</div></div>
       </div>
-      <div style="margin-top:16px"><button class="btn-primary" onclick="showPage('onboard')">Complete Profile →</button></div>`;
+      <div class="dash-grid">
+        <div class="dash-card">
+          <div class="dash-card-title">Next best action</div>
+          <div class="next-action"><strong>Create your DESERVED profile</strong><span>Tell Calgary who you are, what you can do, and what you are looking for.</span></div>
+          <button class="dash-mini-btn" onclick="resetOnboardFormForNewProfile();showPage('onboard')">Complete Profile →</button>
+        </div>
+        <div class="dash-card">
+          <div class="dash-card-title">How DESERVED works</div>
+          <div class="dash-checklist">
+            <div class="dash-check ok"><span>✓</span><span>Create your profile</span></div>
+            <div class="dash-check"><span>○</span><span>Get human-reviewed</span></div>
+            <div class="dash-check"><span>○</span><span>Connect when both people agree</span></div>
+          </div>
+        </div>
+      </div>`;
     return;
   }
+
   const name=`${currentProfile.first_name||''} ${currentProfile.last_name||''}`.trim()||'friend';
   if(nameEl)nameEl.textContent=name+'.';
+
   const colors=['#C46A08','#2A7D4F','#4A6FA5','#8B5E3C','#6B3FA0'];
   const color=colors[name.charCodeAt(0)%colors.length];
   const initial=(currentProfile.first_name||'D').charAt(0).toUpperCase();
-  const skills=Array.isArray(currentProfile.skills)?currentProfile.skills:[];
+  const skills=Array.isArray(currentProfile.skills)?currentProfile.skills:(typeof currentProfile.skills==='string'?currentProfile.skills.split(',').map(s=>s.trim()).filter(Boolean):[]);
+
   const statusClass=currentProfile.status==='approved'?'ds-approved':currentProfile.status==='rejected'?'ds-rejected':'ds-pending';
   const statusIcon=currentProfile.status==='approved'?'✅':currentProfile.status==='rejected'?'❌':'⏳';
   const statusTitle=currentProfile.status==='approved'?'Profile live!':currentProfile.status==='rejected'?'Profile needs revision':'Profile under review';
-  const statusDesc=currentProfile.status==='approved'?'Your profile is live. Calgary can see you.':currentProfile.status==='rejected'?(currentProfile.rejection_reason||'Please update and resubmit.'):'Our team is reviewing your profile. Usually 24–48 hours.';
+  const statusDesc=currentProfile.status==='approved'
+    ?'Your profile is live. Calgary can discover your story, skills, and focus.'
+    :currentProfile.status==='rejected'
+      ?(currentProfile.rejection_reason||'Please update and resubmit your profile.')
+      :'Your profile is waiting for admin review. Once approved, it becomes public.';
+
+  const publicLink=profileUrl(currentProfile);
 
   // Load connections
   const{data:conns}=await sb.from('connections').select('*').or(`requester_id.eq.${currentUser.id},receiver_id.eq.${currentUser.id}`).order('created_at',{ascending:false});
+  const allConns=conns||[];
+  const incoming=allConns.filter(c=>c.receiver_id===currentUser.id&&c.status==='pending');
+  const outgoing=allConns.filter(c=>c.requester_id===currentUser.id&&c.status==='pending');
+  const accepted=allConns.filter(c=>c.status==='accepted');
+  const declined=allConns.filter(c=>c.status==='declined');
 
-  // Count pending incoming
-  const incoming=( conns||[]).filter(c=>c.receiver_id===currentUser.id&&c.status==='pending');
-  const incomingBadge=incoming.length?`<span class="conn-badge">${incoming.length}</span>`:'';
-
-  // Build connections HTML
-  let connsHtml='';
-  if(!conns||conns.length===0){
-    connsHtml=`<p style="font-size:14px;color:var(--muted);line-height:1.7">No connections yet. <button onclick="showPage('browse')" style="background:none;border:none;color:var(--accent);cursor:pointer;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;padding:0">Browse profiles</button> and connect with someone.</p>`;
-  }else{
-    // Get other user IDs to look up their profiles
-    const otherIds=conns.map(c=>c.requester_id===currentUser.id?c.receiver_id:c.requester_id);
+  const otherIds=[...new Set(allConns.map(c=>c.requester_id===currentUser.id?c.receiver_id:c.requester_id))];
+  let profileMap={};
+  if(otherIds.length){
     const{data:otherProfiles}=await sb.from('profiles').select('user_id,first_name,last_name,email,city_area').in('user_id',otherIds);
-    const profileMap={};
     (otherProfiles||[]).forEach(p=>profileMap[p.user_id]=p);
-    const connColors=['#C46A08','#2A7D4F','#4A6FA5','#8B5E3C','#6B3FA0','#C0392B'];
-    connsHtml=conns.map((c,i)=>{
-      const otherId=c.requester_id===currentUser.id?c.receiver_id:c.requester_id;
-      const other=profileMap[otherId];
-      const otherName=other?`${other.first_name||''} ${other.last_name||''}`.trim():'Someone';
-      const otherInitial=otherName.charAt(0).toUpperCase();
-      const cc=connColors[i%connColors.length];
-      const isRequester=c.requester_id===currentUser.id;
-      const statusClass=c.status==='accepted'?'s-accepted':c.status==='declined'?'s-declined':'s-pending';
-      const statusText=c.status==='accepted'?'Connected':c.status==='declined'?'Declined':'Pending';
-      const dir=isRequester?'→ You sent':'← Incoming';
-      // Show email if accepted
-      const emailHtml=c.status==='accepted'&&other?.email?`<span class="ci-email">📧 ${escHtml(other.email)}</span>`:'';
-      // Accept/decline buttons for incoming pending
-      const actionHtml=!isRequester&&c.status==='pending'?`
-        <button class="btn-accept" onclick="respondToConnection('${c.id}','accepted')">Accept ✓</button>
-        <button class="btn-decline-sm" onclick="respondToConnection('${c.id}','declined')">Decline</button>`:'';
-      return `
-        <div class="conn-item">
-          <div class="ci-av" style="background:${cc}">${escHtml(otherInitial)}</div>
-          <div class="ci-info">
-            <div class="ci-name">${escHtml(otherName)} <span style="font-size:11px;color:var(--muted);font-weight:400">${dir}</span></div>
-            ${c.intent?`<div class="ci-msg" style="font-style:normal;font-weight:600;color:var(--accent)">Intent: ${escHtml(c.intent)}</div>`:''}
-            ${c.message?`<div class="ci-msg">"${escHtml(c.message.substring(0,80))}${c.message.length>80?'…':''}"</div>`:''}
-            <div class="ci-bottom">
-              <span class="ci-status ${statusClass}">${statusText}</span>
-              ${emailHtml}
-              ${actionHtml}
-            </div>
+  }
+
+  const connColors=['#C46A08','#2A7D4F','#4A6FA5','#8B5E3C','#6B3FA0','#C0392B'];
+  const renderConnItem=(c,i)=>{
+    const otherId=c.requester_id===currentUser.id?c.receiver_id:c.requester_id;
+    const other=profileMap[otherId];
+    const otherName=other?`${other.first_name||''} ${other.last_name||''}`.trim():'Someone';
+    const otherInitial=otherName.charAt(0).toUpperCase();
+    const cc=connColors[i%connColors.length];
+    const isRequester=c.requester_id===currentUser.id;
+    const statusClass=c.status==='accepted'?'s-accepted':c.status==='declined'?'s-declined':'s-pending';
+    const statusText=c.status==='accepted'?'Connected':c.status==='declined'?'Declined':'Pending';
+    const dir=isRequester?'→ You sent':'← Incoming';
+    const emailHtml=c.status==='accepted'&&other?.email?`<span class="ci-email">📧 ${escHtml(other.email)}</span>`:'';
+    const actionHtml=!isRequester&&c.status==='pending'?`
+      <button class="btn-accept" onclick="respondToConnection('${c.id}','accepted')">Accept ✓</button>
+      <button class="btn-decline-sm" onclick="respondToConnection('${c.id}','declined')">Decline</button>`:'';
+
+    return `
+      <div class="conn-item">
+        <div class="ci-av" style="background:${cc}">${escHtml(otherInitial)}</div>
+        <div class="ci-info">
+          <div class="ci-name">${escHtml(otherName)} <span style="font-size:11px;color:var(--muted);font-weight:400">${dir}</span></div>
+          ${c.intent?`<div class="ci-msg" style="font-style:normal;font-weight:600;color:var(--accent)">Intent: ${escHtml(c.intent)}</div>`:''}
+          ${c.message?`<div class="ci-msg">"${escHtml(c.message.substring(0,90))}${c.message.length>90?'…':''}"</div>`:''}
+          <div class="ci-bottom">
+            <span class="ci-status ${statusClass}">${statusText}</span>
+            ${emailHtml}
+            ${actionHtml}
           </div>
-        </div>`;
-    }).join('');
+        </div>
+      </div>`;
+  };
+
+  const renderConnSection=(title,items,emptyText)=>{
+    return `
+      <div class="dash-conn-section">
+        <div class="dash-conn-heading">${title}</div>
+        ${items.length?items.map(renderConnItem).join(''):`<p style="font-size:13.5px;color:var(--muted);line-height:1.7">${emptyText}</p>`}
+      </div>`;
+  };
+
+  const checks=[
+    ['Story added',!!currentProfile.story],
+    ['Skills added',skills.length>0],
+    ['Current focus added',!!currentProfile.current_focus],
+    ['Ask Me About added',!!currentProfile.ask_me_about],
+    ['Human reviewed',currentProfile.status==='approved']
+  ];
+
+  let nextTitle='Browse Calgary people';
+  let nextText='Find people to help, collaborate with, learn from, or support.';
+  let nextBtn=`<button class="dash-mini-btn" onclick="showPage('browse')">Browse People →</button>`;
+
+  if(currentProfile.status==='pending'){
+    nextTitle='Profile waiting for review';
+    nextText='You can still edit your profile, but every change will be reviewed before going public.';
+    nextBtn=`<button class="dash-mini-btn" onclick="startEditProfile()">Edit Profile</button>`;
+  }else if(currentProfile.status==='rejected'){
+    nextTitle='Update and resubmit';
+    nextText='Your profile needs a quick update before it can go live.';
+    nextBtn=`<button class="dash-mini-btn" onclick="startEditProfile()">Fix Profile →</button>`;
+  }else if(!currentProfile.current_focus){
+    nextTitle='Add a current focus';
+    nextText='Tell Calgary what you are looking for or offering right now.';
+    nextBtn=`<button class="dash-mini-btn" onclick="startEditProfile()">Add Focus →</button>`;
+  }else if(!currentProfile.ask_me_about){
+    nextTitle='Add Ask Me About topics';
+    nextText='Help people know what they can reach out to you about.';
+    nextBtn=`<button class="dash-mini-btn" onclick="startEditProfile()">Add Topics →</button>`;
+  }else if(incoming.length){
+    nextTitle='Respond to connection requests';
+    nextText=`You have ${incoming.length} request${incoming.length>1?'s':''} waiting.`;
+    nextBtn=`<button class="dash-mini-btn" onclick="window.scrollTo({top:document.querySelector('.dash-connections').offsetTop-80,behavior:'smooth'})">Review Requests →</button>`;
+  }else if(currentProfile.status==='approved'){
+    nextTitle='Share your profile';
+    nextText='Your profile is live. Copy the link and send it to someone who should see your story.';
+    nextBtn=`<button class="dash-mini-btn" onclick="dashboardCopyProfileLink()">Copy Profile Link</button>`;
   }
 
   box.innerHTML=`
@@ -1946,21 +2033,66 @@ async function loadDashboard(){
       <span class="ds-icon">${statusIcon}</span>
       <div><div class="ds-title">${statusTitle}</div><div class="ds-desc">${escHtml(statusDesc)}</div></div>
     </div>
-    <div class="dash-profile-card">
-      <div class="dpc-top">
-        <div class="dpc-av" style="background:${color}">${escHtml(initial)}</div>
-        <div>
-          <div class="dpc-name">${escHtml(name)}</div>
-          <div class="dpc-sub">${skills.slice(0,3).join(' · ')||'Member'} · ${escHtml(currentProfile.city_area||'Calgary')}</div>
-          ${currentProfile.languages?`<div style="font-size:12px;color:var(--muted);margin-top:3px">🗣️ ${escHtml(currentProfile.languages)}</div>`:''}
+
+    <div class="dash-grid">
+      <div class="dash-card">
+        <div class="dash-card-title">Next best action</div>
+        <div class="next-action"><strong>${escHtml(nextTitle)}</strong><span>${escHtml(nextText)}</span></div>
+        <div class="dash-action-row">${nextBtn}<button class="dash-mini-btn light" onclick="showProfilePage(currentProfile,true)">View My Profile</button></div>
+      </div>
+
+      <div class="dash-card">
+        <div class="dash-card-title">Public profile link</div>
+        <div class="dash-link-box">${currentProfile.status==='approved'?escHtml(publicLink):'Your public link will be shareable after approval.'}</div>
+        <div class="dash-action-row">
+          <button class="dash-mini-btn" onclick="dashboardCopyProfileLink()" ${currentProfile.status==='approved'?'':'disabled style="opacity:.45;cursor:not-allowed"'}>Copy Link</button>
+          <button class="dash-mini-btn light" onclick="startEditProfile()">Edit Profile</button>
         </div>
       </div>
-      ${currentProfile.story?`<div class="dpc-story">"${escHtml(currentProfile.story.substring(0,200))}${currentProfile.story.length>200?'…':''}"</div>`:''}
     </div>
+
+    <div class="dash-grid">
+      <div class="dash-profile-card">
+        <div class="dpc-top">
+          <div class="dpc-av" style="background:${color}">${escHtml(initial)}</div>
+          <div>
+            <div class="dpc-name">${escHtml(name)}</div>
+            <div class="dpc-sub">${skills.slice(0,3).join(' · ')||'Member'} · ${escHtml(currentProfile.city_area||'Calgary')}</div>
+            ${currentProfile.current_focus?`<div style="font-size:12.5px;color:var(--accent);font-weight:700;margin-top:5px">🎯 ${escHtml(currentProfile.current_focus)}</div>`:''}
+            ${currentProfile.languages?`<div style="font-size:12px;color:var(--muted);margin-top:3px">🗣️ ${escHtml(currentProfile.languages)}</div>`:''}
+          </div>
+        </div>
+        ${currentProfile.story?`<div class="dpc-story">"${escHtml(currentProfile.story.substring(0,220))}${currentProfile.story.length>220?'…':''}"</div>`:''}
+      </div>
+
+      <div class="dash-card">
+        <div class="dash-card-title">Profile strength</div>
+        <div class="dash-checklist">
+          ${checks.map(([label,ok])=>`<div class="dash-check ${ok?'ok':''}"><span>${ok?'✓':'○'}</span><span>${escHtml(label)}</span></div>`).join('')}
+        </div>
+      </div>
+    </div>
+
     <div class="dash-connections">
-      <div class="dc-title">🔗 Connections ${incomingBadge}</div>
-      ${connsHtml}
+      <div class="dc-title">🔗 Connections ${incoming.length?`<span class="conn-badge">${incoming.length}</span>`:''}</div>
+      <div class="dash-conn-tabs">
+        <span class="dash-conn-chip warn">Incoming ${incoming.length}</span>
+        <span class="dash-conn-chip warn">Outgoing ${outgoing.length}</span>
+        <span class="dash-conn-chip good">Connected ${accepted.length}</span>
+        <span class="dash-conn-chip">Declined ${declined.length}</span>
+      </div>
+      ${renderConnSection('Incoming requests',incoming,'No incoming requests yet.')}
+      ${renderConnSection('Outgoing requests',outgoing,'No outgoing requests waiting right now.')}
+      ${renderConnSection('Accepted connections',accepted,'No accepted connections yet.')}
     </div>`;
+}
+
+function dashboardCopyProfileLink(){
+  if(!currentProfile||currentProfile.status!=='approved'){
+    toast('Your profile link is available after approval.');
+    return;
+  }
+  navigator.clipboard.writeText(profileUrl(currentProfile)).then(()=>toast('Profile link copied! 🔗')).catch(()=>toast('Could not copy link.'));
 }
 
 
