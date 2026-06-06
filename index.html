@@ -3120,11 +3120,21 @@ function profileCompleteness(profile,skills=[]){
 
 async function showProfilePage(profile,pushHistory=true){
   viewingProfile=profile;
+
+  // Block unapproved users from viewing other people's profiles
+  const isOwn=profile.user_id===currentUser?.id;
+  if(!isOwn&&currentUser&&currentProfile&&currentProfile.status!=='approved'){
+    toast('Your profile must be approved before you can view other profiles. 🙏');
+    return;
+  }
+  // Also block non-logged-in users from viewing profiles (optional — remove if you want public profiles)
+  // If not logged in, just show the page normally (public access)
+
   if(appInitialized&&pushHistory&&!handlingBrowserNav){
     const slug=profileSlug(profile);
     history.pushState({deservedPage:'profile',profileSlug:slug},'','#profile/'+slug);
   }
-  const isOwn=profile.user_id===currentUser?.id;
+  // isOwn already declared above
   const colors=['#C46A08','#2A7D4F','#4A6FA5','#8B5E3C','#6B3FA0','#C0392B'];
   const name=`${profile.first_name||''} ${profile.last_name||''}`.trim()||'Member';
   const initial=name.charAt(0).toUpperCase();
@@ -3282,7 +3292,7 @@ async function showProfilePage(profile,pushHistory=true){
     profile.calgary_time?`<div class="qi-item"><span class="qi-icon">🗓️</span><div><div class="qi-label">In Calgary</div><div class="qi-val">${escHtml(profile.calgary_time)}</div></div></div>`:'',
     profile.languages?`<div class="qi-item"><span class="qi-icon">🗣️</span><div><div class="qi-label">Languages</div><div class="qi-val">${escHtml(profile.languages)}</div></div></div>`:'',
     profile.experience?`<div class="qi-item"><span class="qi-icon">💼</span><div><div class="qi-label">Experience</div><div class="qi-val">${escHtml(profile.experience)}</div></div></div>`:'',
-    `<div class="qi-item"><span class="qi-icon">✅</span><div><div class="qi-label">Status</div><div class="qi-val" style="color:var(--give);font-weight:600">Verified by DESERVED</div></div></div>`,
+    profile.status==='approved'?`<div class="qi-item"><span class="qi-icon">✅</span><div><div class="qi-label">Status</div><div class="qi-val" style="color:var(--give);font-weight:600">Verified by DESERVED</div></div></div>`:`<div class="qi-item"><span class="qi-icon">⏳</span><div><div class="qi-label">Status</div><div class="qi-val" style="color:var(--accent);font-weight:600">Pending Review</div></div></div>`,
     isFoundingMember(profile)?`<div class="qi-item"><span class="qi-icon">✦</span><div><div class="qi-label">Badge</div><div class="qi-val" style="color:var(--accent);font-weight:700">Founding Member · Calgary</div></div></div>`:'',
     profile.verification_status?`<div class="qi-item"><span class="qi-icon">🧾</span><div><div class="qi-label">Proof Level</div><div class="qi-val" style="font-weight:700">${escHtml(verificationText(profile.verification_status))}</div></div></div>`:'',
   ].filter(Boolean).join('');
