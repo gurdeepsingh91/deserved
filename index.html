@@ -468,6 +468,10 @@ h1.home-h .ac{color:var(--accent)}
 .modal-overlay.open .delete-modal{transform:translateY(0)}font-size:12.5px;color:var(--muted);background:none;border:none;cursor:pointer;font-family:"DM Sans",sans-serif;text-decoration:underline;text-underline-offset:3px;padding:0;transition:color .2s;margin-top:4px;display:block;text-align:right}
 .forgot-link:hover{color:var(--accent)}
 .back-to-signin{font-size:13px;color:var(--accent);background:none;border:none;cursor:pointer;font-family:"DM Sans",sans-serif;padding:0;font-weight:600;margin-top:8px;display:block}
+
+.forgot-link{font-size:12.5px;color:var(--muted);background:none!important;border:none!important;cursor:pointer;font-family:"DM Sans",sans-serif;text-decoration:underline;text-underline-offset:3px;padding:6px 0 0!important;transition:color .2s;margin-top:4px;display:inline-block;text-align:left;box-shadow:none!important;outline:none!important}
+.forgot-link:hover{color:var(--accent)}
+.forgot-link:focus{outline:none!important;box-shadow:none!important;background:none!important}
 #toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(12px);background:var(--black);color:var(--off);padding:12px 24px;border-radius:100px;font-size:13px;font-weight:500;opacity:0;pointer-events:none;transition:all .35s;z-index:1000;white-space:nowrap;max-width:90vw;text-align:center}
 #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
@@ -714,6 +718,21 @@ footer p{font-size:13px;color:rgba(247,244,239,.35)}
       <div class="step-tag">Step 1 of 4 — Your purpose</div>
       <h2 class="step-title">What brings<br><span class="it">you here?</span></h2>
       <p class="step-desc">This shapes how people find you and how we match you.</p>
+      <div class="form-section" id="edit-basic-info-section" style="display:none">
+        <div class="form-section-title">👤 Basic profile info</div>
+        <div class="ob-row">
+          <div class="ob-fg"><label>First Name</label><input id="edit-first" type="text" placeholder="First name"></div>
+          <div class="ob-fg"><label>Last Name</label><input id="edit-last" type="text" placeholder="Last name"></div>
+        </div>
+        <div class="ob-fg"><label>City Area</label>
+          <select id="edit-area">
+            <option value="">Select your area…</option>
+            <option>NE Calgary</option><option>NW Calgary</option>
+            <option>SE Calgary</option><option>SW Calgary</option>
+            <option>Downtown Calgary</option><option>Outside Calgary</option>
+          </select>
+        </div>
+      </div>
       <div class="form-section">
         <div class="form-section-title">🎯 Choose your role</div>
         <div class="role-grid">
@@ -1385,6 +1404,15 @@ function prefillOnboardForm(p){
   const needFields=document.getElementById('need-fields');
   if(needFields)needFields.style.display=(p.role==='give')?'none':'block';
 
+  const basicInfo=document.getElementById('edit-basic-info-section');
+  if(basicInfo)basicInfo.style.display='block';
+  const editFirst=document.getElementById('edit-first');
+  const editLast=document.getElementById('edit-last');
+  const editArea=document.getElementById('edit-area');
+  if(editFirst)editFirst.value=p.first_name||'';
+  if(editLast)editLast.value=p.last_name||'';
+  if(editArea)editArea.value=p.city_area||'';
+
   onboard.skills=Array.isArray(p.skills)?p.skills:(typeof p.skills==='string'?p.skills.split(',').map(s=>s.trim()).filter(Boolean):[]);
   renderSkills();
 
@@ -1419,6 +1447,12 @@ function resetOnboardFormForNewProfile(){
   });
   const needFields=document.getElementById('need-fields');
   if(needFields)needFields.style.display='block';
+  const basicInfo=document.getElementById('edit-basic-info-section');
+  if(basicInfo)basicInfo.style.display='none';
+  ['edit-first','edit-last','edit-area'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el)el.value='';
+  });
   const btn=document.getElementById('btn-submit-profile');
   if(btn)btn.textContent='Submit Profile 🙏';
   updateOnboardEditMode(false);
@@ -1427,9 +1461,16 @@ function resetOnboardFormForNewProfile(){
 // ── SUBMIT PROFILE ──
 async function submitProfile(){
   if(!currentUser){showAuth('signup');return;}
-  const first=localStorage.getItem('deserved_signup_first')||currentUser.user_metadata?.first_name||'';
-  const last=localStorage.getItem('deserved_signup_last')||currentUser.user_metadata?.last_name||'';
-  const area=localStorage.getItem('deserved_signup_area')||currentUser.user_metadata?.city_area||'';
+  const editFirst=document.getElementById('edit-first')?.value.trim();
+  const editLast=document.getElementById('edit-last')?.value.trim();
+  const editArea=document.getElementById('edit-area')?.value;
+  const first=editMode?(editFirst||currentProfile?.first_name||''):(localStorage.getItem('deserved_signup_first')||currentUser.user_metadata?.first_name||'');
+  const last=editMode?(editLast||currentProfile?.last_name||''):(localStorage.getItem('deserved_signup_last')||currentUser.user_metadata?.last_name||'');
+  const area=editMode?(editArea||currentProfile?.city_area||''):(localStorage.getItem('deserved_signup_area')||currentUser.user_metadata?.city_area||'');
+  if(editMode&&(!first||!last||!area)){
+    toast('Please fill in first name, last name, and city area.');
+    return;
+  }
   const profile={
     id:currentUser.id,user_id:currentUser.id,
     email:currentUser.email,
@@ -1452,6 +1493,9 @@ async function submitProfile(){
     if(error){console.error('Submit error:',error);toast(error.message);return;}
     const{data:fresh}=await sb.from('profiles').select('*').eq('id',currentUser.id).maybeSingle();
     currentProfile=fresh||profile;
+    localStorage.setItem('deserved_signup_first',currentProfile.first_name||first);
+    localStorage.setItem('deserved_signup_last',currentProfile.last_name||last);
+    localStorage.setItem('deserved_signup_area',currentProfile.city_area||area);
     toast(editMode?'Profile updated ✓':'Profile submitted 🙏');
     editMode=false;
     profileReturnTarget=null;
