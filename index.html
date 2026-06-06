@@ -389,6 +389,14 @@ h1.home-h .ac{color:var(--accent)}
 .glance-val{font-size:13.5px;color:var(--black);line-height:1.45;font-weight:600}
 .match-list{display:flex;flex-wrap:wrap;gap:8px}
 .match-chip{background:var(--off);border:1px solid var(--border);border-radius:100px;padding:7px 13px;font-size:12.5px;font-weight:600;color:var(--muted)}
+.focus-card{background:rgba(232,130,12,.06);border:1px solid rgba(232,130,12,.18);border-radius:16px;padding:18px 20px}
+.focus-label{font-size:10.5px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:7px}
+.focus-text{font-family:'Fraunces',serif;font-size:18px;font-weight:700;color:var(--black);letter-spacing:-.02em;line-height:1.35}
+.ask-chips{display:flex;flex-wrap:wrap;gap:8px}
+.ask-chip{background:var(--off);border:1.5px solid var(--border);border-radius:100px;padding:8px 14px;font-size:13px;font-weight:600;color:var(--black)}
+.intent-select{width:100%;background:var(--warm);border:1.5px solid var(--border);color:var(--black);padding:13px 14px;border-radius:12px;font-size:14px;font-family:'DM Sans',sans-serif;outline:none;margin-bottom:12px}
+.intent-select:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(232,130,12,.1)}
+
 .profile-note{background:rgba(232,130,12,.06);border:1px solid rgba(232,130,12,.18);border-radius:14px;padding:15px 16px;font-size:13px;color:var(--muted);line-height:1.65}
 .profile-note strong{color:var(--black)}
 .strength-list{display:flex;flex-direction:column;gap:8px}
@@ -591,6 +599,15 @@ footer p{font-size:13px;color:rgba(247,244,239,.35)}
     <div class="modal-title" id="modal-title">Connect</div>
     <p class="modal-desc" id="modal-desc">Write a short message. They'll decide whether to connect. Your contact info stays private until both of you agree.</p>
     <div class="modal-fg">
+      <select id="conn-intent" class="intent-select">
+        <option value="">Why do you want to connect?</option>
+        <option>I can help</option>
+        <option>I need help</option>
+        <option>I want to collaborate</option>
+        <option>I have an opportunity</option>
+        <option>I want to learn from them</option>
+        <option>Other</option>
+      </select>
       <textarea id="conn-msg" placeholder="Hi, my name is… I'd like to connect because…" maxlength="400" rows="4"></textarea>
     </div>
     <div class="modal-btns">
@@ -768,6 +785,9 @@ footer p{font-size:13px;color:rgba(247,244,239,.35)}
           <div class="ob-fg"><label>Describe what you need</label>
             <textarea id="need-desc" maxlength="300" placeholder="Be honest and specific…"></textarea>
           </div>
+          <div class="ob-fg"><label>Current Focus</label>
+            <input id="current-focus" maxlength="140" placeholder="e.g. Looking for local singing opportunities this month">
+          </div>
         </div>
       </div>
       <div class="step-nav">
@@ -798,6 +818,10 @@ footer p{font-size:13px;color:rgba(247,244,239,.35)}
             <button class="skill-sug" onclick="addSkill('Music')">Music</button>
             <button class="skill-sug" onclick="addSkill('Mentoring')">Mentoring</button>
           </div>
+        </div>
+        <div class="ob-fg">
+          <label>Ask me about</label>
+          <input id="ask-me-about" maxlength="160" placeholder="Optional: Singing, local events, songwriting, tutoring…">
         </div>
         <div class="ob-fg"><label>Years of experience</label>
           <select id="experience">
@@ -932,6 +956,12 @@ footer p{font-size:13px;color:rgba(247,244,239,.35)}
     <div class="profile-left">
       <!-- ABOUT TAB -->
       <div class="ptab-content on" id="ptab-about">
+        <div class="pcard" id="prof-focus-card" style="display:none">
+          <div class="pcard-header"><div class="pcard-title">🎯 Current Focus</div></div>
+          <div class="pcard-body">
+            <div class="focus-card"><div class="focus-label">Right now</div><div class="focus-text" id="prof-current-focus"></div></div>
+          </div>
+        </div>
         <div class="pcard">
           <div class="pcard-header"><div class="pcard-title">✍️ <span id="prof-story-title">Story</span></div></div>
           <div class="pcard-body">
@@ -957,6 +987,10 @@ footer p{font-size:13px;color:rgba(247,244,239,.35)}
           <div class="pcard-header"><div class="pcard-title">💼 Skills & Expertise</div></div>
           <div class="pcard-body">
             <div class="skills-wrap" id="prof-skills-list"></div>
+            <div style="margin-top:22px" id="prof-ask-wrap">
+              <div class="pcard-title" style="font-size:15px;margin-bottom:12px">Ask me about</div>
+              <div class="ask-chips" id="prof-ask-list"></div>
+            </div>
             <div style="margin-top:22px">
               <div class="pcard-title" style="font-size:15px;margin-bottom:12px">Good match for</div>
               <div class="match-list" id="prof-match-list"></div>
@@ -1454,6 +1488,8 @@ function prefillOnboardForm(p){
   const setVal=(id,val)=>{const el=document.getElementById(id);if(el)el.value=val||'';};
   setVal('need-type',p.need_type);
   setVal('need-desc',p.need_description);
+  setVal('current-focus',p.current_focus);
+  setVal('ask-me-about',p.ask_me_about);
   setVal('experience',p.experience);
   setVal('story',p.story);
   setVal('origin',p.origin);
@@ -1476,7 +1512,7 @@ function resetOnboardFormForNewProfile(){
   onboard={role:'',skills:[]};
   document.querySelectorAll('.role-card').forEach(c=>c.classList.remove('active'));
   renderSkills();
-  ['need-type','need-desc','experience','story','origin','calgary-time','languages'].forEach(id=>{
+  ['need-type','need-desc','current-focus','ask-me-about','experience','story','origin','calgary-time','languages'].forEach(id=>{
     const el=document.getElementById(id);
     if(el)el.value='';
   });
@@ -1513,7 +1549,9 @@ async function submitProfile(){
     role:onboard.role,
     need_type:document.getElementById('need-type').value,
     need_description:document.getElementById('need-desc').value.trim(),
+    current_focus:document.getElementById('current-focus')?.value.trim()||'',
     skills:onboard.skills,
+    ask_me_about:document.getElementById('ask-me-about')?.value.trim()||'',
     experience:document.getElementById('experience').value,
     story:document.getElementById('story').value.trim(),
     origin:document.getElementById('origin').value.trim(),
@@ -1764,6 +1802,7 @@ function openConnModal(receiverId,receiverName){
   document.getElementById('modal-title').textContent='Connect with '+receiverName.split(' ')[0];
   document.getElementById('modal-desc').textContent='Send '+receiverName.split(' ')[0]+' a message. They\'ll decide whether to connect. Your contact info stays private.';
   document.getElementById('conn-msg').value='';
+  const intent=document.getElementById('conn-intent');if(intent)intent.value='';
   document.getElementById('conn-modal').classList.add('open');
   document.body.style.overflow='hidden';
 }
@@ -1775,7 +1814,9 @@ function closeConnModal(){
 function handleModalBg(e){if(e.target===document.getElementById('conn-modal'))closeConnModal();}
 
 async function sendConnectionRequest(){
+  const intent=document.getElementById('conn-intent')?.value||'';
   const msg=document.getElementById('conn-msg').value.trim();
+  if(!intent){toast('Please choose why you want to connect.');return;}
   if(!msg){toast('Please write a short message. 🙏');return;}
   if(!connectingToId||!currentUser){toast('Something went wrong. Please try again.');return;}
   const btn=document.getElementById('btn-modal-send');
@@ -1787,6 +1828,7 @@ async function sendConnectionRequest(){
     const{error}=await sb.from('connections').insert({
       requester_id:currentUser.id,
       receiver_id:connectingToId,
+      intent:intent,
       message:msg,
       status:'pending'
     });
@@ -1887,6 +1929,7 @@ async function loadDashboard(){
           <div class="ci-av" style="background:${cc}">${escHtml(otherInitial)}</div>
           <div class="ci-info">
             <div class="ci-name">${escHtml(otherName)} <span style="font-size:11px;color:var(--muted);font-weight:400">${dir}</span></div>
+            ${c.intent?`<div class="ci-msg" style="font-style:normal;font-weight:600;color:var(--accent)">Intent: ${escHtml(c.intent)}</div>`:''}
             ${c.message?`<div class="ci-msg">"${escHtml(c.message.substring(0,80))}${c.message.length>80?'…':''}"</div>`:''}
             <div class="ci-bottom">
               <span class="ci-status ${statusClass}">${statusText}</span>
@@ -2057,6 +2100,23 @@ function buildWhyConnect(profile,skills=[]){
   return `Connect with ${name} if their story, skills, or goals align with something you can offer or need.`;
 }
 
+
+function askTopics(profile,skills=[]){
+  const custom=String(profile.ask_me_about||'').split(',').map(s=>s.trim()).filter(Boolean);
+  const fromSkills=skills.slice(0,6);
+  const combined=[...custom,...fromSkills];
+  return [...new Set(combined.map(s=>s.trim()).filter(Boolean))].slice(0,8);
+}
+
+function defaultCurrentFocus(profile,skills=[]){
+  if(profile.current_focus)return profile.current_focus;
+  const name=profile.first_name||'This member';
+  if(profile.role==='give')return `${name} is currently open to helping with ${skills.slice(0,2).join(' and ')||'their skills'}.`;
+  if(profile.role==='need')return `${name} is currently looking for ${profile.need_type||'a local opportunity'}.`;
+  if(profile.role==='both')return `${name} is open to both giving help and finding the right local opportunity.`;
+  return `${name} is open to meaningful Calgary connections.`;
+}
+
 function profileCompleteness(profile,skills=[]){
   const checks=[
     ['Story added',!!profile.story],
@@ -2084,6 +2144,8 @@ async function showProfilePage(profile,pushHistory=true){
   const badgeText=profile.role==='need'?'🙋 Looking for work':profile.role==='give'?'🤝 Offering help':profile.role==='both'?'⚡ Need & Give':'Member';
   const matches=profileMatchIdeas(profile,skills);
   const whyConnect=buildWhyConnect(profile,skills);
+  const asks=askTopics(profile,skills);
+  const focusText=defaultCurrentFocus(profile,skills);
 
   // Avatar
   const avEl=document.getElementById('prof-av');
@@ -2143,6 +2205,14 @@ async function showProfilePage(profile,pushHistory=true){
     }
   }
 
+  // Current focus
+  const focusCard=document.getElementById('prof-focus-card');
+  const focusEl=document.getElementById('prof-current-focus');
+  if(focusCard&&focusEl){
+    focusCard.style.display=focusText?'block':'none';
+    focusEl.textContent=focusText||'';
+  }
+
   // Story
   const storyBody=document.getElementById('prof-story-body');
   if(profile.story){
@@ -2179,6 +2249,12 @@ async function showProfilePage(profile,pushHistory=true){
   // Skills
   const skillsList=document.getElementById('prof-skills-list');
   skillsList.innerHTML=skills.length?skills.map(s=>`<div class="skill-chip">${escHtml(s)}</div>`).join(''):'<p style="color:var(--muted)">No skills added yet.</p>';
+  const askWrap=document.getElementById('prof-ask-wrap');
+  const askList=document.getElementById('prof-ask-list');
+  if(askWrap&&askList){
+    askWrap.style.display=asks.length?'block':'none';
+    askList.innerHTML=asks.map(a=>`<span class="ask-chip">${escHtml(a)}</span>`).join('');
+  }
   const matchList=document.getElementById('prof-match-list');
   if(matchList)matchList.innerHTML=matches.map(m=>`<span class="match-chip">${escHtml(m)}</span>`).join('');
 
@@ -2229,7 +2305,7 @@ async function showProfilePage(profile,pushHistory=true){
         const sTxt=c.status==='accepted'?'Connected':c.status==='declined'?'Declined':'Pending';
         const emailHtml=c.status==='accepted'&&o?.email?`<span class="ci-email">📧 ${escHtml(o.email)}</span>`:'';
         const actHtml=!isReq&&c.status==='pending'?`<button class="btn-accept" onclick="respondToConnection('${c.id}','accepted')">Accept ✓</button><button class="btn-decline-sm" onclick="respondToConnection('${c.id}','declined')">Decline</button>`:'';
-        return `<div class="conn-item"><div class="ci-av" style="background:${cc}">${escHtml(oinit)}</div><div class="ci-info"><div class="ci-name">${escHtml(oname)} <span style="font-size:11px;color:var(--muted);font-weight:400">${isReq?'→ You sent':'← Incoming'}</span></div>${c.message?`<div class="ci-msg">"${escHtml(c.message.substring(0,60))}…"</div>`:''}<div class="ci-bottom"><span class="ci-status ${sClass}">${sTxt}</span>${emailHtml}${actHtml}</div></div></div>`;
+        return `<div class="conn-item"><div class="ci-av" style="background:${cc}">${escHtml(oinit)}</div><div class="ci-info"><div class="ci-name">${escHtml(oname)} <span style="font-size:11px;color:var(--muted);font-weight:400">${isReq?'→ You sent':'← Incoming'}</span></div>${c.intent?`<div class="ci-msg" style="font-style:normal;font-weight:600;color:var(--accent)">Intent: ${escHtml(c.intent)}</div>`:''}${c.message?`<div class="ci-msg">"${escHtml(c.message.substring(0,60))}…"</div>`:''}<div class="ci-bottom"><span class="ci-status ${sClass}">${sTxt}</span>${emailHtml}${actHtml}</div></div></div>`;
       }).join('');
     }
   } else {
