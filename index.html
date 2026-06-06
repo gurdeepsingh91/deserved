@@ -551,6 +551,24 @@ h1.home-h .ac{color:var(--accent)}
 .mob-notif-count{display:inline-flex;align-items:center;justify-content:center;min-width:20px;height:20px;background:var(--need);border-radius:100px;font-size:11px;font-weight:800;color:#fff;padding:0 5px;margin-left:8px;font-family:'DM Sans',sans-serif}
 
 /* ── APPROVAL BANNER ── */
+/* ── CELEBRATION OVERLAY ── */
+#celebration-overlay{position:fixed;inset:0;z-index:9000;display:none;align-items:center;justify-content:center;padding:24px;background:rgba(12,12,12,.75);backdrop-filter:blur(12px)}
+#celebration-overlay.show{display:flex;animation:fadeInOverlay .4s ease}
+@keyframes fadeInOverlay{from{opacity:0}to{opacity:1}}
+.celebration-box{background:var(--off);border-radius:28px;padding:48px 40px;max-width:520px;width:100%;text-align:center;position:relative;animation:celebIn .5s cubic-bezier(.23,1,.32,1)}
+@keyframes celebIn{from{opacity:0;transform:translateY(30px) scale(.95)}to{opacity:1;transform:translateY(0) scale(1)}}
+.celeb-icon{font-size:64px;display:block;margin-bottom:16px;animation:bounceIn .6s cubic-bezier(.23,1,.32,1) .2s both}
+@keyframes bounceIn{from{transform:scale(0)}50%{transform:scale(1.2)}to{transform:scale(1)}}
+.celeb-title{font-family:'Fraunces',serif;font-size:clamp(28px,5vw,40px);font-weight:900;color:var(--black);letter-spacing:-.04em;line-height:.95;margin-bottom:12px}
+.celeb-title .it{font-style:italic;font-weight:300;color:var(--muted)}
+.celeb-desc{font-size:15px;color:var(--muted);line-height:1.75;margin-bottom:24px;max-width:380px;margin-left:auto;margin-right:auto}
+.celeb-actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.celeb-btn-primary{background:var(--give);color:#fff;padding:14px 28px;border-radius:100px;font-size:14px;font-weight:700;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s}
+.celeb-btn-primary:hover{background:#1f5f3a;transform:translateY(-1px)}
+.celeb-btn-secondary{background:transparent;border:1.5px solid var(--border);color:var(--muted);padding:12px 22px;border-radius:100px;font-size:14px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s}
+.celeb-btn-secondary:hover{border-color:var(--black);color:var(--black)}
+@keyframes confettiFall{to{transform:translateY(520px) rotate(360deg);opacity:0}}
+.celeb-confetti div{pointer-events:none}
 .approval-banner{background:linear-gradient(135deg,rgba(42,125,79,.12),rgba(42,125,79,.06));border:1.5px solid rgba(42,125,79,.3);border-radius:20px;padding:24px 28px;margin-bottom:20px;display:flex;align-items:flex-start;gap:16px;animation:bannerIn .6s cubic-bezier(.23,1,.32,1)}
 @keyframes bannerIn{from{opacity:0;transform:translateY(-12px)}to{opacity:1;transform:translateY(0)}}
 .ab-icon{font-size:32px;flex-shrink:0}
@@ -759,6 +777,20 @@ footer p{font-size:13px;color:rgba(247,244,239,.35)}
     <button class="hamburger" id="hbg" onclick="openMob()"><span></span><span></span><span></span></button>
   </div>
 </nav>
+
+<!-- CELEBRATION OVERLAY -->
+<div id="celebration-overlay" onclick="handleCelebOverlayClick(event)">
+  <div class="celebration-box" id="celebration-box">
+    <div class="celeb-confetti" id="celeb-confetti"></div>
+    <span class="celeb-icon" id="celeb-icon">🎉</span>
+    <div class="celeb-title" id="celeb-title">You're live,<br><span class="it" id="celeb-name">friend!</span></div>
+    <p class="celeb-desc" id="celeb-desc">Your profile has been approved by DESERVED. Calgary can now discover your story, skills, and connect with you.</p>
+    <div class="celeb-actions">
+      <button class="celeb-btn-primary" onclick="celebCopyLink()">📋 Copy Profile Link</button>
+      <button class="celeb-btn-secondary" onclick="closeCelebration()">View My Dashboard</button>
+    </div>
+  </div>
+</div>
 
 <!-- DELETE ACCOUNT MODAL -->
 <div class="modal-overlay" id="delete-modal" onclick="handleDeleteModalBg(event)">
@@ -2191,10 +2223,22 @@ async function loadStats(){
   try{
     const FOUNDING_GOAL=59;
     const{count:pc}=await sb.from('profiles').select('*',{count:'exact',head:true}).eq('status','approved');
-    const{count:cc}=await sb.from('connections').select('*',{count:'exact',head:true}).eq('status','accepted');
     const liveMembers=pc??0;
-    const realConnections=cc??0;
     const spotsOpen=Math.max(FOUNDING_GOAL-liveMembers,0);
+
+    // Connections count — only available when signed in due to RLS
+    // Use cached value for signed-out users
+    let realConnections=0;
+    if(currentUser){
+      const{count:cc}=await sb.from('connections').select('*',{count:'exact',head:true}).eq('status','accepted');
+      realConnections=cc??0;
+      // Cache for signed-out display
+      localStorage.setItem('deserved-cached-connections',String(realConnections));
+    }else{
+      // Use cached value from last sign-in
+      const cached=localStorage.getItem('deserved-cached-connections');
+      realConnections=cached?parseInt(cached,10):0;
+    }
 
     const membersEl=document.getElementById('stat-members');
     const connsEl=document.getElementById('stat-connections');
@@ -2638,10 +2682,14 @@ async function loadDashboard(){
   }
 
   // ── BANNERS ──
-  // 1. Profile approved banner (show once — dismissed via localStorage)
+  // 1. Profile approved celebration (show once — dismissed via localStorage)
   const approvedBannerKey=`deserved-approved-seen-${currentUser.id}`;
   const approvedBannerSeen=localStorage.getItem(approvedBannerKey);
   const showApprovedBanner=currentProfile.status==='approved'&&!approvedBannerSeen;
+  if(showApprovedBanner){
+    // Show full-screen celebration overlay after a brief delay
+    setTimeout(()=>showCelebration(name),600);
+  }
 
   // 2. Newly accepted connections banner (connections I sent that were recently accepted, unseen)
   const seenKey=`deserved-last-seen-notifs-${currentUser.id}`;
@@ -2653,28 +2701,15 @@ async function loadDashboard(){
     new Date(c.responded_at)>new Date(lastSeen)
   );
 
-  // Build banner HTML
+  // Build banner HTML — only accepted connection notifications now
+  // (approval is handled by full-screen overlay above)
   let bannersHtml='';
-
-  if(showApprovedBanner){
-    bannersHtml+=`
-      <div class="approval-banner" id="approval-banner">
-        <span class="ab-icon">🎉</span>
-        <div style="flex:1">
-          <div class="ab-title">You're live, ${escHtml(name.split(' ')[0])}!</div>
-          <div class="ab-desc">Your profile has been approved by DESERVED. Calgary can now discover your story and connect with you. Share your profile link and let people know you're here.</div>
-          <button class="dash-mini-btn" onclick="dashboardCopyProfileLink()" style="margin-top:10px">Copy Profile Link</button>
-        </div>
-        <button class="ab-dismiss" onclick="dismissApprovalBanner()" title="Dismiss">✕</button>
-      </div>`;
-  }
 
   if(newlyAccepted.length>0){
     newlyAccepted.forEach(c=>{
       const otherId=c.receiver_id;
       const other=profileMap[otherId];
       const otherName=other?`${other.first_name||''} ${other.last_name||''}`.trim():'Someone';
-      const otherInitial=otherName.charAt(0).toUpperCase();
       bannersHtml+=`
         <div class="accepted-banner">
           <span style="font-size:28px;flex-shrink:0">🤝</span>
@@ -2959,6 +2994,53 @@ async function viewConnProfile(userId){
   const{data:prof}=await sb.from('profiles').select('*').eq('user_id',userId).maybeSingle();
   if(prof)showProfilePage(prof,true);
   else toast('Could not load profile.');
+}
+
+// ── CELEBRATION OVERLAY ──
+function showCelebration(name){
+  const overlay=document.getElementById('celebration-overlay');
+  const nameEl=document.getElementById('celeb-name');
+  const descEl=document.getElementById('celeb-desc');
+  if(nameEl)nameEl.textContent=(name||'friend').split(' ')[0]+'!';
+  if(descEl)descEl.textContent=`Your profile has been approved by DESERVED. Calgary can now discover your story, connect with you, and find out what you can offer. Share your link — you've earned it. 🙏`;
+  if(overlay){overlay.classList.add('show');document.body.style.overflow='hidden';}
+  // Confetti burst
+  spawnConfetti();
+}
+
+function closeCelebration(){
+  const overlay=document.getElementById('celebration-overlay');
+  if(overlay){
+    overlay.style.transition='opacity .3s';overlay.style.opacity='0';
+    setTimeout(()=>{overlay.classList.remove('show');overlay.style.opacity='';document.body.style.overflow='';},300);
+  }
+  // Mark as seen
+  if(currentUser){
+    const key=`deserved-approved-seen-${currentUser.id}`;
+    localStorage.setItem(key,'true');
+  }
+}
+
+function handleCelebOverlayClick(e){
+  if(e.target===document.getElementById('celebration-overlay'))closeCelebration();
+}
+
+function celebCopyLink(){
+  if(currentProfile)navigator.clipboard.writeText(profileUrl(currentProfile)).then(()=>toast('Profile link copied! Share it! 🔗')).catch(()=>toast('Could not copy link.'));
+  closeCelebration();
+}
+
+function spawnConfetti(){
+  const container=document.getElementById('celeb-confetti');
+  if(!container)return;
+  container.innerHTML='';
+  const colors=['#E8820C','#2A7D4F','#4A6FA5','#C0392B','#8B5E3C','#F5C76B'];
+  for(let i=0;i<40;i++){
+    const dot=document.createElement('div');
+    const size=Math.random()*8+4;
+    dot.style.cssText=`position:absolute;width:${size}px;height:${size}px;border-radius:${Math.random()>0.5?'50%':'2px'};background:${colors[Math.floor(Math.random()*colors.length)]};left:${Math.random()*100}%;top:-10px;opacity:${Math.random()*.8+.2};animation:confettiFall ${Math.random()*1.5+1}s ease-in ${Math.random()*.8}s forwards`;
+    container.appendChild(dot);
+  }
 }
 
 function dismissApprovalBanner(){
@@ -3438,6 +3520,14 @@ async function showProfilePage(profile,pushHistory=true){
   // Always show connections tab on own, hide on others
   const connTab=document.querySelector('.phb-tab[onclick*="connections"]');
   if(connTab)connTab.style.display=isOwn?'':'none';
+
+  // Show approval celebration if own approved profile — first time only
+  if(isOwn&&currentProfile&&currentProfile.status==='approved'&&currentUser){
+    const approvedKey=`deserved-approved-seen-${currentUser.id}`;
+    if(!localStorage.getItem(approvedKey)){
+      setTimeout(()=>showCelebration(currentProfile.first_name||'friend'),800);
+    }
+  }
 
   // Reset to about tab
   switchProfTab('about',document.querySelector('.phb-tab'));
